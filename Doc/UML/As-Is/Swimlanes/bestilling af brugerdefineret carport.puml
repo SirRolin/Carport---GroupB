@@ -1,0 +1,44 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+|Kunde|
+start
+:gå til brugerdefineret hjemmeside;
+|Shop|
+:vælg egenskaber på carport<
+note right:underdiagram
+|Kunde|
+:Send Forespørgsel;
+|Mail|
+:Forespørgsel]
+:Send Mail with Forespørgsel;
+|Sælger|
+:modtage Mail;
+:indtast data i tilbuds program;
+|Tilbuds Program|
+:beregn tegninger, lister og pris;
+|Sælger|
+if(brugbare mål?) is (nej) then
+:ring til kunde;
+|Kunde|
+:godkend nye mål;
+else (ja)
+end if
+|Sælger|
+if(brugbare mål?) is (nej) then
+:find ny løsning;
+:ring til kunde;
+|Kunde|
+:godkend løsning;
+else (ja)
+end if
+|Sælger|
+:vælg pris med tilbud;
+:send tilbud til kunde;
+|Mail|
+:Tilbud]
+|Kunde|
+:godkend på tilbud;
+stop
+
+@enduml

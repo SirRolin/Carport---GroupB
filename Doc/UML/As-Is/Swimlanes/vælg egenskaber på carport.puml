@@ -1,0 +1,18 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+|Kunde|
+start
+:gå til brugerdefineret hjemmeside;
+:Vælg Mål;
+:Vælg om Skur;
+if(skur) is (yes) then
+:Vælg Skur Lændge;
+:Vælg Hel Eller Halv Skur;
+else (no)
+end if
+:Vælg Materialer;
+:Vælg Tag;
+stop
+
+@enduml
