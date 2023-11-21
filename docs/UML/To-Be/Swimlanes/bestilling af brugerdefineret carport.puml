@@ -3,7 +3,51 @@
 
 |Kunde|
 start
-
+:Gå til hjemmeside;
+|Hjemmeside|
+:Tilpas forespørgsel til carport<
+note right:Se: Underdiagram - Tilpasning af carport
+|Kunde|
+:Send forespørgsel;
+|Hjemmeside|
+:Modtag Forespørgsel;
+:Generér hyperlink;
+|E-mail|
+:Hyperlink med data fra forespørgsel]
+|Sælger|
+:Modtag hyperlink;
+:Klik hyperlink til hjemmesiden med forespørgselsdata;
+|Hjemmeside|
+:Beregn mål og rendér plantegning;
+:Beregn pris;
+:Udskriv stykliste;
+|Sælger|
+:Vurdér mål;
+if(Realistiske mål?) is (Nej) then
+:Kom med ny mulig løsning;
+else (Ja)
+end if
+:Kontakt kunde;
+|Kunde|
+:Modtag ny mulig løsning;
+if (Acceptabel løsning?) is (Nej) then
+|E-mail|
+:Find på løsning sammen;
+else (Ja)
+end if
+:Ny løsning]
+|Sælger|
+:Modtag løsning;
+:Vurdér løsning;
+|Hjemmeside|
+:Udregn tilbud;
+|Sælger|
+:Send tilbud til kunde;
+|E-mail|
+:Tilbud]
+|Kunde|
+:Godkend tilbud;
+:Betal?;
 stop
 
 @enduml
