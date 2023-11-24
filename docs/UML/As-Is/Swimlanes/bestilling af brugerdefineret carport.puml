@@ -6,13 +6,13 @@ start
 :gå til brugerdefineret hjemmeside;
 |Shop|
 :vælg egenskaber på carport<
-note right:underdiagram
 |Kunde|
 :Send Forespørgsel;
 |Mail|
 :Forespørgsel]
 :Send Mail with Forespørgsel;
 |Sælger|
+:Mail]
 :modtage Mail;
 :indtast data i tilbuds program;
 |Tilbuds Program|
@@ -38,7 +38,29 @@ end if
 |Mail|
 :Tilbud]
 |Kunde|
-:godkend på tilbud;
+if(kunden er glad) is (yes) then
+:godkendelse på tilbud;
+|Shop|
+:Betaling]
+|Mail|
+:Mail]
+|Sælger|
+if(stadig har tilbud åbent) is (no) then
+:tag mail og indtast i tilbudsprogramet igen;
+|Tilbuds Program|
+:beregn tegninger, lister og pris;
+else (yes)
+end if
+|Sælger|
+:plokliste]
+:send plokliste til kunde via email;
+|Mail|
+:plokliste]
+|Kunde|
+:modtag plokliste;
+:plokliste]
+else (no)
+end if
 stop
 
 @enduml

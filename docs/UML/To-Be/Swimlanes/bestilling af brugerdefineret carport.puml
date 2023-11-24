@@ -4,12 +4,12 @@
 |Kunde|
 start
 :Gå til hjemmeside;
-|Hjemmeside|
+|Shop|
 :Tilpas forespørgsel til carport<
 note right:Se: Underdiagram - Tilpasning af carport
 |Kunde|
 :Send forespørgsel;
-|Hjemmeside|
+|Shop|
 :Modtag Forespørgsel;
 :Generér hyperlink;
 |E-mail|
@@ -17,7 +17,7 @@ note right:Se: Underdiagram - Tilpasning af carport
 |Sælger|
 :Modtag hyperlink;
 :Klik hyperlink til hjemmesiden med forespørgselsdata;
-|Hjemmeside|
+|Shop|
 :Beregn mål og rendér plantegning;
 :Beregn pris;
 :Udskriv stykliste;
@@ -31,7 +31,7 @@ end if
 |Kunde|
 :Modtag ny mulig løsning;
 if (Acceptabel løsning?) is (Nej) then
-|E-mail|
+|Sælger|
 :Find på løsning sammen;
 else (Ja)
 end if
@@ -39,7 +39,7 @@ end if
 |Sælger|
 :Modtag løsning;
 :Vurdér løsning;
-|Hjemmeside|
+|Shop|
 :Udregn tilbud;
 |Sælger|
 :Send tilbud til kunde;
