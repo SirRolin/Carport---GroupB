@@ -1,48 +1,32 @@
 @startuml
-'https://plantuml.com/class-diagram
+Title DomainModel
+hide circle
+hide methods
 
-class main
-package "MailSystem" #yellow {
-interface IMAP
+class Customer {
+    email
 }
-package "Config"{
-    class ThymeleafConfig
+class Admin{
+    userName
 }
-package "Controller" #red {
-    class PremadeCarport
-    class CustomCarport
-    class ViewOrder
-    package "admin" #pink {
-    class AdminSite
-    class BuildACarport
-    }
+class Orders{
+    carport
 }
-package "Mapper" #green {
-    class Premade
-    class Orders
-    class Materials
+class Carport{
+    size
 }
-package "Engine" #lightblue {
-    class MainEngine
-    interface Roof
-    interface Pillars
-    interface Beams
-    interface Crossbeams
+class Shed{
+    size
 }
-main *-- "Controller"
-main *-- "Config"
-PremadeCarport *-- Premade
-CustomCarport *-- Materials
-ViewOrder *-- Orders
-IMAP --* CustomCarport
-IMAP --* BuildACarport
-BuildACarport *-- MainEngine
-BuildACarport *-- Materials
-MainEngine *-- Roof
-MainEngine *-- Pillars
-MainEngine *-- Beams
-MainEngine *-- Crossbeams
-AdminSite *-- "Mapper"
-Materials --* "Engine"
+class CarportCustomizer{
+    calculator
+}
+
+Orders "*" -up- "1" Customer: generates <
+Admin "1" -left- "*" Orders: > custemizes
+Orders "1" -down- "1" Carport: has >
+Carport "1" -right- "0-1" Shed: has >
+Admin "1" -up- "1" CarportCustomizer :uses >
+
 
 @enduml
