@@ -10,16 +10,36 @@ class Admin{
     userName
 }
 class Orders{
-    carport
+    date
+    ordreNummer
+    status*
+    itemList
+    constructionGuide
+    illustration
+
 }
 class Carport{
-    size
+    width
+    length
+    illustration
 }
 class Shed{
-    size
+   width
+   length
+   illustration
 }
 class CarportCustomizer{
     calculator
+}
+
+class itemList{
+    quantity
+    description
+}
+class meterials{
+    description
+}
+class reciept{
 }
 
 Orders "*" -up- "1" Customer: generates <
@@ -27,6 +47,7 @@ Admin "1" -left- "*" Orders: > custemizes
 Orders "1" -down- "1" Carport: has >
 Carport "1" -right- "0-1" Shed: has >
 Admin "1" -up- "1" CarportCustomizer :uses >
-
-
+Orders "1" -left- "*" itemList: contains >
+itemList "*" -down- "1" meterials: has >
+Orders "1" -left- "*" reciept: >
 @enduml
