@@ -1,0 +1,94 @@
+@startuml
+package "Materials" #FFD {
+    Object roof {
+        Serial id
+        String name
+        boolean sloped
+        int width
+        Double price
+        String description
+    }
+    Object cover_planks {
+        Serial id
+        String name
+        int width
+        int length
+        Double price
+        String description
+    }
+    Object pillar {
+        Serial id
+        String name
+        int length
+        Double price
+        String description
+    }
+    Object beam {
+        Serial id
+        String name
+        int length
+        Double price
+        String description
+    }
+    Object crossbeam {
+        Serial id
+        String name
+        int length
+        Double price
+        String description
+    }
+}
+
+package "Prebuilt" {
+    Object carport {
+        Serial id
+        int length
+        int width
+        Boolean shed
+        int shed_length
+        int shed_width
+        Serial roofID
+        int slope_degrees
+        Serial cover_planksID
+        Serial pillarID
+        Serial beamID
+        Serial cross_beamID
+        Double price
+    }
+}
+
+package "Orders" {
+    Object requests {
+        Serial id
+        int length
+        int width
+        boolean shed
+        int shed_length
+        int shed_width
+        Serial roofID
+        boolean sloped
+        int slope_degrees
+        Serial cover_planksID
+        Serial pillarID
+        Serial beamID
+        Serial cross_beamID
+        boolean hire_assembler
+        Double price
+        Status status
+    }
+}
+
+package Enum {
+    Object Status {
+        initialised
+        processing
+        waiting_for_customer
+        accepted
+        paid
+    }
+}
+
+requests <|.. Status
+requests --> Materials
+carport --> Materials
+@enduml
