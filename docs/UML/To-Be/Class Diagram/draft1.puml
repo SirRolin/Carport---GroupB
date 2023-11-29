@@ -1,0 +1,48 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class main
+package "MailSystem" #yellow {
+interface IMAP
+}
+package "Config"{
+    class ThymeleafConfig
+}
+package "Controller" #red {
+    class PremadeCarport
+    class CustomCarport
+    class ViewOrder
+    package "admin" #pink {
+    class AdminSite
+    class BuildACarport
+    }
+}
+package "Mapper" #green {
+    class Premade
+    class Orders
+    class Materials
+}
+package "Engine" #lightblue {
+    class MainEngine
+    interface Roof
+    interface Pillars
+    interface Beams
+    interface Crossbeams
+}
+main *-- "Controller"
+main *-- "Config"
+PremadeCarport *-- Premade
+CustomCarport *-- Materials
+ViewOrder *-- Orders
+IMAP --* CustomCarport
+IMAP --* BuildACarport
+BuildACarport *-- MainEngine
+BuildACarport *-- Materials
+MainEngine *-- Roof
+MainEngine *-- Pillars
+MainEngine *-- Beams
+MainEngine *-- Crossbeams
+AdminSite *-- "Mapper"
+Materials --* "Engine"
+
+@enduml
