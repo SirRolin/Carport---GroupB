@@ -36,6 +36,7 @@ A typical coding standard for Java programmers focuses on various aspects like n
    - Methods: Start with a lowercase letter and use camelCase for subsequent words, e.g., `calculateTotal`.
    - Variables: Similar to methods, e.g., `employeeCount`.
    - Constants: All uppercase with underscores to separate words, e.g., `MAX_SIZE`.
+   - Short and meaningfull names! (looking at you Christian!)
 
 2. **Code Layout**:
    - Indentation: Use spaces (commonly 4) for indentation to maintain code readability.
