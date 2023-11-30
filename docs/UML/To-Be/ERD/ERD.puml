@@ -1,7 +1,8 @@
 @startuml
 package "Materials" #FFD {
     Object roof {
-        Serial id
+        Serial uID
+        Serial mID
         String name
         boolean sloped
         int width
@@ -9,7 +10,8 @@ package "Materials" #FFD {
         String description
     }
     Object cover_planks {
-        Serial id
+        Serial uID
+        Serial mID
         String name
         int width
         int length
@@ -17,21 +19,16 @@ package "Materials" #FFD {
         String description
     }
     Object pillar {
-        Serial id
+        Serial uID
+        Serial mID
         String name
         int length
         Double price
         String description
     }
     Object beam {
-        Serial id
-        String name
-        int length
-        Double price
-        String description
-    }
-    Object crossbeam {
-        Serial id
+        Serial uID
+        Serial mID
         String name
         int length
         Double price
@@ -41,7 +38,7 @@ package "Materials" #FFD {
 
 package "Prebuilt" {
     Object carport {
-        Serial id
+        Serial uID
         int length
         int width
         Boolean shed
@@ -59,7 +56,7 @@ package "Prebuilt" {
 
 package "Orders" {
     Object requests {
-        Serial id
+        Serial uID
         int length
         int width
         boolean shed
