@@ -1,91 +1,83 @@
 @startuml
-package "Materials" #FFD {
-    Object roof {
-        Serial uID
-        Serial mID
-        String name
-        boolean sloped
-        int width
-        Double price
-        String description
-    }
-    Object cover_planks {
-        Serial uID
-        Serial mID
-        String name
-        int width
-        int length
-        Double price
-        String description
-    }
-    Object pillar {
-        Serial uID
-        Serial mID
-        String name
-        int length
-        Double price
-        String description
-    }
-    Object beam {
-        Serial uID
-        Serial mID
-        String name
-        int length
-        Double price
-        String description
-    }
-}
-
-package "Prebuilt" {
+package "Prebuilt" #FFB52E {
     Object carport {
         Serial uID
-        int length
-        int width
-        Boolean shed
+        int length_cm
+        int width_cm
         int shed_length
         int shed_width
-        Serial roofID
         int slope_degrees
-        Serial cover_planksID
-        Serial pillarID
-        Serial beamID
-        Serial cross_beamID
+        Serial oID
         Double price
     }
 }
 
-package "Orders" {
-    Object requests {
+package "Materials" #ffb {
+    Object material_variant {
         Serial uID
-        int length
-        int width
-        boolean shed
-        int shed_length
-        int shed_width
-        Serial roofID
-        boolean sloped
+        Serial mID
+        String description
+    }
+    Object material {
+        Serial mID
+        String name
+        TYPE type
+        int length_mm
+        int width_mm
+        int depth_mm
+        Double price
+    }
+
+    'nice to have - if a material has this it's a roof that requires a slope
+    Object requires_slope {
+        Serial mID
+        tinyint min_slope
+        tinyint max_slope
+    }
+}
+
+package "Orders" #00CDFF {
+    Object orders {
+        Serial oID
+        int length_cm
+        int width_cm
+        int shed_length_cm
+        int shed_width_cm
         int slope_degrees
-        Serial cover_planksID
-        Serial pillarID
-        Serial beamID
-        Serial cross_beamID
         boolean hire_assembler
         Double price
-        Status status
+        STATUS status
+    }
+    Object order_item {
+        Serial ID
+        Serial oID
+        Serial mID
+        tinyint quantity
     }
 }
 
-package Enum {
-    Object Status {
+package Enum #aad {
+    Object STATUS {
         initialised
         processing
         waiting_for_customer
         accepted
         paid
     }
+    Object TYPE {
+        roof
+        pillar
+        beam
+        cover_planks
+    }
 }
 
-requests <|.. Status
-requests --> Materials
-carport --> Materials
+orders <|.. STATUS
+material <|.. TYPE
+order_item --> material_variant
+carport -> order_item
+order_item <- orders
+material_variant --> material
+requires_slope -> material_variant
+
 @enduml
