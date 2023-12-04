@@ -1,7 +1,7 @@
 @startuml
 package "Prebuilt" #FFB52E {
     Object carport {
-        Serial uID
+        Serial ID
         int length_cm
         int width_cm
         int shed_length
@@ -14,25 +14,25 @@ package "Prebuilt" #FFB52E {
 
 package "Materials" #ffb {
     Object material_variant {
-        Serial uID
+        Serial mvID
         Serial mID
-        String description
+        int length_cm
+        Double price
     }
     Object material {
         Serial mID
         String name
         MTYPE type
-        int length_mm
         int width_mm
         int depth_mm
-        Double price
+        String description
     }
 
     'nice to have - if a material has this it's a roof that requires a slope
     Object requires_slope {
         Serial mID
-        tinyint min_slope
-        tinyint max_slope
+        smallint min_slope
+        smallint max_slope
     }
 }
 
@@ -51,7 +51,7 @@ package "Orders" #00CDFF {
     Object order_item {
         Serial ID
         Serial oID
-        Serial mID
+        Serial mvID
         tinyint quantity
     }
 }
