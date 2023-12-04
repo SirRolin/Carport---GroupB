@@ -6,7 +6,7 @@ import io.javalin.rendering.template.JavalinThymeleaf;
 import io.javalin.http.Context;
 
 import javax.swing.*;
-import java.util.TimerTask;
+import java.util.Random;
 
 
 public class Main {
@@ -24,13 +24,14 @@ public class Main {
         }).start(7070);
 
         // render start:
-        app.get("/SynchronousVisitsTestPage", ctx -> testLoading(ctx));
+        app.get("/SynchronousVisitsTestPage", Main::testLoading);
     }
 
     public static void testLoading(Context ctx){
         changePeople(1);
         try {
-            Thread.sleep(10000);
+            Random rng = new Random();
+            Thread.sleep(rng.nextInt(5000,10000));
         } catch (InterruptedException ignored) {}
         ctx.attribute("people", people);
         ctx.render("testpage.html");
