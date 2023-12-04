@@ -29,12 +29,16 @@ public class Main {
 
     public static void testLoading(Context ctx){
         changePeople(1);
+        ctx.attribute("queue", people);
+        ctx.render("testQueue.html"); // Virker ikke. hjemmesiden venter til funktionen er fuldført.
+        Random rng = new Random();
+        int time = rng.nextInt(5000,10000);
         try {
-            Random rng = new Random();
-            Thread.sleep(rng.nextInt(5000,10000));
+            Thread.sleep(time);
         } catch (InterruptedException ignored) {}
         ctx.attribute("people", people);
-        ctx.render("testpage.html");
+        ctx.attribute("time", time);
+        ctx.render("testPage.html");
         changePeople(-1);
     }
     //// Increasing and Decreasing people synchronously to avoid desyncs.
