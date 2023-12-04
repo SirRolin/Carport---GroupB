@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>make your damn carport</title>
+</head>
+<body>
+    <form method="post" id="carportWithNormalRoof" action="/costumCarportWithNormalRoof">
+        <div name = "form_flat_roof">
+            <div name = "width">
+                <p>brædde</p>
+                <select name="width_option"></select>
+            </div>
+        <div name = "length">
+            <p>længde</p>
+            <select name="length_options"></select>
+        </div>
+        <div name = "roof_type">
+            <p>vælg tagtype</p>
+            <select name="chosen_roof">
+
+            </select>
+        </div>
+        <div name="roof_slope">
+            <p>tag hælgning</p>
+            <select name="slope_options">
+
+            </select>
+        </div>
+        <div name="short_description">
+            <p>Redskabsrum</p><br>
+            <p>NB! Der skal beregnes 15 cm tagudhæng på hver side af redskabsrummet!*</p>
+        </div>
+        <div name="shed_width">
+            <p>skur bredde</p>
+            <select name="shed_width_option">
+
+            </select>
+        </div>
+        <div name="shed_length">
+            <p>skur længde</p>
+
+            <select name="shed_length_options">
+
+            </select>
+        </div>
+        <div name="special_wishes_or_notices">
+            <p>
+                Evt. bemærkning/Særlige ønsker
+                </p>
+                <div>
+                    <input type="text" name="wish_changes_text">
+                </div>
+            </div>
+            <div name = "nextButton">
+                <input type="submit" value="next">
+            </div>
+        </div>
+    </form>
+
+
+</body>
+</html>
