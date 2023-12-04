@@ -21,7 +21,7 @@ package "Materials" #ffb {
     Object material {
         Serial mID
         String name
-        TYPE type
+        MTYPE type
         int length_mm
         int width_mm
         int depth_mm
@@ -64,7 +64,7 @@ package Enum #aad {
         accepted
         paid
     }
-    Object TYPE {
+    Object MTYPE {
         roof
         pillar
         beam
@@ -73,7 +73,7 @@ package Enum #aad {
 }
 
 orders <|.. STATUS
-material <|.. TYPE
+material <|.. MTYPE
 order_item --> material_variant
 carport -> order_item
 order_item <- orders
