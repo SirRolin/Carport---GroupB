@@ -11,9 +11,6 @@ import java.util.Random;
 
 public class Main {
 
-    //// Testing How many people are trying to access the page
-    private static int people = 0;
-
     public static void main(String[] args)
     {
         // Initializing Javalin and Jetty webserver
@@ -24,9 +21,16 @@ public class Main {
         }).start(7070);
 
         // render start:
+        // tests
         app.get("/SynchronousVisitsTestPage", Main::testLoading);
     }
 
+    //// Testing Section:
+    //// Testing How many people are trying to access the page
+    private static int people = 0;
+
+    //// Testing of parallel processing via Javalin/Jetty - Success
+    //// Testing of buffer page - Failure
     public static void testLoading(Context ctx){
         changePeople(1);
         ctx.attribute("queue", people);
