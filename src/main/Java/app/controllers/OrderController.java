@@ -8,9 +8,22 @@ import io.javalin.http.Context;
 
 public class OrderController {
 
-    public static OrderDTO createOrder(ConnectionPool connectionPool, Context ctx) throws DatabaseException {
-        int orderId = OrderMapper.addOrder(connectionPool,100,100,200,200,90,true,10,"paid");
-        return null;
+
+    public static boolean createOrder(ConnectionPool connectionPool, Context ctx) throws DatabaseException{
+        try{
+            int lengthCm = ctx.sessionAttribute("Length");
+            int widthCm = ctx.sessionAttribute("Width");
+            int shedLengthCm = ctx.sessionAttribute("Shed_length");
+            int shedWidthCm = ctx.sessionAttribute("Shed_width");
+            int slopeDegrees = ctx.sessionAttribute("Roof_slope");
+            boolean hasAssembler = ctx.sessionAttribute("has_assembler");
+            String notice = ctx.sessionAttribute("special_wishes_or_notices");
+            OrderDTO order = new OrderDTO(lengthCm,widthCm,shedLengthCm,shedWidthCm,slopeDegrees,hasAssembler,0.0,null,notice);
+            OrderMapper.addOrder(connectionPool,order);
+            return true;
+        }catch(Exception e){
+            throw new DatabaseException("Error");
+        }
     }
 
 }
