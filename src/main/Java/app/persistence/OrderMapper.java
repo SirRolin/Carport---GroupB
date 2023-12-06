@@ -67,6 +67,7 @@ public class OrderMapper {
             throw new DatabaseException("Error while connecting to database! "+e);
         }
 
+        
         return true;
     }
 
