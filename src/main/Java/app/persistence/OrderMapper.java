@@ -37,8 +37,37 @@ public class OrderMapper {
         }catch(Exception e){
             throw new DatabaseException("Error while connecting to database");
         }
-        OrderDTO resultDTO = new OrderDTO(orderId,order.getLengthCm(),order.getWidthCm(),order.getShedLengthCm(),order.getShedWidthCm(),order.getSlopeDegrees(),order.isHasAssembler(),0, order.getStatus(),order.getNotice());
+        OrderDTO resultDTO = new OrderDTO(orderId,order.getLengthCm(),order.getWidthCm(),order.getShedLengthCm(),order.getShedWidthCm(),order.getSlopeDegrees(),order.isHasAssembler(),order.getPrice(), order.getStatus(),order.getNotice(),order.getNotice());
         return resultDTO;
+    }
+
+    public static boolean updateOrder(ConnectionPool connectionPool, OrderDTO newOrder) throws DatabaseException{
+        String sql = "update orders set length_cm = ?, width_cm = ?, shed_length_cm = ?, shed_width_cm =?, slope_degrees = ?, hire_assembler = ?, price = ?, status = ?, notice = ?, svg_text = ? where orderID = ?";
+        try(Connection connection = connectionPool.getConnection()){
+            try(PreparedStatement ps = connection.prepareStatement(sql)){
+                ps.setInt(1,newOrder.getLengthCm());
+                ps.setInt(2,newOrder.getWidthCm());
+                ps.setInt(3,newOrder.getShedLengthCm());
+                ps.setInt(4,newOrder.getShedWidthCm());
+                ps.setInt(5,newOrder.getSlopeDegrees());
+                ps.setBoolean(6,newOrder.isHasAssembler());
+                ps.setDouble(7,newOrder.getPrice());
+                ps.setObject(8,newOrder.getStatus());
+                ps.setString(9,newOrder.getNotice());
+                ps.setString(10,newOrder.getSvg());
+
+                ps.setInt(11,newOrder.getId());
+
+                int rowsAffected = ps.executeUpdate();
+                if(rowsAffected < 1){
+                    throw new DatabaseException("Error while updating order! ");
+                }
+            }
+        }catch(Exception e){
+            throw new DatabaseException("Error while connecting to database! "+e);
+        }
+
+        return true;
     }
 
 }

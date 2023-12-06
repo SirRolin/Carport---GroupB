@@ -1,6 +1,7 @@
 package app.controllers;
 
 import app.entities.OrderDTO;
+import app.entities.Status;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
@@ -18,12 +19,15 @@ public class OrderController {
             int slopeDegrees = ctx.sessionAttribute("roof_slope");
             boolean hasAssembler = ctx.sessionAttribute("has_assembler");
             String notice = ctx.sessionAttribute("special_wishes_or_notices");
-            OrderDTO order = new OrderDTO(lengthCm,widthCm,shedLengthCm,shedWidthCm,slopeDegrees,hasAssembler,0.0,null,notice);
+            OrderDTO order = new OrderDTO(lengthCm,widthCm,shedLengthCm,shedWidthCm,slopeDegrees,hasAssembler,0.0, Status.initialised,notice,"");
             OrderMapper.addOrder(connectionPool,order);
             return true;
         }catch(Exception e){
             throw new DatabaseException("Error");
         }
     }
+
+
+
 
 }

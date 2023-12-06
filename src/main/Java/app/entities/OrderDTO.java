@@ -12,8 +12,9 @@ public class OrderDTO {
     private double price;
     private Status status;
     private String notice;
+    private String svg;
 
-    public OrderDTO(int id, int lengthCm, int widthCm, int shedLengthCm, int shedWidthCm, int slopeDegrees, boolean hasAssembler, double price, Status status, String notice){
+    public OrderDTO(int id, int lengthCm, int widthCm, int shedLengthCm, int shedWidthCm, int slopeDegrees, boolean hasAssembler, double price, Status status, String notice, String svg){
         this.id = id;
         this.lengthCm = lengthCm;
         this.widthCm = widthCm;
@@ -24,9 +25,10 @@ public class OrderDTO {
         this.price = price;
         this.status = status;
         this.notice = notice;
+        this.svg = svg;
     }
 
-    public OrderDTO(int lengthCm, int widthCm, int shedLengthCm, int shedWidthCm, int slopeDegrees, boolean hasAssembler, double price, Status status, String notice){
+    public OrderDTO(int lengthCm, int widthCm, int shedLengthCm, int shedWidthCm, int slopeDegrees, boolean hasAssembler, double price, Status status, String notice, String svg){
         this.lengthCm = lengthCm;
         this.widthCm = widthCm;
         this.shedLengthCm = shedLengthCm;
@@ -36,6 +38,7 @@ public class OrderDTO {
         this.price = price;
         this.status = status;
         this.notice = notice;
+        this.svg = svg;
     }
 
 
@@ -78,8 +81,10 @@ public class OrderDTO {
     public String getNotice() {
         return notice;
     }
+    public String getSvg(){return svg;}
 
     public void setId(int id) {
         this.id = id;
     }
+    public void setSvg(String svg){this.svg = svg;};
 }
