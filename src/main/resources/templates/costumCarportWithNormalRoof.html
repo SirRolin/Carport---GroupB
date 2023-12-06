@@ -9,38 +9,41 @@
         <div name = "form_flat_roof">
             <div name = "width">
                 <p>brædde</p>
-                <select name="width_option"></select>
+
+                <select name="width_option" th:if="${width_option!=null}" th:each="widthOption">
+
+                </select>
             </div>
         <div name = "length">
             <p>længde</p>
-            <select name="length_options"></select>
+            <select name="length_options" th:if="${length_options!=null}" th:each="lengthOption"></select>
         </div>
         <div name = "roof_type">
             <p>vælg tagtype</p>
-            <select name="chosen_roof">
+            <select name="chosen_roof" th:if="${roof_type!=null}" th:each ="roofType ${roof_type}">
 
             </select>
         </div>
-        <div name="roof_slope">
+        <!--<div name="roof_slope">
             <p>tag hælgning</p>
-            <select name="slope_options">
+            <select name="slope_options" >
 
             </select>
-        </div>
+        </div>-->
         <div name="short_description">
             <p>Redskabsrum</p><br>
             <p>NB! Der skal beregnes 15 cm tagudhæng på hver side af redskabsrummet!*</p>
         </div>
         <div name="shed_width">
             <p>skur bredde</p>
-            <select name="shed_width_option">
+            <select name="shed_width_option" th:if="${shed_width!=null}" th:each ="shedWidth ${shed_width}>
 
             </select>
         </div>
         <div name="shed_length">
             <p>skur længde</p>
 
-            <select name="shed_length_options">
+            <select name="shed_length_options" th:if="${shed_length!=null}" th:each="shedLength ${shed_length}">
 
             </select>
         </div>
@@ -53,6 +56,7 @@
                 </div>
             </div>
             <div name = "nextButton">
+                <p>vil du gerne have hjælp til at få carporten samlet så tryk på checkboxen</p>
                 <input type="submit" value="next">
             </div>
         </div>
