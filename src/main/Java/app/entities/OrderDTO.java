@@ -10,18 +10,34 @@ public class OrderDTO {
     private int slopeDegrees;
     private boolean hasAssembler;
     private double price;
-    private String status;
+    private Status status;
+    private String notice;
 
-    public OrderDTO(int id, int lengthCm, int widthCm, int shedLengthCm, int shedWidthCm, int slopeDegrees, boolean hasAssembler, double price, String status){
+    public OrderDTO(int id, int lengthCm, int widthCm, int shedLengthCm, int shedWidthCm, int slopeDegrees, boolean hasAssembler, double price, Status status, String notice){
         this.id = id;
         this.lengthCm = lengthCm;
         this.widthCm = widthCm;
         this.shedLengthCm = shedLengthCm;
+        this.shedWidthCm = shedWidthCm;
         this.slopeDegrees = slopeDegrees;
         this.hasAssembler = hasAssembler;
         this.price = price;
         this.status = status;
+        this.notice = notice;
     }
+
+    public OrderDTO(int lengthCm, int widthCm, int shedLengthCm, int shedWidthCm, int slopeDegrees, boolean hasAssembler, double price, Status status, String notice){
+        this.lengthCm = lengthCm;
+        this.widthCm = widthCm;
+        this.shedLengthCm = shedLengthCm;
+        this.shedWidthCm = shedWidthCm;
+        this.slopeDegrees = slopeDegrees;
+        this.hasAssembler = hasAssembler;
+        this.price = price;
+        this.status = status;
+        this.notice = notice;
+    }
+
 
     public int getId() {
         return id;
@@ -55,7 +71,15 @@ public class OrderDTO {
         return price;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
+    }
+
+    public String getNotice() {
+        return notice;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
