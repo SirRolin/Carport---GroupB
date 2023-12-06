@@ -11,11 +11,11 @@ public class OrderController {
 
     public static boolean createOrder(ConnectionPool connectionPool, Context ctx) throws DatabaseException{
         try{
-            int lengthCm = ctx.sessionAttribute("Length");
-            int widthCm = ctx.sessionAttribute("Width");
-            int shedLengthCm = ctx.sessionAttribute("Shed_length");
-            int shedWidthCm = ctx.sessionAttribute("Shed_width");
-            int slopeDegrees = ctx.sessionAttribute("Roof_slope");
+            int lengthCm = ctx.sessionAttribute("length");
+            int widthCm = ctx.sessionAttribute("width");
+            int shedLengthCm = ctx.sessionAttribute("shed_length");
+            int shedWidthCm = ctx.sessionAttribute("shed_width");
+            int slopeDegrees = ctx.sessionAttribute("roof_slope");
             boolean hasAssembler = ctx.sessionAttribute("has_assembler");
             String notice = ctx.sessionAttribute("special_wishes_or_notices");
             OrderDTO order = new OrderDTO(lengthCm,widthCm,shedLengthCm,shedWidthCm,slopeDegrees,hasAssembler,0.0,null,notice);
