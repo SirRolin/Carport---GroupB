@@ -10,18 +10,102 @@
             <div name = "width">
                 <p>brædde</p>
 
-                <select name="width_option" th:if="${width_option!=null}" th:each="widthOption">
+                <select name="width_option" <!--th:if="${width_option!=null}" th:each="widthOption"-->>
+                    <option>
+                        240cm
+                    </option>
+                    <option>
+                        270cm
+                    </option>
+                    <option>
+                        300cm
+                    </option>
+                    <option>
+                        330cm
+                    </option>
+                    <option>
+                        360cm
+                    </option>
+                    <option>
+                        390cm
+                    </option>
+                    <option>
+                        420cm
+                    </option>
+                    <option>
+                        450cm
+                    </option>
+                    <option>
+                        480cm
+                    </option>
+                    <option>
+                        510cm
+                    </option>
+                    <option>
+                        540cm
+                    </option>
+                    <option>
+                        570cm
+                    </option>
+                    <option>
+                        600cm
+                    </option>
 
                 </select>
             </div>
         <div name = "length">
             <p>længde</p>
-            <select name="length_options" th:if="${length_options!=null}" th:each="lengthOption"></select>
+            <select name="length_options" <!--th:if="${length_options!=null}" th:each="lengthOption"-->
+            <option>
+                240cm
+            </option>
+            <option>
+                270cm
+            </option>
+            <option>
+                300cm
+            </option>
+            <option>
+                330cm
+            </option>
+            <option>
+                360cm
+            </option>
+            <option>
+                390cm
+            </option>
+            <option>
+                420cm
+            </option>
+            <option>
+                450cm
+            </option>
+            <option>
+                480cm
+            </option>
+            <option>
+                510cm
+            </option>
+            <option>
+                540cm
+            </option>
+            <option>
+                570cm
+            </option>
+            <option>
+                600cm
+            </option>
+            </select>
         </div>
         <div name = "roof_type">
             <p>vælg tagtype</p>
-            <select name="chosen_roof" th:if="${roof_type!=null}" th:each ="roofType ${roof_type}">
-
+            <select name="chosen_roof">
+                <option>
+                    uden tagtyper
+                </option>
+                <option>
+                    med trapeztagtyper
+                </option>
             </select>
         </div>
         <!--<div name="roof_slope">
@@ -36,15 +120,91 @@
         </div>
         <div name="shed_width">
             <p>skur bredde</p>
-            <select name="shed_width_option" th:if="${shed_width!=null}" th:each ="shedWidth ${shed_width}>
-
+            <select name="shed_width_option">
+                <option>
+                    240cm
+                </option>
+                <option>
+                    270cm
+                </option>
+                <option>
+                    300cm
+                </option>
+                <option>
+                    330cm
+                </option>
+                <option>
+                    360cm
+                </option>
+                <option>
+                    390cm
+                </option>
+                <option>
+                    420cm
+                </option>
+                <option>
+                    450cm
+                </option>
+                <option>
+                    480cm
+                </option>
+                <option>
+                    510cm
+                </option>
+                <option>
+                    540cm
+                </option>
+                <option>
+                    570cm
+                </option>
+                <option>
+                    600cm
+                </option>
             </select>
         </div>
         <div name="shed_length">
             <p>skur længde</p>
 
-            <select name="shed_length_options" th:if="${shed_length!=null}" th:each="shedLength ${shed_length}">
-
+            <select name="shed_length_options" >
+                <option>
+                    240cm
+                </option>
+                <option>
+                    270cm
+                </option>
+                <option>
+                    300cm
+                </option>
+                <option>
+                    330cm
+                </option>
+                <option>
+                    360cm
+                </option>
+                <option>
+                    390cm
+                </option>
+                <option>
+                    420cm
+                </option>
+                <option>
+                    450cm
+                </option>
+                <option>
+                    480cm
+                </option>
+                <option>
+                    510cm
+                </option>
+                <option>
+                    540cm
+                </option>
+                <option>
+                    570cm
+                </option>
+                <option>
+                    600cm
+                </option>
             </select>
         </div>
         <div name="special_wishes_or_notices">
