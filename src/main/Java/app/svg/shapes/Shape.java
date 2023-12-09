@@ -1,5 +1,5 @@
 package app.svg.shapes;
 
 public interface Shape {
-  String draw();
+  String draw(double offsetX, double offsetY);
 }

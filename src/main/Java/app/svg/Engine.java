@@ -6,9 +6,6 @@ public class Engine {
     svg.append("svg");
   }
   public static void main(String[] args){
-    StringBuilder text = new StringBuilder("hello");
-    System.out.println(text);
-    drawCarportDraft1(text);
-    System.out.println(text);
+
   }
 }

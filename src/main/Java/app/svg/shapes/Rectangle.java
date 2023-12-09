@@ -2,10 +2,10 @@ package app.svg.shapes;
 
 public class Rectangle implements Shape {
 
-  private float x;
-  private float y;
-  private float width;
-  private float height;
+  private final float x;
+  private final float y;
+  private final float width;
+  private final float height;
   public float roundX = 0;
   public float roundY = 0;
   public String fill = "none";
@@ -20,15 +20,15 @@ public class Rectangle implements Shape {
   }
 
   @Override
-  public String draw() {
-    return "<rect x='" + x + "'" +
-        " y='" + y + "'" +
+  public String draw(double offsetX, double offsetY) {
+    return "<rect x='" + (x + offsetX) + "'" +
+        " y='" + (y + offsetY) + "'" +
         " rx='" + roundX + "'" +
         " ry='" + roundY + "'" +
         " width='" + width + "'" +
         " height='" + height + "'" +
         style() +
-        "/>\n";
+        "/>";
   }
 
   private String style(){
@@ -37,11 +37,5 @@ public class Rectangle implements Shape {
         "stroke:" + stroke + ";" +
         "stroke-width:" + stroke_width + ";" +
         "opacity:" + 1 + ";' ";
-  }
-
-  //// For Testing
-  public static void main(String[] args){
-    Shape rect = new Rectangle(50,50,150,150);
-    System.out.println(rect.draw());
   }
 }
