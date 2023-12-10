@@ -32,7 +32,7 @@ public class Calculator {
         }
         return billOfMaterials;
     }
-    // below code is now correct, need to take several extra factors into account before it gives the right result.
+    // below code is not correct, need to take several extra factors into account before it gives the right result.
     // mainly setup for testing right now.
     private static List<MaterialDTO> getPillers(int carportLength, List<MaterialDTO> pillerOptions) {
         List<MaterialDTO> neededPillers = new ArrayList<>();
