@@ -32,14 +32,33 @@ public class Calculator {
         }
         return billOfMaterials;
     }
-    private static List<MaterialDTO> getPillers(int carportLength, List<MaterialDTO> pillerOptions){
+    // below code is now correct, need to take several extra factors into account before it gives the right result.
+    // mainly setup for testing right now.
+    private static List<MaterialDTO> getPillers(int carportLength, List<MaterialDTO> pillerOptions) {
         List<MaterialDTO> neededPillers = new ArrayList<>();
-        // logic for calculation
+        int spaceBetweenPillers = 310;
+        int basePillarAmountForCarport = 4;
+        // Calculate the number of extra pillars needed based on carport length
+        int extraPillars = ((carportLength - spaceBetweenPillers) / spaceBetweenPillers) * 2;
+        // Total number of pillars needed for the carport
+        int pillarAmountForCarport = basePillarAmountForCarport + extraPillars;
+        // Ensure there are enough pillar options available
+        while (neededPillers.size() < pillarAmountForCarport && !pillerOptions.isEmpty()) {
+            neededPillers.add(pillerOptions.remove(0));
+        }
+        // Set the amount for the first pillar option (if available)
+        if (!neededPillers.isEmpty()) {
+            neededPillers.get(0).setAmount(pillarAmountForCarport);
+        }
         return neededPillers;
     }
+
     private static List<MaterialDTO> getBeams(int carportLength, List<MaterialDTO> beamOptions){
         List<MaterialDTO> neededBeams = new ArrayList<>();
         // logic for calculation
+        for (MaterialDTO m: beamOptions) {
+
+        }
         return neededBeams;
     }
     private static List<MaterialDTO> getCrossbeams(int carportLength, int carportWidth, List<MaterialDTO> crossbeamOptions){
