@@ -49,4 +49,27 @@ public class AdminController {
 
 
 
+    public static boolean addNewMaterial(ConnectionPool connectionPool, Context ctx){
+        return true;
+    }
+
+    public static boolean addNewVariant(ConnectionPool connectionPool, Context ctx){
+        return true;
+    }
+
+    public static boolean editMaterial(ConnectionPool connectionPool, Context ctx){
+        return true;
+    }
+
+    public static boolean editVariant(ConnectionPool connectionPool, Context ctx){
+        return true;
+    }
+
+    public static boolean removeMaterial(ConnectionPool connectionPool, Context ctx){
+        return true;
+    }
+
+    public static boolean removeVariant(ConnectionPool connectionPool, Context ctx){
+        return true;
+    }
 }

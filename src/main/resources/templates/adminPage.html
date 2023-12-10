@@ -7,18 +7,6 @@
 <body>
 
 <div id="Content">
-    <form method="post" th:action="@{/load_order_info}">
-        <label>Order:
-            <select name="selected_order" id="selected_user" onchange="this.form.submit()">
-                <option value=""Select OrderID></option>
-                <option th:each="order : ${session.orderlist}" th:value="${order.getId()}" th:text="${order.getId()}"></option>
-            </select>
-        </label>
-    </form>
-
-    <div th:unless="${session.selected_order==null}">
-        
-    </div>
 
 </div>
 
