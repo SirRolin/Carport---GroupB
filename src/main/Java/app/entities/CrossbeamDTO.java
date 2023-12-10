@@ -4,7 +4,7 @@ public class CrossbeamDTO extends MaterialDTO {
     int materialVariantID;
     int length;
     int price;
-    String unitType = "stk";
+    String unitType = "stk"; // TODO it should not be hard coded
 
     public CrossbeamDTO(int materialID, String name, String type, int amount, String costumInfo, int width_mm, int depth_mm, int materialVariantID, int length, int price) {
         super(materialID, name, type, amount, costumInfo, width_mm, depth_mm);
@@ -16,16 +16,13 @@ public class CrossbeamDTO extends MaterialDTO {
     public int getLength() {
         return length;
     }
-
     public int getPrice() {
         return price;
     }
-
     @Override
     public String getUnitType() {
         return unitType;
     }
-
     @Override
     public int getMaterialVariantID() {
         return materialVariantID;
