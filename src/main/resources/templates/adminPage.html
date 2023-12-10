@@ -7,6 +7,81 @@
 <body>
 
 <div id="Content">
+    <div class="materialList" th:unless="${session.material_list == null}">
+        <table id="material_table">
+            <tr class="tableHeader">
+                <th>Material ID</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Width in MM</th>
+                <th>Depth in MM</th>
+                <th>Description</th>
+            </tr>
+            <tr th:each="material : ${session.material_list}">
+                <td th:text="${material.getMaterialId()}">Material Id</td>
+                <td th:text="${material.getName()}">Name</td>
+                <td th:text="${material.getType()}">Type</td>
+                <td th:text="${material.getWidthMm()}">Width in mm</td>
+                <td th:text="${material.getDepthMm()}">Depth in mm</td>
+                <td th:text="${material.getDescription()}">Description</td>
+            </tr>
+        </table>
+    </div>
+
+    <br>
+
+    <div class="variantList" th:unless="${session.variant_list == null}">
+        <table id="variant_table">
+            <tr class="tableHeader">
+                <th>Material Variant Id</th>
+                <th>Material Id</th>
+                <th>Length in CM</th>
+                <th>Price</th>
+            </tr>
+            <tr th:each="variant : ${session.variant_list}">
+                <td th:text="${variant.getMvId()}">Variant Id</td>
+                <td th:text="${variant.getMaterialId()}">Material Id</td>
+                <td th:text="${variant.getLengthCm()}">Length in cm</td>
+                <td th:text="${variant.getPrice()}">Price</td>
+            </tr>
+        </table>
+    </div>
+
+    <br>
+
+    <div class="changeAddType">
+        <form method="post" th:action="@{/chooseVariantOrMaterial}">
+            <select id="addSelect" name="add_select" onchange="this.form.submit()">
+                <option>Add</option>
+                <option name="Material">Material</option>
+                <option name="Variant">Variant</option>
+            </select>
+        </form>
+    </div>
+
+    <br>
+
+    <div th:unless="${session.addMaterial == false || session.addMaterial == null}" class="addProduct">
+        <form method="post" th:action="@{/addMaterial}">
+            <input type="text" name="material_name" placeholder="Material Name">
+            <input type="text" name="material_type" placeholder="Material Type">
+            <input type="number" name="material_width" placeholder="Material width in mm">
+            <input type="number" name="material_depth" placeholder="Material depth in mm">
+            <input type="text" name="material_description" placeholder="Material description">
+            <input type="submit" value="Add">
+        </form>
+    </div>
+
+    <br>
+
+    <div th:unless="${session.addVariant == false || session.addVariant == null}" class="addProduct">
+        <form method="post" th:action="@{/addVariant}">
+            <input type="number" name="variant_material_id" placeholder="Material Id">
+            <input type="number" name="variant_length" placeholder="Material length in cm">
+            <input type="number" name="variant_price" placeholder="Price">
+            <input type="submit" value="Add">
+        </form>
+    </div>
 
 </div>
 

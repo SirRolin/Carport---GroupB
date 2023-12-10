@@ -1,6 +1,8 @@
 package app;
 
 import app.config.ThymeleafConfig;
+import app.controllers.admin.AdminController;
+import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 import io.javalin.http.Context;
@@ -11,6 +13,12 @@ import java.util.Random;
 
 public class Main {
 
+    private static final String USER = "postgres";
+    private static final String PASSWORD = "postgres";
+    private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
+    private static final String DB = "carport";
+
+    private static ConnectionPool connectionPool = null;
     public static void main(String[] args)
     {
         // Initializing Javalin and Jetty webserver
@@ -20,9 +28,17 @@ public class Main {
             JavalinThymeleaf.init(ThymeleafConfig.templateEngine());
         }).start(7070);
 
+        try{
+            connectionPool = connectionPool.getInstance(USER,PASSWORD,URL,DB);
+        }catch(Exception e){
+
+        }
+
         // render start:
         // tests
-        app.get("/SynchronousVisitsTestPage", Main::testLoading);
+        //app.get("/", Main::testLoading);
+        app.get("/", ctx -> AdminController.loadAdminSite(connectionPool, ctx));
+        app.post("/chooseVariantOrMaterial", ctx->AdminController.variantOrMaterial(connectionPool,ctx));
     }
 
     //// Testing Section:

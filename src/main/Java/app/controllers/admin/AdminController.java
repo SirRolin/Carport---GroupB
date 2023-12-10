@@ -1,11 +1,13 @@
 package app.controllers.admin;
 
-import app.entities.OrderDTO;
-import app.entities.Status;
+import app.entities.*;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
 import io.javalin.http.Context;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AdminController {
 
@@ -47,7 +49,44 @@ public class AdminController {
 
     }
 
+    public static void loadAdminSite(ConnectionPool connectionPool, Context ctx){
+        List<MaterialDTO> materials = new ArrayList<>();
+        List<MaterialVariantDTO> variants = new ArrayList<>();
+        /*MaterialDTO pillar1 = new PillarDTO(1,"test1", Mtype.pillar,20,20,"test description");
+        MaterialDTO pillar2 = new PillarDTO(2,"test2", Mtype.pillar,25,30,"test description2");
+        materials.add(pillar1);
+        materials.add(pillar2);
+        MaterialVariantDTO variant1 = new MaterialVariantDTO(1,1,20,200.0);
+        MaterialVariantDTO variant2 = new MaterialVariantDTO(2,2,26,250.0);
+        variants.add(variant1);
+        variants.add(variant2);
+        */
+        try{
+            //materials = MaterialsMapper.getMaterialList(connectionPool, ctx);
+            //variants = MaterialsMapper.getVariantList(connectionPool, ctx);
+            ctx.sessionAttribute("material_list",materials);
+            ctx.sessionAttribute("variant_list",variants);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        ctx.render("adminPage.html");
+    }
 
+    public static void variantOrMaterial(ConnectionPool connectionPool, Context ctx){
+        String picked = ctx.formParam("add_select");
+        try{
+            if(picked.equalsIgnoreCase("Material")){
+                ctx.sessionAttribute("addMaterial",true);
+                ctx.sessionAttribute("addVariant",false);
+            } else if (picked.equalsIgnoreCase("Variant")) {
+                ctx.sessionAttribute("addVariant",true);
+                ctx.sessionAttribute("addMaterial",false);
+            }
+            loadAdminSite(connectionPool,ctx);
+        }catch(NullPointerException e){
+            e.printStackTrace();
+        }
+    }
 
     public static boolean addNewMaterial(ConnectionPool connectionPool, Context ctx){
         return true;
