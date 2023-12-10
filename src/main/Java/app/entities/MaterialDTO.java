@@ -1,38 +1,63 @@
 package app.entities;
 
 public abstract class MaterialDTO {
-    String info;
+    int materialID;
+    String name;
+    String type;
     int amount;
-    String unitType;
     String costumInfo;
-    public MaterialDTO(String info, int amount, String unitType, String costumInfo) {
-        this.info = info;
+    int width_mm;
+    int depth_mm;
+
+    public MaterialDTO(int materialID, String name, String type, int amount, String costumInfo, int width_mm, int depth_mm) {
+        this.materialID = materialID;
+        this.name = name;
+        this.type = type;
         this.amount = amount;
-        this.unitType = unitType;
         this.costumInfo = costumInfo;
+        this.width_mm = width_mm;
+        this.depth_mm = depth_mm;
     }
-    public MaterialDTO(String info, String unitType, String costumInfo) {
-        this.info = info;
-        this.unitType = unitType;
+    public MaterialDTO(int materialID, String name, String type, String costumInfo, int width_mm, int depth_mm) {
+        this.materialID = materialID;
+        this.name = name;
+        this.type = type;
         this.costumInfo = costumInfo;
+        this.width_mm = width_mm;
+        this.depth_mm = depth_mm;
     }
 
-    public String getInfo() {
-        return info;
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+    public int getMaterialID() {
+        return materialID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public int getAmount() {
         return amount;
     }
 
-    public String getUnitType() {
-        return unitType;
-    }
+    public abstract String getUnitType();
 
     public String getCostumInfo() {
         return costumInfo;
     }
-    public void setAmount(int amount) {
-        this.amount = amount;
+
+    public int getWidth_mm() {
+        return width_mm;
     }
+
+    public int getDepth_mm() {
+        return depth_mm;
+    }
+    public abstract int getMaterialVariantID();
 }

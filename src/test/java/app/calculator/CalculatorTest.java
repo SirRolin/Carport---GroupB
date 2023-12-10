@@ -7,18 +7,15 @@ import static org.junit.jupiter.api.Assertions.*;
 class CalculatorTest {
 
     @Test
+    void printBillOfMaterialsByOrder() {
+    }
+
+    @Test
+    void printBillOfMaterialsByOrderID() {
+    }
+
+    @Test
     void generateBillOfMaterials() {
-    }
 
-    @Test
-    void getPillers() {
-    }
-
-    @Test
-    void getRems() {
-    }
-
-    @Test
-    void getSpear() {
     }
 }
