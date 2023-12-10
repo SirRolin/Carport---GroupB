@@ -33,7 +33,6 @@ public class OrderItemMapper {
             }
             return totalRowsAffected;
     }
-
     public static List<MaterialDTO> getMaterialsByOrder(OrderDTO order) {
         List<MaterialDTO> billOfMaterialsByOrder = new ArrayList<>();
         return  billOfMaterialsByOrder;

@@ -27,9 +27,6 @@ public abstract class MaterialDTO {
         this.depth_mm = depth_mm;
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
     public int getMaterialID() {
         return materialID;
     }
@@ -59,5 +56,6 @@ public abstract class MaterialDTO {
     public int getDepth_mm() {
         return depth_mm;
     }
-    public abstract int getMaterialVariantID();
+    public  abstract int getMaterialVariantID();
+    public abstract void setAmount(int amount);
 }

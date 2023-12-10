@@ -6,13 +6,18 @@ public class CrossbeamDTO extends MaterialDTO {
     int price;
     String unitType = "stk"; // TODO it should not be hard coded
 
-    public CrossbeamDTO(int materialID, String name, String type, int amount, String costumInfo, int width_mm, int depth_mm, int materialVariantID, int length, int price) {
+   public CrossbeamDTO(int materialID, String name, String type, int amount, String costumInfo, int width_mm, int depth_mm, int materialVariantID, int length, int price) {
         super(materialID, name, type, amount, costumInfo, width_mm, depth_mm);
         this.materialVariantID = materialVariantID;
         this.length = length;
         this.price = price;
     }
-
+    public CrossbeamDTO(int materialID, String name, String type, String costumInfo, int width_mm, int depth_mm, int materialVariantID, int length, int price) {
+        super(materialID, name, type, costumInfo, width_mm, depth_mm);
+        this.materialVariantID = materialVariantID;
+        this.length = length;
+        this.price = price;
+    }
     public int getLength() {
         return length;
     }
@@ -26,5 +31,10 @@ public class CrossbeamDTO extends MaterialDTO {
     @Override
     public int getMaterialVariantID() {
         return materialVariantID;
+    }
+
+    @Override
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 }

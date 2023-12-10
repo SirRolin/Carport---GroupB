@@ -5,14 +5,20 @@ public class PillerDTO extends MaterialDTO {
     int materialVariantID;
     int length;
     int price;
+    int amount = 0;
     String unitType = "stk"; // TODO it should not be hard coded
-    public PillerDTO(int materialID, String name, String type, int amount, String costumInfo, int width_mm, int depth_mm, int materialVariantID, int length, int price) {
+   public PillerDTO(int materialID, String name, String type, int amount, String costumInfo, int width_mm, int depth_mm, int materialVariantID, int length, int price) {
         super(materialID, name, type, amount, costumInfo, width_mm, depth_mm);
         this.materialVariantID = materialVariantID;
         this.length = length;
         this.price = price;
     }
-
+    public PillerDTO(int materialID, String name, String type, String costumInfo, int width_mm, int depth_mm, int materialVariantID, int length, int price) {
+        super(materialID, name, type, costumInfo, width_mm, depth_mm);
+        this.materialVariantID = materialVariantID;
+        this.length = length;
+        this.price = price;
+    }
     public int getLength() {
         return length;
     }
@@ -29,5 +35,10 @@ public class PillerDTO extends MaterialDTO {
     @Override
     public int getMaterialVariantID() {
         return materialVariantID;
+    }
+
+    @Override
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 }
