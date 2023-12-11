@@ -108,12 +108,12 @@
                 </option>
             </select>
         </div>
-        <!--<div name="roof_slope">
+        <div name="roof_slope" th:if="${param.chosenRoofType == 'inclined'}">
             <p>tag hælgning</p>
             <select name="slope_options" >
 
             </select>
-        </div>-->
+        </div>
         <div name="short_description">
             <p>Redskabsrum</p><br>
             <p>NB! Der skal beregnes 15 cm tagudhæng på hver side af redskabsrummet!*</p>

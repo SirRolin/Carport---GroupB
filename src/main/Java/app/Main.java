@@ -5,8 +5,8 @@ import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 import io.javalin.http.Context;
 
-import javax.swing.*;
 import java.util.TimerTask;
+
 
 
 public class Main {
@@ -24,10 +24,14 @@ public class Main {
         }).start(7070);
 
         // render start:
-        app.get("/SynchronousVisitsTestPage", ctx -> testLoading(ctx));
+        app.get("/",ctx ->ctx.render("index.html"));
+        app.post("/costumCarport",ctx ->ctx.render("costumCarport.html"));
+
+
+        //app.get("/SynchronousVisitsTestPage", ctx -> testLoading(ctx));
     }
 
-    public static void testLoading(Context ctx){
+    /*public static void testLoading(Context ctx){
         changePeople(1);
         try {
             Thread.sleep(10000);
@@ -39,5 +43,8 @@ public class Main {
     //// Increasing and Decreasing people synchronously to avoid desyncs.
     private static synchronized void changePeople(int by){
         people += by;
-    }
+    }*/
+
+
+
 }
