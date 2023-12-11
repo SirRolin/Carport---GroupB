@@ -39,6 +39,7 @@ public class Main {
         //app.get("/", Main::testLoading);
         app.get("/", ctx -> AdminController.loadAdminSite(connectionPool, ctx));
         app.post("/chooseVariantOrMaterial", ctx->AdminController.variantOrMaterial(connectionPool,ctx));
+        app.post("/editMaterial",ctx->AdminController.pickEditable(connectionPool,ctx));
     }
 
     //// Testing Section:
