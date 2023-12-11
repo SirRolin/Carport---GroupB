@@ -23,8 +23,8 @@ public class Calculator {
         List<MaterialDTO> billOfMaterials = new ArrayList<>();
         // find the different materials we currently have available based on type.
         try {
-        billOfMaterials.add((MaterialDTO) getPillers(order.getLengthCm(),MaterialsMapper.getMaterialInfo(connectionPool,"pillar")));
-        billOfMaterials.add((MaterialDTO) getBeams(order.getLengthCm(), MaterialsMapper.getMaterialInfo(connectionPool,"beam")));
+        billOfMaterials.add((MaterialDTO) getPillers(order.getLengthCm(),order.getWidthCm(),MaterialsMapper.getMaterialInfo(connectionPool,"pillar")));
+        billOfMaterials.add((MaterialDTO) getBeams(order.getLengthCm(), order.getWidthCm(), MaterialsMapper.getMaterialInfo(connectionPool,"beam")));
         billOfMaterials.add((MaterialDTO) getCrossbeams(order.getLengthCm(),order.getWidthCm(),MaterialsMapper.getMaterialInfo(connectionPool,"cover_planks")));
         OrderItemMapper.saveBillOfMaterials(billOfMaterials, order.getId(), connectionPool);
         }catch (DatabaseException e){
@@ -33,37 +33,50 @@ public class Calculator {
         return billOfMaterials;
     }
     // below code is not correct, need to take several extra factors into account before it gives the right result.
-    // mainly setup for testing right now.
-    private static List<MaterialDTO> getPillers(int carportLength, List<MaterialDTO> pillerOptions) {
+    private static List<MaterialDTO> getPillers(int carportLength,int carportWidth, List<MaterialDTO> pillerOptions) {
+        // TODO add logic that decides which pillar is the best, if there is more than one.
         List<MaterialDTO> neededPillers = new ArrayList<>();
-        int spaceBetweenPillers = 310;
-        int basePillarAmountForCarport = 4;
-        // Calculate the number of extra pillars needed based on carport length
-        int extraPillars = ((carportLength - spaceBetweenPillers) / spaceBetweenPillers) * 2;
-        // Total number of pillars needed for the carport
-        int pillarAmountForCarport = basePillarAmountForCarport + extraPillars;
-        // Ensure there are enough pillar options available
-        while (neededPillers.size() < pillarAmountForCarport && !pillerOptions.isEmpty()) {
-            neededPillers.add(pillerOptions.remove(0));
+        int maxDistanceBetweenPillars = 310; // Maximum distance between pillars
+        int totalPillars = 1; // starting amount.
+        int remainingLength = carportLength;
+        int remainingWidth = carportWidth;
+        while(remainingLength > maxDistanceBetweenPillars){
+            remainingLength -= maxDistanceBetweenPillars;
+            totalPillars++;
+            while(remainingWidth > carportWidth) {
+                remainingWidth -= maxDistanceBetweenPillars;
+                totalPillars++;
+                // TODO add real logic that adds more pillars if the the width is to large.
+            }
         }
-        // Set the amount for the first pillar option (if available)
-        if (!neededPillers.isEmpty()) {
-            neededPillers.get(0).setAmount(pillarAmountForCarport);
-        }
+        totalPillars *=2;
+        neededPillers.add(pillerOptions.remove(0));
+        neededPillers.get(0).setAmount(totalPillars);
         return neededPillers;
     }
 
-    private static List<MaterialDTO> getBeams(int carportLength, List<MaterialDTO> beamOptions){
+    private static List<MaterialDTO> getBeams(int carportLength,int carportWidth, List<MaterialDTO> beamOptions) {
         List<MaterialDTO> neededBeams = new ArrayList<>();
-        // logic for calculation
-        for (MaterialDTO m: beamOptions) {
-
-        }
+        // TODO need to add logic
         return neededBeams;
     }
     private static List<MaterialDTO> getCrossbeams(int carportLength, int carportWidth, List<MaterialDTO> crossbeamOptions){
         List<MaterialDTO> neededCrossbeams = new ArrayList<>();
-        // Logic for calculation
+        // TODO find the most suiteble beam. Even though i could only find 1 type on fog homepage.
+        int remainingLength = carportLength;
+        int remainingWidth = carportWidth;
+        int distanceBetweenBeams = 55;
+        int totalCrossBeams = 1; // starts with 1 crossbeam
+        while (remainingLength > distanceBetweenBeams){ // keeps adding crossbeams as long as there is room.
+            remainingLength -= distanceBetweenBeams;
+            totalCrossBeams++;
+        }
+        // divides by 2 if the carportWidth is less than half of the crossbeam length.
+        if(carportWidth < (crossbeamOptions.get(0).getLength())/2){
+            totalCrossBeams /=2;
+        }
+        neededCrossbeams.add(crossbeamOptions.remove(0));
+        neededCrossbeams.get(0).setAmount(totalCrossBeams);
         return neededCrossbeams;
     }
 }

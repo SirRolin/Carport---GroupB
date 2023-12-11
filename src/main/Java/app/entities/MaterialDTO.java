@@ -58,4 +58,5 @@ public abstract class MaterialDTO {
     }
     public  abstract int getMaterialVariantID();
     public abstract void setAmount(int amount);
+    public abstract int getLength();
 }
