@@ -54,7 +54,7 @@ public class AdminController {
         List<MaterialDTO> materials = new ArrayList<>();
         List<MaterialVariantDTO> variants = new ArrayList<>();
         MaterialDTO pillar1 = new PillarDTO(1,"test1", Mtype.pillar,20,20,"test description");
-        MaterialDTO pillar2 = new PillarDTO(2,"test2", Mtype.pillar,25,30,"test description2");
+        MaterialDTO pillar2 = new PillarDTO(2,"test2", Mtype.beam,25,30,"test description2");
         materials.add(pillar1);
         materials.add(pillar2);
         MaterialVariantDTO variant1 = new MaterialVariantDTO(1,1,20,200.0);
@@ -63,9 +63,13 @@ public class AdminController {
         variants.add(variant2);
 
         try{
+            if(ctx.sessionAttribute("modified_list")==null){
+                ctx.sessionAttribute("material_list",materials);
+            }else {
+                ctx.sessionAttribute("material_list",ctx.sessionAttribute("modified_list"));
+            }
             //materials = MaterialsMapper.getMaterialList(connectionPool, ctx);
             //variants = MaterialsMapper.getVariantList(connectionPool, ctx);
-            ctx.sessionAttribute("material_list",materials);
             ctx.sessionAttribute("variant_list",variants);
         }catch(Exception e){
             e.printStackTrace();
@@ -87,7 +91,7 @@ public class AdminController {
         }
     }
 
-    public static void pickEditable(ConnectionPool connectionPool, Context ctx){
+    public static void pickEditableMaterial(ConnectionPool connectionPool, Context ctx){
         try{
             String pickedEdit = ctx.formParam("edit_material");
             if(pickedEdit.contains("done")){
@@ -95,12 +99,46 @@ public class AdminController {
                 ctx.sessionAttribute("edit_material",-1);
             }else{
                int pickedEditInt =  Integer.parseInt(pickedEdit);
-                ctx.sessionAttribute("edit_material",pickedEdit);
+                ctx.sessionAttribute("edit_material",pickedEditInt);
             }
         }catch(Exception e){
 
         }
         loadAdminSite(connectionPool,ctx);
+    }
+
+    public static void pickEditableVariant(ConnectionPool connectionPool, Context ctx){
+        try{
+            String pickedEdit = ctx.formParam("edit_variant");
+            if(pickedEdit.contains("done")){
+                //call edit variant function
+                ctx.sessionAttribute("edit_variant",-1);
+            }else {
+                int pickedEditInt = Integer.parseInt(pickedEdit);
+                ctx.sessionAttribute("edit_variant",pickedEditInt);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        loadAdminSite(connectionPool,ctx);
+    }
+
+    public static void filterMaterials(ConnectionPool connectionPool, Context ctx){
+        String filter = ctx.formParam("filter");
+        switch(filter){
+            case "all":
+                //getAllMaterialInfo
+                break;
+            case "pillar":
+                //getAllMaterialInfoByType
+                break;
+            case "beam":
+                break;
+            case "roof":
+                break;
+            case "cover_planks":
+                break;
+        }
     }
 
     public static boolean addNewMaterial(ConnectionPool connectionPool, Context ctx){

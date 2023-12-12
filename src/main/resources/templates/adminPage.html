@@ -8,6 +8,16 @@
 
 <div id="Content">
     <div class="materialList" th:unless="${session.material_list == null || session.material_list.isEmpty()}">
+        <p>Filter by materialtype:</p>
+        <form method="post" th:action="@{/filterMaterials}" onchange="this.form.submit()">
+            <select>
+                <option name="filter" value="all" th:text="all"></option>
+                <option name="filter" value="pillar" th:text="pillar"></option>
+                <option name="filter" value="roof" th:text="roof"></option>
+                <option name="filter" value="beam" th:text="beam"></option>
+                <option name="filter" value="cover_planks" th:text="'cover planks'"></option>
+            </select>
+        </form>
         <form method="post" th:action="@{/editMaterial}">
         <table id="material_table">
             <tr class="tableHeader">
@@ -34,7 +44,30 @@
                     <input type="text" name="edited_material_name" th:value="${material.getName()}">
                 </td>
                 <td th:unless="${session.edit_material != i.index}">
-                    <input type="text" name="edited_material_type" th:value="${material.getType()}">
+                    <select th:if="${#strings.equals(material.getType().toString(), 'pillar')}" name="edited_material_type">
+                        <option name="pillar" th:text="pillar">pillar</option>
+                        <option name="roof" th:text="roof">roof</option>
+                        <option name="beam" th:text="beam">beam</option>
+                        <option name="cover_planks" th:text="'cover planks'">cover planks</option>
+                    </select>
+                    <select th:if="${#strings.equals(material.getType().toString(), 'roof')}" name="edited_material_type">
+                        <option name="roof" th:text="roof">roof</option>
+                        <option name="pillar" th:text="pillar">pillar</option>
+                        <option name="beam" th:text="beam">beam</option>
+                        <option name="cover_planks" th:text="'cover planks'">cover planks</option>
+                    </select>
+                    <select th:if="${#strings.equals(material.getType().toString(), 'beam')}" name="edited_material_type">
+                        <option name="beam" th:text="beam">beam</option>
+                        <option name="roof" th:text="roof">roof</option>
+                        <option name="pillar" th:text="pillar">pillar</option>
+                        <option name="cover_planks" th:text="'cover planks'">cover planks</option>
+                    </select>
+                    <select th:if="${#strings.equals(material.getType().toString(), 'cover_planks')}" name="edited_material_type">
+                        <option name="cover_planks" th:text="'cover planks'">cover planks</option>
+                        <option name="roof" th:text="roof">roof</option>
+                        <option name="beam" th:text="beam">beam</option>
+                        <option name="pillar" th:text="pillar">pillar</option>
+                    </select>
                 </td>
                 <td th:unless="${session.edit_material != i.index}">
                     <input type="number" name="edited_material_width" th:value="${material.getWidthMm()}">
@@ -56,20 +89,37 @@
     <br>
 
     <div class="variantList" th:unless="${session.variant_list == null || session.variant_list.isEmpty()}">
+        <form method="post" th:action="@{/editVariant}">
         <table id="variant_table">
             <tr class="tableHeader">
                 <th>Material Variant Id</th>
                 <th>Material Id</th>
                 <th>Length in CM</th>
                 <th>Price</th>
+                <th>Action</th>
             </tr>
-            <tr th:each="variant : ${session.variant_list}">
-                <td th:text="${variant.getMvId()}">Variant Id</td>
-                <td th:text="${variant.getMaterialId()}">Material Id</td>
-                <td th:text="${variant.getLengthCm()}">Length in cm</td>
-                <td th:text="${variant.getPrice()}">Price</td>
+            <tr th:each="variant, i : ${session.variant_list}">
+                <td th:if="${session.edit_variant != i.index}" th:text="${variant.getMvId()}">Variant Id</td>
+                <td th:if="${session.edit_variant != i.index}" th:text="${variant.getMaterialId()}">Material Id</td>
+                <td th:if="${session.edit_variant != i.index}" th:text="${variant.getLengthCm()}">Length in cm</td>
+                <td th:if="${session.edit_variant != i.index}" th:text="${variant.getPrice()}">Price</td>
+                <td th:if="${session.edit_variant != i.index}">
+                    <button type="submit" name="edit_variant" th:value="${i.index}" th:id="'edit_variant_'+ ${i.index}">Edit</button>
+                </td>
+                <td th:unless="${session.edit_variant != i.index}" th:text="${variant.getMvId()}"></td>
+                <td th:unless="${session.edit_variant != i.index}" th:text="${variant.getMaterialId()}"></td>
+                <td th:unless="${session.edit_variant != i.index}">
+                    <input type="number" name="edited_variant_length" th:value="${variant.getLengthCm()}">
+                </td>
+                <td th:unless="${session.edit_variant != i.index}">
+                    <input type="number" name="edited_variant_price" th:value="${variant.getPrice()}">
+                </td>
+                <td th:unless="${session.edit_variant != i.index}">
+                    <button type="submit" name="edit_variant" th:value="'done '+${i.index}" th:id="'edit_variant_'+ ${i.index}">Save</button>
+                </td>
             </tr>
         </table>
+        </form>
     </div>
 
     <br>
