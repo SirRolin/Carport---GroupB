@@ -29,8 +29,9 @@ private static ConnectionPool connectionPool = null;
 
         // render start:
         app.get("/",ctx ->ctx.render("index.html"));
+        app.get("submitCostumCarport",ctx->ctx.render("submitCostumCarport"));
         app.post("/costumCarport",ctx ->customController.renderCostumCarportFile(ctx,connectionPool));
-
+        app.post("/submitCostumCarport",ctx->customController.sendOrderDTO(ctx,connectionPool));
 
         //app.get("/SynchronousVisitsTestPage", ctx -> testLoading(ctx));
     }
