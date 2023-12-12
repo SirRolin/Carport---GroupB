@@ -9,12 +9,18 @@
 
   <div id="mainMenu">
     <div id="mainForm">
-      <form  id="choice" action="/costumCarport" method="post">
+      <!--th:action="@{/costumCarport}"-->
       <div id = "formChoice">
-          <a href="/costumCarport?chosenRoofType=flat">carport med fladt tag</a>
-          <a href="/costumCarport?chosenRoofType=inclined">carport med hældningstag</a>
+          <form id="submitForFlat"  th:action="@{/costumCarport}" method="post">
+              <input type="submit" name="inclined" th:value="carport_without_incline">
+          </form>
+          <form id ="submitForInclined"  th:action="@{/costumCarport}" method="post">
+              <input type="submit" name="inclined" th:value="carport_with_incline" >
+          </form>
+
+          <!--færdiglavet carport link her-->
       </div>
-      </form>
+
     </div>
   </div>
 

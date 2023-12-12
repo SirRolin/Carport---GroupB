@@ -10,7 +10,7 @@
             <div name = "width">
                 <p>brædde</p>
 
-                <select name="width_option" <!--th:if="${width_option!=null}" th:each="widthOption"-->>
+                <select name="width_option"> <!--th:if="${width_option!=null}" th:each="widthOption"-->
                     <option>
                         240cm
                     </option>
@@ -55,7 +55,7 @@
             </div>
         <div name = "length">
             <p>længde</p>
-            <select name="length_options" <!--th:if="${length_options!=null}" th:each="lengthOption"-->
+            <select name="length_options"> <!--th:if="${length_options!=null}" th:each="lengthOption"-->
             <option>
                 240cm
             </option>
@@ -108,9 +108,14 @@
                 </option>
             </select>
         </div>
-        <div name="roof_slope" th:if="${param.chosenRoofType == 'inclined'}">
+        <div name="roof_slope" th:if="${session.roof_type == true}"><!---->
             <p>tag hælgning</p>
             <select name="slope_options" >
+                <option>1 grader</option>
+                <option>2 grader</option>
+                <option>3 grader</option>
+                <option>4 grader</option>
+                <option>5 grader</option>
 
             </select>
         </div>

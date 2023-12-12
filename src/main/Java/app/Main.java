@@ -1,16 +1,17 @@
 package app;
 
 import app.config.ThymeleafConfig;
+import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
+import app.controllers.CustomController;
 import io.javalin.http.Context;
 
 import java.util.TimerTask;
 
 
-
 public class Main {
-
+private static ConnectionPool connectionPool = null;
     //// Testing How many people are trying to access the page
     private static int people = 0;
 
@@ -23,9 +24,12 @@ public class Main {
             JavalinThymeleaf.init(ThymeleafConfig.templateEngine());
         }).start(7070);
 
+        CustomController customController = new CustomController();
+        connectionPool = connectionPool.getInstance();
+
         // render start:
         app.get("/",ctx ->ctx.render("index.html"));
-        app.post("/costumCarport",ctx ->ctx.render("costumCarport.html"));
+        app.post("/costumCarport",ctx ->customController.renderCostumCarportFile(ctx,connectionPool));
 
 
         //app.get("/SynchronousVisitsTestPage", ctx -> testLoading(ctx));
