@@ -1,44 +1,50 @@
 @startuml
 package "Prebuilt" #FFB52E {
     Object carport {
-        Serial uID
+        Serial carportID
         int length_cm
         int width_cm
-        int shed_length
-        int shed_width
+        int shed_length_cm
+        int shed_width_cm
         int slope_degrees
-        Serial oID
+        Serial order_itemID
         Double price
     }
 }
 
 package "Materials" #ffb {
     Object material_variant {
-        Serial uID
-        Serial mID
-        String description
+        Serial mvID
+        Serial materialID
+        int length_cm
+        Double price
     }
     Object material {
-        Serial mID
+        Serial materialID
         String name
         MTYPE type
-        int length_mm
         int width_mm
         int depth_mm
-        Double price
+        String description
     }
 
     'nice to have - if a material has this it's a roof that requires a slope
     Object requires_slope {
-        Serial mID
-        tinyint min_slope
-        tinyint max_slope
+        Serial materialID
+        smallint min_slope
+        smallint max_slope
     }
 }
 
 package "Orders" #00CDFF {
+    Object order_item {
+        Serial order_itemID
+        Serial orderID
+        Serial mvID
+        tinyint quantity
+    }
     Object orders {
-        Serial oID
+        Serial orderID
         int length_cm
         int width_cm
         int shed_length_cm
@@ -47,12 +53,6 @@ package "Orders" #00CDFF {
         boolean hire_assembler
         Double price
         STATUS status
-    }
-    Object order_item {
-        Serial ID
-        Serial oID
-        Serial mID
-        tinyint quantity
     }
 }
 

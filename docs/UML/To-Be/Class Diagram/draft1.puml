@@ -9,18 +9,22 @@ package "Config"{
     class ThymeleafConfig
 }
 package "Controller" #red {
-    class PremadeCarport
-    class CustomCarport
-    class ViewOrder
+    class PremadeController
+    class CustomController
+    class OrderController{
+        + Boolean {static} createOrder(ConnectionPool, Context ctx)
+    }
     package "admin" #pink {
     class AdminSite
     class BuildACarport
     }
 }
 package "Mapper" #green {
-    class Premade
-    class Orders
-    class Materials
+    class PremadeMapper
+    class OrderMapper{
+        + {static} OrderDTO addOrder(ConnectionPool, OrderDTO)
+    }
+    class MaterialMapper
 }
 package "Engine" #lightblue {
     class MainEngine
@@ -31,18 +35,19 @@ package "Engine" #lightblue {
 }
 main *-- "Controller"
 main *-- "Config"
-PremadeCarport *-- Premade
-CustomCarport *-- Materials
-ViewOrder *-- Orders
-IMAP --* CustomCarport
+PremadeController *-- PremadeMapper
+CustomController *-- MaterialMapper
+OrderController *-- OrderMapper
+IMAP --* CustomController
 IMAP --* BuildACarport
 BuildACarport *-- MainEngine
-BuildACarport *-- Materials
+BuildACarport *-- MaterialMapper
 MainEngine *-- Roof
 MainEngine *-- Pillars
 MainEngine *-- Beams
 MainEngine *-- Crossbeams
 AdminSite *-- "Mapper"
-Materials --* "Engine"
+MaterialMapper --* "Engine"
+
 
 @enduml
