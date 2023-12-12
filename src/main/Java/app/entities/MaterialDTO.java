@@ -1,6 +1,6 @@
 package app.entities;
 
-public abstract class MaterialDTO {
+public abstract class MaterialDTO implements Comparable<MaterialDTO> {
     int materialID;
     String name;
     String type;

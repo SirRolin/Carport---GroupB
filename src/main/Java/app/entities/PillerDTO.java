@@ -1,12 +1,14 @@
 package app.entities;
 
-public class PillerDTO extends MaterialDTO {
+import org.jetbrains.annotations.NotNull;
 
-    int materialVariantID;
-    int length;
-    int price;
-    int amount = 0;
-    String unitType = "stk"; // TODO it should not be hard coded
+public class PillerDTO extends MaterialDTO implements Comparable<MaterialDTO>{
+
+    private int materialVariantID;
+    private int length;
+    private int price;
+    private int amount = 0;
+    private String unitType = "stk"; // TODO it should not be hard coded
    public PillerDTO(int materialID, String name, String type, int amount, String costumInfo, int width_mm, int depth_mm, int materialVariantID, int length, int price) {
         super(materialID, name, type, amount, costumInfo, width_mm, depth_mm);
         this.materialVariantID = materialVariantID;
@@ -40,5 +42,11 @@ public class PillerDTO extends MaterialDTO {
     @Override
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    @Override
+    public int compareTo(@NotNull MaterialDTO o) {
+       String strLength = String.valueOf(length);
+       return strLength.compareTo(String.valueOf(o.getLength()));
     }
 }
