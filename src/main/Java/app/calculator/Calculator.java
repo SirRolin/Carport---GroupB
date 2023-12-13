@@ -28,46 +28,27 @@ public class Calculator {
         return billOfMaterials;
     }
 
-    // below code is not completed, need to take several extra factors into account before it gives the right result.
+    // below code should be complete, until we decide to add a shed.
     private static List<MaterialDTO> getPillers(int carportLength, int carportWidth, List<MaterialDTO> pillerOptions) {
-        // TODO add logic that decides which pillar is the best, if there is more than one.
         List<MaterialDTO> neededPillers = new ArrayList<>();
         int maxDistanceBetweenPillars = 310; // Maximum distance between pillars
-        int totalPillars = 1; // starting amount
-        int remainingLength = carportLength;
-        int remainingWidth = carportWidth;
-        MaterialDTO choosenPiller = null;
-        // sorts the piller Options array by length, longest first, if there is more than 1 pillar.
-        if(pillerOptions.size() > 1){
-            Collections.sort(pillerOptions,Collections.reverseOrder());
+        MaterialDTO choosenPillar = null;
+        if(!pillerOptions.isEmpty()){
+            choosenPillar = pillerOptions.remove(0);
         }
-        // we only have one pillar type
-        if (choosenPiller == null) {
-            choosenPiller = pillerOptions.remove(0);
-        }
-        while (totalPillars*maxDistanceBetweenPillars <= carportLength) {
-            remainingLength -= maxDistanceBetweenPillars;
+        int totalPillars = 0; // starting amount
+        while(totalPillars*maxDistanceBetweenPillars < carportLength*2){ // carportLength times two because there is two sides.
             totalPillars++;
         }
-        while (remainingWidth > carportWidth) {
-            remainingWidth -= maxDistanceBetweenPillars;
-            totalPillars++;
-            // TODO add real logic that adds more pillars if the the width is to large.
-        }
-        totalPillars *= 2; // double the amount of pillars after it's done counting, because there is two sides.
-        // makes sure there is always atleast 4 pillars.
-        if (totalPillars < 4) {
-            totalPillars = 4;
-        }
-        choosenPiller.setAmount(totalPillars);
-        neededPillers.add(choosenPiller);
+        choosenPillar.setAmount(totalPillars);
+        neededPillers.add(choosenPillar);
         return neededPillers;
     }
 
-    // below code is done!
+    // below code is done, atleast until we decide to add a shed!
     private static List<MaterialDTO> getBeams(int carportLength, int carportWidth, List<MaterialDTO> beamOptions) {
         List<MaterialDTO> neededBeams = new ArrayList<>();
-        // sorts the piller Options array by length, longest last, if there is more than 1 pillar.
+        // sorts the beam Options array by length, longest last, if there is more than 1 pillar.
         if(beamOptions.size() > 1){
             Collections.sort(beamOptions, Comparator.naturalOrder());
         }
@@ -91,7 +72,7 @@ public class Calculator {
                 // sets the amount and removes the beam from the list and goes again.
                 currentBeam.setAmount(totalBeams);
                 beamOptions.remove(i);
-                // a check to make sure it only adds a beam if it's needed.
+                // a check to make sure it only adds a beam if it',s needed.
                 if (currentBeam.getAmount() != 0) {
                     neededBeams.add(currentBeam);
                 }
@@ -100,26 +81,33 @@ public class Calculator {
         return neededBeams;
     }
 
-    // below logic is outdated and a bit flawed, please ignore.
+    // below logic is done, unless we decide to do the nice to have TO_DO.
     private static List<MaterialDTO> getCrossbeams(int carportLength, int carportWidth, List<MaterialDTO> crossbeamOptions) {
         List<MaterialDTO> neededCrossbeams = new ArrayList<>();
-        // TODO need to add logic
         int distanceBetweenCrossBeams = 55; // Maximum distance between pillars
-        int totalCrossBeams = 1; // starting amount
-        int remainingLength = carportLength;
-        int remainingWidth = carportWidth;
-        Boolean stillCounting = true;
+        int totalCrossBeams = 0; // starting amount
         MaterialDTO choosenCrossBeam = null;
-        while (stillCounting) {
-            while (remainingLength > distanceBetweenCrossBeams) {
-                remainingLength -= distanceBetweenCrossBeams;
+        // sorts the beam Options array by length, shortest last, if there is more than 1 pillar.
+        if(crossbeamOptions.size() > 1){
+            Collections.sort(crossbeamOptions, Comparator.reverseOrder());
+        }
+        // if the length of the crossbeam is long enough to cover carport width, it is chosen.
+        for(int i = crossbeamOptions.size()-1;i >=0;i--){
+            if(crossbeamOptions.get(i).getLength() >= carportWidth){
+                choosenCrossBeam = crossbeamOptions.get(i);
+            }
+        }
+        // adds the amount need of the chosen crossbeam to out needCrossBeam array if one was chosen.
+        if(!choosenCrossBeam.equals(null)) {
+            while (totalCrossBeams * distanceBetweenCrossBeams <= carportLength) {
                 totalCrossBeams++;
             }
-            if (totalCrossBeams*distanceBetweenCrossBeams < carportLength) {
-                choosenCrossBeam.setAmount(totalCrossBeams);
-                 neededCrossbeams.add(choosenCrossBeam);
-                stillCounting = false;
-            }
+            choosenCrossBeam.setAmount(totalCrossBeams);
+            neededCrossbeams.add(choosenCrossBeam);
+        }
+
+        if(choosenCrossBeam.equals(null)){
+            // TODO NICE TO HAVE: add logic if no single CrossBeam is long enough to cover the width of the carport on its own.
         }
         return neededCrossbeams;
     }

@@ -29,19 +29,19 @@ public class MaterialsMapper {
                     int length = rs.getInt("length_cm");
                     int price = rs.getInt("price");
                     switch (type) {
-                        case "pillar":
-                            availableMaterials.add(new PillerDTO(materialID,name, type,description,width_mm,depth_mm, materialVariantID,length,price));
-                            break;
-                        case "beam":
-                            availableMaterials.add(new BeamDTO(materialID,name, type,description,width_mm,depth_mm, materialVariantID,length,price));
-                            break;
-                        case "cover_planks":
-                            availableMaterials.add(new CrossbeamDTO(materialID,name, type,description,width_mm,depth_mm, materialVariantID,length,price));
-                            break;
+                        case "pillar" -> {
+                            availableMaterials.add(new PillerDTO(materialID, name, type, description, width_mm, depth_mm, materialVariantID, length, price));
+                        }
+                        case "beam" -> {
+                            availableMaterials.add(new BeamDTO(materialID, name, type, description, width_mm, depth_mm, materialVariantID, length, price));
+                        }
+                        case "cover_planks" -> {
+                            availableMaterials.add(new CrossbeamDTO(materialID, name, type, description, width_mm, depth_mm, materialVariantID, length, price));
+                        }
                         // Add more cases as more material is needed
-                        default:
-                            break;
-                }
+                        default -> {
+                        }
+                    }
             }
         }catch (SQLException e){
             throw new DatabaseException("unable to connect to database");
@@ -66,18 +66,18 @@ public class MaterialsMapper {
                 int length = rs.getInt("length_cm");
                 int price = rs.getInt("price");
                 switch (type) {
-                    case "pillar":
-                        availableMaterials.add(new PillerDTO(materialID,name, type,description,width_mm,depth_mm, materialVariantID,length,price));
-                        break;
-                    case "beam":
-                        availableMaterials.add(new BeamDTO(materialID,name, type,description,width_mm,depth_mm, materialVariantID,length,price));
-                        break;
-                    case "cover_planks":
-                        availableMaterials.add(new CrossbeamDTO(materialID,name, type,description,width_mm,depth_mm, materialVariantID,length,price));
-                        break;
+                    case "pillar" -> {
+                        availableMaterials.add(new PillerDTO(materialID, name, type, description, width_mm, depth_mm, materialVariantID, length, price));
+                    }
+                    case "beam" -> {
+                        availableMaterials.add(new BeamDTO(materialID, name, type, description, width_mm, depth_mm, materialVariantID, length, price));
+                    }
+                    case "cover_planks" -> {
+                        availableMaterials.add(new CrossbeamDTO(materialID, name, type, description, width_mm, depth_mm, materialVariantID, length, price));
+                    }
                     // Add more cases as more material is needed
-                    default:
-                        break;
+                    default -> {
+                    }
                 }
             }
         }catch (SQLException e){

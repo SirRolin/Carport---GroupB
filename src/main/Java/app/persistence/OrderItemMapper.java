@@ -13,7 +13,7 @@ import java.util.List;
 public class OrderItemMapper {
     // saves bill of materials to the order id.
     public static int saveBillOfMaterials(List<MaterialDTO> billOfMaterials,int orderID,ConnectionPool connectionPool) throws DatabaseException {
-            String sql = "insert into order_items(orderID,mvID,quantity)";
+            String sql = "insert into order_item(\"orderID\",\"mvID\",\"quantity\") values (?,?,?)";
             int totalRowsAffected = 0; // this is used for test purposes only.
             try(Connection connection = connectionPool.getConnection()){
                 try(PreparedStatement ps = connection.prepareStatement(sql)){
