@@ -1,5 +1,8 @@
 package app.entities;
 
+
+import java.util.Date;
+
 public class OrderDTO {
 
     private int id;
@@ -11,10 +14,14 @@ public class OrderDTO {
     private boolean hasAssembler;
     private double price;
     private Status status;
-    private String notice;
     private String svg;
+    private String name;
+    private String email;
+    private Date date;
+    private String notice;
 
-    public OrderDTO(int id, int lengthCm, int widthCm, int shedLengthCm, int shedWidthCm, int slopeDegrees, boolean hasAssembler, double price, Status status, String notice, String svg){
+    //FULL CONSTRUCTOR FOR FULL ORDER | ONLY NEEDED IN ORDERMAPPER WHEN WRITING TO DATABASE.
+    public OrderDTO(int id, int lengthCm, int widthCm, int shedLengthCm, int shedWidthCm, int slopeDegrees, boolean hasAssembler, double price, Status status, String svg, String name, String email, Date date, String notice) {
         this.id = id;
         this.lengthCm = lengthCm;
         this.widthCm = widthCm;
@@ -24,11 +31,32 @@ public class OrderDTO {
         this.hasAssembler = hasAssembler;
         this.price = price;
         this.status = status;
-        this.notice = notice;
         this.svg = svg;
+        this.name = name;
+        this.email = email;
+        this.date = date;
+        this.notice = notice;
     }
 
-    public OrderDTO(int lengthCm, int widthCm, int shedLengthCm, int shedWidthCm, int slopeDegrees, boolean hasAssembler, double price, Status status, String notice, String svg){
+    //PARTIAL CONTRUCTOR FOR DATA TRANSFERRING | ONLY NEEDED IN TESTS>
+    public OrderDTO(int lengthCm, int widthCm, int shedLengthCm, int shedWidthCm, int slopeDegrees, boolean hasAssembler, double price, Status status, String svg, String name, String email, String notice) {
+        this.lengthCm = lengthCm;
+        this.widthCm = widthCm;
+        this.shedLengthCm = shedLengthCm;
+        this.shedWidthCm = shedWidthCm;
+        this.slopeDegrees = slopeDegrees;
+        this.hasAssembler = hasAssembler;
+        this.price = price;
+        this.status = status;
+        this.svg = svg;
+        this.name = name;
+        this.email = email;
+        this.notice = notice;
+    }
+
+
+    //PARTIAL CONTRUCTOR FOR DATA TRANSFERRING | ONLY NEEDED IN TRANSFER
+    public OrderDTO(int lengthCm, int widthCm, int shedLengthCm, int shedWidthCm, int slopeDegrees, boolean hasAssembler, double price, Status status, String notice) {
         this.lengthCm = lengthCm;
         this.widthCm = widthCm;
         this.shedLengthCm = shedLengthCm;
@@ -38,9 +66,8 @@ public class OrderDTO {
         this.price = price;
         this.status = status;
         this.notice = notice;
-        this.svg = svg;
-    }
 
+    }
 
     public int getId() {
         return id;
@@ -78,13 +105,29 @@ public class OrderDTO {
         return status;
     }
 
+    public String getSvg() {
+        return svg;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
     public String getNotice() {
         return notice;
     }
-    public String getSvg(){return svg;}
 
     public void setId(int id) {
         this.id = id;
     }
     public void setSvg(String svg){this.svg = svg;};
+    public void setDate(Date date){this.date = date;}
 }

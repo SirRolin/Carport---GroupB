@@ -18,6 +18,8 @@ public class AdminController {
 
     }
 
+    //TODO: NEEDS REFACTORING FOR WHEN WE KNOW WHAT TO EDIT IN THE ORDER.
+    /*
     //int id, int lengthCm, int widthCm, int shedLengthCm, int shedWidthCm, int slopeDegrees, boolean hasAssembler, double price, Status status, String notice
     public static boolean editOrder(ConnectionPool connectionPool, Context ctx) throws DatabaseException{
         OrderDTO order = ctx.sessionAttribute("chosen_order");
@@ -44,7 +46,7 @@ public class AdminController {
 
         }
         return false;
-    }
+    }*/
 
     public static void removeOrder(ConnectionPool connectionPool, Context ctx){
 

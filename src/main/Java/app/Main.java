@@ -2,7 +2,10 @@ package app;
 
 import app.config.ThymeleafConfig;
 import app.controllers.admin.AdminController;
+import app.entities.OrderDTO;
+import app.entities.Status;
 import app.persistence.ConnectionPool;
+import app.persistence.OrderMapper;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 import io.javalin.http.Context;
@@ -33,10 +36,10 @@ public class Main {
         }catch(Exception e){
 
         }
-
-        // render start:
+        //Render start
         // tests
         //app.get("/", Main::testLoading);
+
         app.get("/", ctx -> AdminController.loadAdminSite(connectionPool, ctx));
         app.post("/chooseVariantOrMaterial", ctx->AdminController.variantOrMaterial(connectionPool,ctx));
         app.post("/editMaterial",ctx->AdminController.pickEditableMaterial(connectionPool,ctx));

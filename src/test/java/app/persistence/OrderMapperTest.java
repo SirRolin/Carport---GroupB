@@ -22,7 +22,7 @@ class OrderMapperTest {
     @BeforeEach
     void setup(){
         connectionPool = ConnectionPool.getInstance(USER,PASSWORD,URL,DB);
-        order = new OrderDTO(100,100,200,200,90,true,0,Status.initialised,"Test","");
+        order = new OrderDTO(100,100,20,20,90,true,20.0,Status.initialised,"blank","Name","Email","Notice");
     }
     @Test
     void successfulTest(){
