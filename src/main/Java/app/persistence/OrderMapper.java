@@ -11,7 +11,7 @@ import java.sql.Statement;
 public class OrderMapper {
 
     public static OrderDTO addOrder(ConnectionPool connectionPool, OrderDTO order) throws DatabaseException{
-        int orderId = 0;
+        int orderId = 1;
         String sql = "insert into orders (length_cm, width_cm, shed_length_cm, shed_width_cm, slope_degrees, hire_assembler, status) values (?,?,?,?,?,?,?)";
         try(Connection connection = connectionPool.getConnection()){
             try(PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
@@ -21,7 +21,7 @@ public class OrderMapper {
                 ps.setInt(4,order.getShedWidthCm());
                 ps.setInt(5,order.getSlopeDegrees());
                 ps.setBoolean(6,order.isHasAssembler());
-                ps.setObject(7,order.getStatus());
+                ps.setObject(7,order.getStatus().toString());
 
                 int rowsAffected = ps.executeUpdate();
                 if(rowsAffected < 1){
