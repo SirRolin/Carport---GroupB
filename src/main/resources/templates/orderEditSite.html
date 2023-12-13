@@ -10,8 +10,39 @@
 <div>
 <p> <h1>Enter ID for the order you want to edit. Alternately enter name or email to see if there is any orders associated with them</h1></p>
 </div>
-<p>Queue position: <span th:text="${queue}"></span></p>
-<p>Currently requesting: <span th:text="${people}"></span></p>
-<p>Time queued: <span th:text="${time}"></span></p>
+<div id="Content">
+    <div class="order_chosen" th:unless="${session.chosen_order == null}">
+        <p th:if="${message != null}" th:text="${message}"></p>
+        <h1>Here we can costemize the costumers order!</h1>
+
+    </div>
+
+    <div class="no_order_chosen" th:if="${session.chosen_order == null}">
+        <p th:if="${message != null}" th:text="${message}"></p>
+        <form th:action="@{/submitOrderID}" method="post">
+            <label for="orderID_input">Enter Order ID:</label>
+            <input type="number" id="orderID_input" name="orderID_input" />
+            <button type="submit">Submit</button>
+        </form>
+        <div class="costumer_order" th:if="${session.costumer_orders == null || session.costumer_orders.isEmpty() == true}">
+            <h1> Input Costumer info: </h1>
+            <form th:action="@{/submitCostumerName}" method="post">
+                <label for="name_input">Enter costumer name:</label>
+                <input type="text" id="name_input" name="name_input" />
+                <button type="submit">Submit</button>
+            </form>
+            <br><br/>
+        <form th:action="@{/submCostumerEmail}" method="post">
+            <label for="email_input">Enter costumer email:</label>
+            <input type="email" id="email_input" name="email_input" />
+            <button type="submit">Submit</button>
+        </form>
+        </div>
+        <div class="show_orders" th:unless="${session.costumer_orders == null || session.costumer_orders.isEmpty() == true}">
+            <p th:if="${message != null}" th:text="${message}"></p>
+            <h1> Her vises Kundens ordre info</h1>
+        </div>
+    </div>
+    </div>
 </body>
 </html>
