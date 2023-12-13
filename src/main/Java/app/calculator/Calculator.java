@@ -18,9 +18,9 @@ public class Calculator {
         List<MaterialDTO> billOfMaterials = new ArrayList<>();
         // find the different materials we currently have available based on type.
         try {
-            billOfMaterials.add((MaterialDTO) getPillers(order.getLengthCm(), order.getWidthCm(), MaterialsMapper.getMaterialInfoByType(connectionPool, "pillar")));
-            billOfMaterials.add((MaterialDTO) getBeams(order.getLengthCm(), order.getWidthCm(), MaterialsMapper.getMaterialInfoByType(connectionPool, "beam")));
-            billOfMaterials.add((MaterialDTO) getCrossbeams(order.getLengthCm(), order.getWidthCm(), MaterialsMapper.getMaterialInfoByType(connectionPool, "cover_planks")));
+            billOfMaterials.add((MaterialDTO) getPillers(order.getLengthCm(), order.getWidthCm(), MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.pillar)));
+            billOfMaterials.add((MaterialDTO) getBeams(order.getLengthCm(), order.getWidthCm(), MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.beam)));
+            billOfMaterials.add((MaterialDTO) getCrossbeams(order.getLengthCm(), order.getWidthCm(), MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.cover_blanks)));
             OrderItemMapper.saveBillOfMaterials(billOfMaterials, order.getId(), connectionPool);
         } catch (DatabaseException e) {
             // TODO add logic incase of database exception

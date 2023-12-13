@@ -1,9 +1,6 @@
 package app.persistence;
 
-import app.entities.BeamDTO;
-import app.entities.CrossbeamDTO;
-import app.entities.MaterialDTO;
-import app.entities.PillerDTO;
+import app.entities.*;
 import app.exceptions.DatabaseException;
 
 import java.sql.*;
@@ -11,13 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MaterialsMapper {
-    public static List<MaterialDTO> getMaterialInfoByType(ConnectionPool connectionPool, String type) throws DatabaseException {
+    public static List<MaterialDTO> getMaterialInfoByType(ConnectionPool connectionPool, Mtype type) throws DatabaseException {
         List<MaterialDTO> availableMaterials = new ArrayList<>();
         String sql = "SELECT * FROM public.material_variant AS mv JOIN material AS m ON mv.materialID = m.materialID WHERE type = ?";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, type);
+            ps.setObject(1, type, Types.OTHER);
             ResultSet rs = ps.executeQuery();
                 while (rs.next()){
                     int materialID = rs.getInt("materialID");
@@ -29,13 +26,13 @@ public class MaterialsMapper {
                     int length = rs.getInt("length_cm");
                     int price = rs.getInt("price");
                     switch (type) {
-                        case "pillar" -> {
-                            availableMaterials.add(new PillerDTO(materialID, name, type, description, width_mm, depth_mm, materialVariantID, length, price));
+                        case pillar -> {
+                            availableMaterials.add(new PillarDTO(materialID, name, type, description, width_mm, depth_mm, materialVariantID, length, price));
                         }
-                        case "beam" -> {
+                        case beam -> {
                             availableMaterials.add(new BeamDTO(materialID, name, type, description, width_mm, depth_mm, materialVariantID, length, price));
                         }
-                        case "cover_planks" -> {
+                        case cover_blanks -> {
                             availableMaterials.add(new CrossbeamDTO(materialID, name, type, description, width_mm, depth_mm, materialVariantID, length, price));
                         }
                         // Add more cases as more material is needed
@@ -58,22 +55,23 @@ public class MaterialsMapper {
             while (rs.next()){
                 int materialID = rs.getInt("materialID");
                 String name = rs.getString("name");
-                String type = rs.getString("type");
+                Object type = rs.getObject("type");
                 String description = rs.getString("description");
                 int width_mm = rs.getInt("width_mm");
                 int depth_mm = rs.getInt("depth_mm");
                 int materialVariantID = rs.getInt("mvID");
                 int length = rs.getInt("length_cm");
                 int price = rs.getInt("price");
-                switch (type) {
-                    case "pillar" -> {
-                        availableMaterials.add(new PillerDTO(materialID, name, type, description, width_mm, depth_mm, materialVariantID, length, price));
+
+                switch ((Mtype)type) {
+                    case pillar -> {
+                        availableMaterials.add(new PillarDTO(materialID, name, (Mtype) type, description, width_mm, depth_mm, materialVariantID, length, price));
                     }
-                    case "beam" -> {
-                        availableMaterials.add(new BeamDTO(materialID, name, type, description, width_mm, depth_mm, materialVariantID, length, price));
+                    case beam -> {
+                        availableMaterials.add(new BeamDTO(materialID, name, (Mtype) type, description, width_mm, depth_mm, materialVariantID, length, price));
                     }
-                    case "cover_planks" -> {
-                        availableMaterials.add(new CrossbeamDTO(materialID, name, type, description, width_mm, depth_mm, materialVariantID, length, price));
+                    case cover_blanks -> {
+                        availableMaterials.add(new CrossbeamDTO(materialID, name, (Mtype) type, description, width_mm, depth_mm, materialVariantID, length, price));
                     }
                     // Add more cases as more material is needed
                     default -> {
