@@ -1,6 +1,7 @@
 package app;
 
 import app.config.ThymeleafConfig;
+import app.controllers.OrderEditController;
 import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
@@ -15,7 +16,7 @@ public class Main {
     private static final String DEFAULT_USER = "postgres";
     private static final String DEFAULT_PASSWORD = "postgres";
     private static final String DEFAULT_URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
-    private static final String DEFAULT_DB = "carport";
+    private static final String DEFAULT_DB = "Carport";
 
     public static ConnectionPool connectionPool = null;
 
@@ -34,7 +35,12 @@ public class Main {
         }catch (Exception e){
 
         }
-        app.get("/SynchronousVisitsTestPage", Main::testLoading);
+        try{
+            app.get("/", ctx -> OrderEditController.loadOrderEditSite(ctx,connectionPool));
+        }catch (Exception e){
+
+        }
+        //app.get("/SynchronousVisitsTestPage", Main::testLoading);
     }
 
     //// Testing Section:

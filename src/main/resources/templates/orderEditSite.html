@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="da">
+<head>
+    <title>Testpage</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+<div>
+<p> <h1>Enter ID for the order you want to edit. Alternately enter name or email to see if there is any orders associated with them</h1></p>
+</div>
+<p>Queue position: <span th:text="${queue}"></span></p>
+<p>Currently requesting: <span th:text="${people}"></span></p>
+<p>Time queued: <span th:text="${time}"></span></p>
+</body>
+</html>
