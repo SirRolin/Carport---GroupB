@@ -108,6 +108,10 @@ public class Calculator {
 
         if(choosenCrossBeam.equals(null)){
             // TODO NICE TO HAVE: add logic if no single CrossBeam is long enough to cover the width of the carport on its own.
+            // choose the longest beam available. subtract its length from width. and do new check all over again with the
+            // the remaining width. now find the crossbeam with the sortes length that can cover that remaining width.
+            // and start the count. if the length of the shortest crossbeam is more than twice the remaining length divide
+            // the shortest crossbeam count by 2.
         }
         return neededCrossbeams;
     }
