@@ -70,7 +70,7 @@ public class AdminController {
             }else {
                 ctx.sessionAttribute("material_list",ctx.sessionAttribute("modified_list"));
             }
-            //materials = MaterialsMapper.getMaterialList(connectionPool, ctx);
+            //materials = MaterialsMapper.getMaterialList(connectionPool, ctx);  //TODO Reference to the material list
             //variants = MaterialsMapper.getVariantList(connectionPool, ctx);
             ctx.sessionAttribute("variant_list",variants);
         }catch(Exception e){
@@ -97,7 +97,7 @@ public class AdminController {
         try{
             String pickedEdit = ctx.formParam("edit_material");
             if(pickedEdit.contains("done")){
-                //call edit material function
+                //call edit material function //TODO EDIT MATERIAL FUNCTION REFERENCE
                 ctx.sessionAttribute("edit_material",-1);
             }else{
                int pickedEditInt =  Integer.parseInt(pickedEdit);
@@ -113,7 +113,7 @@ public class AdminController {
         try{
             String pickedEdit = ctx.formParam("edit_variant");
             if(pickedEdit.contains("done")){
-                //call edit variant function
+                //call edit variant function //TODO EDIT VARIANT FUNCTION REFERENCE.
                 ctx.sessionAttribute("edit_variant",-1);
             }else {
                 int pickedEditInt = Integer.parseInt(pickedEdit);
@@ -129,7 +129,7 @@ public class AdminController {
         String filter = ctx.formParam("filter");
         switch(filter){
             case "all":
-                //getAllMaterialInfo
+                //getAllMaterialInfo //TODO FILTER MATERIALS
                 break;
             case "pillar":
                 //getAllMaterialInfoByType
@@ -143,6 +143,7 @@ public class AdminController {
         }
     }
 
+    //TODO YOU HAVE ALL THESE METHODS LEFT!
     public static boolean addNewMaterial(ConnectionPool connectionPool, Context ctx){
         return true;
     }
