@@ -10,10 +10,13 @@ public class OrderEditController {
 
         ctx.render("orderEditSite.html");
     }
-    public static void loadOrderWithID(Context ctx,ConnectionPool connectionPool){
 
+    public static void showChosenOrderByID(Context ctx, ConnectionPool connectionPool) {
     }
-    public static void showOrderWithID(Context ctx,ConnectionPool connectionPool){
 
+    public static void showOrdersByName(Context ctx, ConnectionPool connectionPool) {
+    }
+
+    public static void showOrdersByEmail(Context ctx, ConnectionPool connectionPool) {
     }
 }

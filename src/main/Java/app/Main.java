@@ -37,6 +37,9 @@ public class Main {
         }
         try{
             app.get("/", ctx -> OrderEditController.loadOrderEditSite(ctx,connectionPool));
+            app.post("/submitOrderID", ctx -> OrderEditController.showChosenOrderByID(ctx,connectionPool));
+            app.post("/submitCostumerName", ctx -> OrderEditController.showOrdersByName(ctx,connectionPool));
+            app.post("/submitCostumerEmail", ctx -> OrderEditController.showOrdersByEmail(ctx,connectionPool));
         }catch (Exception e){
 
         }
