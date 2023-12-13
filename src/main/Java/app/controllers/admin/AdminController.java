@@ -3,7 +3,9 @@ package app.controllers.admin;
 import app.entities.*;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
+import app.persistence.MaterialsMapper;
 import app.persistence.OrderMapper;
+import app.persistence.VariantsMapper;
 import io.javalin.http.Context;
 import org.jetbrains.annotations.NotNull;
 
@@ -55,23 +57,15 @@ public class AdminController {
     public static void loadAdminSite(ConnectionPool connectionPool, Context ctx){
         List<MaterialDTO> materials = new ArrayList<>();
         List<MaterialVariantDTO> variants = new ArrayList<>();
-        MaterialDTO pillar1 = new PillarDTO(1,"test1", Mtype.pillar,20,20,"test description");
-        MaterialDTO pillar2 = new PillarDTO(2,"test2", Mtype.beam,25,30,"test description2");
-        materials.add(pillar1);
-        materials.add(pillar2);
-        MaterialVariantDTO variant1 = new MaterialVariantDTO(1,1,20,200.0);
-        MaterialVariantDTO variant2 = new MaterialVariantDTO(2,2,26,250.0);
-        variants.add(variant1);
-        variants.add(variant2);
 
         try{
+            materials = MaterialsMapper.getAllMaterialInfo(connectionPool);
+            variants = VariantsMapper.getVariantInfo(connectionPool);
             if(ctx.sessionAttribute("modified_list")==null){
                 ctx.sessionAttribute("material_list",materials);
             }else {
                 ctx.sessionAttribute("material_list",ctx.sessionAttribute("modified_list"));
             }
-            //materials = MaterialsMapper.getMaterialList(connectionPool, ctx);  //TODO Reference to the material list
-            //variants = MaterialsMapper.getVariantList(connectionPool, ctx);
             ctx.sessionAttribute("variant_list",variants);
         }catch(Exception e){
             e.printStackTrace();

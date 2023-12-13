@@ -4,6 +4,6 @@ public enum Mtype {
     roof,
     pillar,
     beam,
-    cover_blanks;
+    cover_planks;
 
 }
