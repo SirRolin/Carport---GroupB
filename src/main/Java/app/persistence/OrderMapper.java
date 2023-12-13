@@ -21,7 +21,7 @@ public class OrderMapper {
                 ps.setInt(4,order.getShedWidthCm());
                 ps.setInt(5,order.getSlopeDegrees());
                 ps.setBoolean(6,order.isHasAssembler());
-                ps.setObject(7,order.getStatus().toString());
+                ps.setObject(7,order.getStatus());
 
                 int rowsAffected = ps.executeUpdate();
                 if(rowsAffected < 1){
@@ -35,7 +35,7 @@ public class OrderMapper {
                 }
             }
         }catch(Exception e){
-            throw new DatabaseException("Error while connecting to database");
+            throw new DatabaseException("Error while connecting to database"+e.getMessage());
         }
         OrderDTO resultDTO = new OrderDTO(orderId,order.getLengthCm(),order.getWidthCm(),order.getShedLengthCm(),order.getShedWidthCm(),order.getSlopeDegrees(),order.isHasAssembler(),0, order.getStatus(),order.getNotice());
         return resultDTO;

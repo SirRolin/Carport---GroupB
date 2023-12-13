@@ -11,43 +11,43 @@
                 <p>brædde</p>
 
                 <select name="width_option"> <!--th:if="${width_option!=null}" th:each="widthOption"-->
-                    <option>
+                    <option value="270">
                         240
                     </option>
                     <option>
                         270
                     </option>
-                    <option>
+                    <option value="300">
                         300
                     </option>
-                    <option>
+                    <option value="330">
                         330
                     </option>
-                    <option>
+                    <option value="360">
                         360
                     </option>
-                    <option>
+                    <option value="390">
                         390
                     </option>
-                    <option>
+                    <option value="420">
                         420
                     </option>
-                    <option>
+                    <option value="450">
                         450
                     </option>
-                    <option>
+                    <option value="480">
                         480
                     </option>
-                    <option>
+                    <option value="510">
                         510
                     </option>
-                    <option>
+                    <option value="540">
                         540
                     </option>
-                    <option>
+                    <option value="570">
                         570
                     </option>
-                    <option>
+                    <option value="600">
                         600
                     </option>
 
@@ -56,43 +56,43 @@
         <div name = "length">
             <p>længde</p>
             <select name="length_options"> <!--th:if="${length_options!=null}" th:each="lengthOption"-->
-            <option>
+            <option value="240">
                 240
             </option>
-            <option>
+            <option value="270">
                 270
             </option>
-            <option>
+            <option value="300">
                 300
             </option>
-            <option>
+            <option value="330">
                 330
             </option>
-            <option>
+            <option value="360">
                 360
             </option>
-            <option>
+            <option value="390">
                 390
             </option>
-            <option>
+            <option value="420">
                 420
             </option>
-            <option>
+            <option value="450">
                 450
             </option>
-            <option>
+            <option value="480">
                 480
             </option>
-            <option>
+            <option value="510">
                 510
             </option>
-            <option>
+            <option value="540">
                 540
             </option>
-            <option>
+            <option value="570">
                 570
             </option>
-            <option>
+            <option value="600">
                 600
             </option>
             </select>
@@ -100,23 +100,24 @@
         <div name = "roof_type">
             <p>vælg tagtype</p>
             <select name="chosen_roof">
-                <option>
+                <option value="'uden tagtyper'">
                     uden tagtyper
                 </option>
-                <option>
+                <option value="'med trapeztagtyper'">
                     med trapeztagtyper
                 </option>
             </select>
         </div>
         <div name="roof_slope" th:if="${session.roof_type == true}"><!---->
-            <p>tag hælgning</p>
+            <p>tag hældning</p>
             <select name="slope_options" >
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                <option>6</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option  value="2">2</option>
+                <option  value="3">3</option>
+                <option  value="4">4</option>
+                <option  value="5">5</option>
+                <option  value="6">6</option>
 
             </select>
         </div>
@@ -127,43 +128,43 @@
         <div name="shed_width">
             <p>skur bredde</p>
             <select name="shed_width_option">
-                <option>
+                <option value="240">
                     240
                 </option>
-                <option>
+                <option value="270">
                     270
                 </option>
-                <option>
+                <option value="300">
                     300
                 </option>
-                <option>
+                <option value="330">
                     330
                 </option>
-                <option>
+                <option value="360">
                     360
                 </option>
-                <option>
+                <option value="390">
                     390
                 </option>
-                <option>
+                <option value="420">
                     420
                 </option>
-                <option>
+                <option value="450">
                     450
                 </option>
-                <option>
+                <option value="480">
                     480
                 </option>
-                <option>
+                <option value="510">
                     510
                 </option>
-                <option>
+                <option value="540">
                     540
                 </option>
-                <option>
+                <option value="570">
                     570
                 </option>
-                <option>
+                <option value="600">
                     600
                 </option>
             </select>
@@ -172,43 +173,43 @@
             <p>skur længde</p>
 
             <select name="shed_length_options" >
-                <option>
+                <option value="240">
                     240
                 </option>
-                <option>
+                <option value="270">
                     270
                 </option>
-                <option>
+                <option value="300">
                     300
                 </option>
-                <option>
+                <option value="330">
                     330
                 </option>
-                <option>
+                <option value="360">
                     360
                 </option>
-                <option>
+                <option value="390">
                     390
                 </option>
-                <option>
+                <option value="420">
                     420
                 </option>
-                <option>
+                <option value="450">
                     450
                 </option>
-                <option>
+                <option value="480">
                     480
                 </option>
-                <option>
+                <option value="510">
                     510
                 </option>
-                <option>
+                <option value="540">
                     540
                 </option>
-                <option>
+                <option value="570">
                     570
                 </option>
-                <option>
+                <option value="600">
                     600
                 </option>
             </select>
