@@ -21,7 +21,7 @@ public class OrderMapper {
                 ps.setInt(4,order.getShedWidthCm());
                 ps.setInt(5,order.getSlopeDegrees());
                 ps.setBoolean(6,order.isHasAssembler());
-                ps.setObject(7,order.getStatus());
+                ps.setObject(7,order.getStatus().toString());
 
                 int rowsAffected = ps.executeUpdate();
                 if(rowsAffected < 1){
@@ -52,7 +52,7 @@ public class OrderMapper {
                 ps.setInt(5,newOrder.getSlopeDegrees());
                 ps.setBoolean(6,newOrder.isHasAssembler());
                 ps.setDouble(7,newOrder.getPrice());
-                ps.setObject(8,newOrder.getStatus());
+                ps.setObject(8,newOrder.getStatus().toString());
                 ps.setString(9,newOrder.getNotice());
                 ps.setString(10,newOrder.getSvg());
 
