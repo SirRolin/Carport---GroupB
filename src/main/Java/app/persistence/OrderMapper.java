@@ -4,15 +4,8 @@ import app.entities.OrderDTO;
 import app.entities.Status;
 import app.exceptions.DatabaseException;
 
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-
 import java.sql.*;
 import java.util.Date;
-
 
 
 public class OrderMapper {
@@ -28,9 +21,6 @@ public class OrderMapper {
                 ps.setInt(4,order.getShedWidthCm());
                 ps.setInt(5,order.getSlopeDegrees());
                 ps.setBoolean(6,order.isHasAssembler());
-
-                ps.setObject(7,order.getStatus());
-
                 ps.setDouble(7,order.getPrice());
                 ps.setObject(8,order.getStatus(), Types.OTHER);
                 ps.setString(9,order.getSvg());

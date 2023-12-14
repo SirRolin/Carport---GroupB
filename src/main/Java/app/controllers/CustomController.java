@@ -13,13 +13,20 @@ public class CustomController {
             int widthOption = Integer.parseInt(ctx.formParam("width_option"));
             int lengthOption = Integer.parseInt(ctx.formParam("length_options"));
             //String chosenRoof = ctx.formParam("chosen_roof");
-            //int slopeOptions = Integer.parseInt(ctx.formParam("slope_options"));
+            int slopeOptions = Integer.parseInt(ctx.formParam("slope_options"));
             int shedWidthOption = Integer.parseInt(ctx.formParam("shed_width_option"));
             int shedLengthOption = Integer.parseInt(ctx.formParam("shed_length_options"));
-            String wishChangesText = "";
-            wishChangesText = ctx.formParam("special_wishes_or_notices");
+            String svgText = "";
+            String name = ctx.formParam("costumer_name");
+            String email = ctx.formParam("user_email");
+            String wishChangesText = ctx.formParam("wish_changes_text");
 
-            OrderDTO orderDTO = new OrderDTO(lengthOption,widthOption,shedLengthOption,shedWidthOption,0,false,0.0, Status.initialised,wishChangesText);
+            if(wishChangesText == null){
+                wishChangesText ="";
+            }
+
+
+            OrderDTO orderDTO = new OrderDTO(lengthOption,widthOption,shedLengthOption,shedWidthOption,slopeOptions,false,0.0, Status.initialised,svgText,name,email,wishChangesText);
 
             OrderDTO savedOrder = OrderMapper.addOrder(connectionPool,orderDTO);
 
