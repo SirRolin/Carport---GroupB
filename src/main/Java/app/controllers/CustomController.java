@@ -26,7 +26,7 @@ public class CustomController {
             }
 
 
-            OrderDTO orderDTO = new OrderDTO(lengthOption,widthOption,shedLengthOption,shedWidthOption,slopeOptions,false,0.0, Status.initialised,svgText,name,email,wishChangesText);
+            OrderDTO orderDTO = new OrderDTO(lengthOption,widthOption,shedLengthOption,shedWidthOption,slopeOptions,false,0.0, Status.initialised,svgText,wishChangesText);
 
             OrderDTO savedOrder = OrderMapper.addOrder(connectionPool,orderDTO);
 

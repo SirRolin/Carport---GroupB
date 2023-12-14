@@ -20,6 +20,21 @@ public class OrderDTO {
     private Date date;
     private String notice;
 
+
+
+    public OrderDTO(int id,int lengthCm,int widthCm,int shedLengthCm,int shedWidthCm,int slopeDegrees,boolean hasAssembler,int price, Status status,String svgText, String notice){
+        this.id = id;
+        this.lengthCm = lengthCm;
+        this.widthCm = widthCm;
+        this.shedLengthCm = shedLengthCm;
+        this.shedWidthCm = shedWidthCm;
+        this.slopeDegrees = slopeDegrees;
+        this.hasAssembler = hasAssembler;
+        this.price = price;
+        this.status = status;
+        this.svg = svgText;
+        this.notice = notice;
+    }
     //FULL CONSTRUCTOR FOR FULL ORDER | ONLY NEEDED IN ORDERMAPPER WHEN WRITING TO DATABASE.
     public OrderDTO(int id, int lengthCm, int widthCm, int shedLengthCm, int shedWidthCm, int slopeDegrees, boolean hasAssembler, double price, Status status, String svg, String name, String email, Date date, String notice) {
         this.id = id;
@@ -128,6 +143,14 @@ public class OrderDTO {
     public void setId(int id) {
         this.id = id;
     }
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public void SetEmail(String email){
+        this.email = email;
+    }
+
     public void setSvg(String svg){this.svg = svg;};
     public void setDate(Date date){this.date = date;}
 }
