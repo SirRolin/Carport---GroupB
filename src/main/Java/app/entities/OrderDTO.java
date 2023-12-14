@@ -1,7 +1,5 @@
 package app.entities;
 
-import java.sql.Date;
-
 public class OrderDTO {
 
     private int id;
@@ -39,8 +37,6 @@ public class OrderDTO {
         this.status = status;
         this.notice = notice;
     }
-    //Christians constructor touch it and you are killed when you die
-    
 
 
     public int getId() {

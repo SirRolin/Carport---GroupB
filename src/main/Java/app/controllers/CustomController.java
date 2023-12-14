@@ -16,17 +16,12 @@ public class CustomController {
             //int slopeOptions = Integer.parseInt(ctx.formParam("slope_options"));
             int shedWidthOption = Integer.parseInt(ctx.formParam("shed_width_option"));
             int shedLengthOption = Integer.parseInt(ctx.formParam("shed_length_options"));
-            String wishChangesText = ctx.formParam("special_wishes_or_notices");
-
-            if(wishChangesText == null){
-                wishChangesText = "";
-            }
-
+            String wishChangesText = "";
+            wishChangesText = ctx.formParam("special_wishes_or_notices");
 
             OrderDTO orderDTO = new OrderDTO(lengthOption,widthOption,shedLengthOption,shedWidthOption,0,false,0.0, Status.initialised,wishChangesText);
 
             OrderDTO savedOrder = OrderMapper.addOrder(connectionPool,orderDTO);
-
 
             ctx.redirect("/congratsYouDidIt");
 
