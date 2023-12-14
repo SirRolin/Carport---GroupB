@@ -22,8 +22,7 @@ public class OrderDTO {
 
 
 
-    public OrderDTO(int id,int lengthCm,int widthCm,int shedLengthCm,int shedWidthCm,int slopeDegrees,boolean hasAssembler,int price, Status status,String svgText, String notice){
-        this.id = id;
+    public OrderDTO(int lengthCm,int widthCm,int shedLengthCm,int shedWidthCm,int slopeDegrees,boolean hasAssembler,int price, Status status,String svgText, String notice){
         this.lengthCm = lengthCm;
         this.widthCm = widthCm;
         this.shedLengthCm = shedLengthCm;
@@ -153,4 +152,7 @@ public class OrderDTO {
 
     public void setSvg(String svg){this.svg = svg;};
     public void setDate(Date date){this.date = date;}
+
+    public void setEmail(String email) {
+    }
 }

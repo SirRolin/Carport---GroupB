@@ -7,6 +7,8 @@ import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
 import io.javalin.http.Context;
 
+import java.util.Date;
+
 public class CustomController {
     public void sendOrderDTO(Context ctx, ConnectionPool connectionPool){
         try{
@@ -17,8 +19,6 @@ public class CustomController {
             int shedWidthOption = Integer.parseInt(ctx.formParam("shed_width_option"));
             int shedLengthOption = Integer.parseInt(ctx.formParam("shed_length_options"));
             String svgText = "";
-            String name = ctx.formParam("costumer_name");
-            String email = ctx.formParam("user_email");
             String wishChangesText = ctx.formParam("wish_changes_text");
 
             if(wishChangesText == null){
@@ -26,11 +26,11 @@ public class CustomController {
             }
 
 
-            OrderDTO orderDTO = new OrderDTO(lengthOption,widthOption,shedLengthOption,shedWidthOption,slopeOptions,false,0.0, Status.initialised,svgText,wishChangesText);
+            OrderDTO orderDTO = new OrderDTO(lengthOption,widthOption,shedLengthOption,shedWidthOption,slopeOptions,false,0, Status.initialised,svgText,wishChangesText);
 
-            OrderDTO savedOrder = OrderMapper.addOrder(connectionPool,orderDTO);
 
-            ctx.redirect("/congratsYouDidIt");
+            ctx.sessionAttribute("current_order",orderDTO);
+
 
         }
 
@@ -38,6 +38,22 @@ public class CustomController {
             System.out.println(e);
         }
     }
+
+    public void sendOrderDtoToReciept(Context ctx, ConnectionPool connectionPool){
+        String name = ctx.formParam("costumer_name");
+        String email = ctx.formParam("user_email");
+        try {
+            OrderDTO orderDTO = ctx.sessionAttribute("current_order");
+            orderDTO.setName(name);
+            orderDTO.setEmail(email);
+            ctx.sessionAttribute("current_order",orderDTO);
+
+        }catch (Exception e){
+            System.out.println(e);
+        }
+
+    }
+
     public void renderCostumCarportFile(Context ctx, ConnectionPool connectionPool){
         try{
             String choice = ctx.formParam("inclined");
