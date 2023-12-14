@@ -60,9 +60,11 @@ public class CustomController {
             OrderDTO finalDTO = new OrderDTO(orderDTO.getId(),orderDTO.getLengthCm(),orderDTO.getWidthCm(),orderDTO.getShedLengthCm(),orderDTO.getShedWidthCm(),orderDTO.getSlopeDegrees(),orderDTO.getAssembler(),orderDTO.getPrice(),orderDTO.getStatus(),orderDTO.getSvg(),orderDTO.getName(),orderDTO.getEmail(),orderDTO.getDate(),orderDTO.getNotice());
 
             try {
-                OrderDTO savedDTO = OrderMapper.addOrder(connectionPool,orderDTO);
+                OrderDTO savedDTO = OrderMapper.addOrder(connectionPool,finalDTO);
+                String dtoName = savedDTO.getName();
                 ctx.render("index.html");
             }catch (Exception e){
+                System.out.println(finalDTO.getName());
                 System.out.println("error with db try again");
             }
 
@@ -72,14 +74,20 @@ public class CustomController {
     }
 
     public void sendOrderDtoToReciept(Context ctx, ConnectionPool connectionPool){
-        String name = ctx.formParam("costumer_name");
-        String email = ctx.formParam("user_email");
+
         try {
             OrderDTO orderDTO = ctx.sessionAttribute("current_order");
-            orderDTO.setName(name);
-            orderDTO.setEmail(email);
-            ctx.sessionAttribute("current_order",orderDTO);
-
+            String name = ctx.formParam("costumer_name");
+            String email = ctx.formParam("user_email");
+            if(email != null || email != "null"){
+                orderDTO.setName(name);
+                orderDTO.setEmail(email);
+                System.out.println(orderDTO.getName());
+                System.out.println(orderDTO.getEmail());
+                ctx.sessionAttribute("current_order",orderDTO);
+            }else if(orderDTO.getName() == null){
+                System.out.println("name :" +orderDTO.getName());
+            }
 
         }catch (Exception e){
             System.out.println(e);
