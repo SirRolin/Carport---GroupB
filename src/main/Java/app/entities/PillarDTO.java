@@ -11,21 +11,21 @@ public class PillarDTO extends MaterialDTO implements Comparable<MaterialDTO>{
     private String unitType = "stk"; // TODO it should not be hard coded
 
     //int materialId, String name, Mtype type, int widthMm, int depthMm, String description
-   public PillarDTO(int materialID, String name, Mtype type, int amount, String description, int width_mm, int depth_mm, int materialVariantID, int length, int price) {
-        super(materialID, name, type, amount, width_mm, depth_mm,description);
+   public PillarDTO(int materialID, String name, Mtype type, int amount, int width_mm, int depth_mm, int materialVariantID, int length, int price) {
+        super(materialID, name, type, amount, width_mm, depth_mm);
         this.materialVariantID = materialVariantID;
         this.length = length;
         this.price = price;
     }
-    public PillarDTO(int materialID, String name, Mtype type, String description, int width_mm, int depth_mm, int materialVariantID, int length, int price) {
-        super(materialID, name, type, width_mm, depth_mm, description);
+    public PillarDTO(int materialID, String name, Mtype type, int width_mm, int depth_mm, int materialVariantID, int length, int price) {
+        super(materialID, name, type, width_mm, depth_mm);
         this.materialVariantID = materialVariantID;
         this.length = length;
         this.price = price;
     }
 
-    public PillarDTO(int materialId, String name, Mtype type, int widthMm, int depthMm,String description){
-       super(materialId,name,type,widthMm,depthMm,description);
+    public PillarDTO(int materialId, String name, Mtype type, int widthMm, int depthMm){
+       super(materialId,name,type,widthMm,depthMm);
     }
 
     public int getLength() {

@@ -87,18 +87,46 @@ public class AdminController {
         }
     }
 
+    //int lengthCm = (ctx.sessionAttribute("length") != null) ? ctx.sessionAttribute("length") : order.getLengthCm();
+
     public static void pickEditableMaterial(ConnectionPool connectionPool, Context ctx){
         try{
             String pickedEdit = ctx.formParam("edit_material");
             if(pickedEdit.contains("done")){
-                //call edit material function //TODO EDIT MATERIAL FUNCTION REFERENCE
+                String[] editString = pickedEdit.split(" ");
+                int id = Integer.parseInt(editString[1]);
+                List<MaterialDTO> materials = ctx.sessionAttribute("material_list");
+                int finalId = materials.get(id).getMaterialId();
+                MaterialDTO pickedMaterial = MaterialsMapper.getMaterialById(connectionPool, finalId);
+                String name = (ctx.formParam("edited_material_name") != null || !ctx.formParam("edited_material_name").isEmpty()) ? ctx.formParam("edited_material_name") : pickedMaterial.getName();
+                String type = (ctx.formParam("edited_material_type") != null || !ctx.formParam("edited_material_type").isEmpty()) ? ctx.formParam("edited_material_type") : pickedMaterial.getUnitType();
+                int width = Integer.parseInt((ctx.formParam("edited_material_width") != null || !ctx.formParam("edited_material_width").isEmpty()) ? ctx.formParam("edited_material_width") : String.valueOf(pickedMaterial.getWidthMm()));
+                int depth = Integer.parseInt((ctx.formParam("edited_material_depth") != null || !ctx.formParam("edited_material_depth").isEmpty()) ? ctx.formParam("edited_material_depth") : String.valueOf(pickedMaterial.getDepthMm()));
+                MaterialDTO newMaterial = null;
+                switch(type){
+                    case "pillar":
+                        newMaterial = new PillarDTO(finalId,name,Mtype.pillar,width,depth);
+                        break;
+                    case "beam":
+                        newMaterial = new BeamDTO(finalId,name,Mtype.beam,width,depth);
+                        break;
+                    case "roof":
+                        newMaterial = new RoofDTO(finalId,name,Mtype.roof,width,depth);
+                        break;
+                    case "cover planks":
+                        newMaterial = new CrossbeamDTO(finalId,name,Mtype.cover_planks,width,depth);
+                        break;
+                }
+                if(newMaterial != null){
+                    MaterialsMapper.updateMaterial(connectionPool, newMaterial);
+                }
                 ctx.sessionAttribute("edit_material",-1);
             }else{
                int pickedEditInt =  Integer.parseInt(pickedEdit);
                 ctx.sessionAttribute("edit_material",pickedEditInt);
             }
         }catch(Exception e){
-
+            System.out.println(e);
         }
         loadAdminSite(connectionPool,ctx);
     }
@@ -143,14 +171,6 @@ public class AdminController {
     }
 
     public static boolean addNewVariant(ConnectionPool connectionPool, Context ctx){
-        return true;
-    }
-
-    public static boolean editMaterial(ConnectionPool connectionPool, Context ctx){
-        return true;
-    }
-
-    public static boolean editVariant(ConnectionPool connectionPool, Context ctx){
         return true;
     }
 

@@ -26,7 +26,6 @@
                 <th>Type</th>
                 <th>Width in MM</th>
                 <th>Depth in MM</th>
-                <th>Description</th>
                 <th>Action</th>
             </tr>
             <tr th:each="material, i :  ${session.material_list}">
@@ -35,11 +34,11 @@
                 <td th:if="${session.edit_material != i.index}" th:text="${material.getType()}">Type</td>
                 <td th:if="${session.edit_material != i.index}" th:text="${material.getWidthMm()}">Width in mm</td>
                 <td th:if="${session.edit_material != i.index}" th:text="${material.getDepthMm()}">Depth in mm</td>
-                <td th:if="${session.edit_material != i.index}" th:text="${material.getDescription()}">Description</td>
                 <td th:if="${session.edit_material != i.index}">
                     <button type="submit" name="edit_material" th:value="${i.index}" th:id="'edit_material_'+ ${i.index}">Edit</button>
                 </td>
-                <td th:unless="${session.edit_material != i.index}" th:text="${material.getMaterialId()}"></td>
+
+                <td th:unless="${session.edit_material != i.index}" name="edited_material_id" th:text="${material.getMaterialId()}"></td>
                 <td th:unless="${session.edit_material != i.index}">
                     <input type="text" name="edited_material_name" th:value="${material.getName()}">
                 </td>
@@ -74,9 +73,6 @@
                 </td>
                 <td th:unless="${session.edit_material != i.index}">
                     <input type="number" name="edited_material_depth" th:value="${material.getDepthMm()}">
-                </td>
-                <td th:unless="${session.edit_material != i.index}">
-                    <input type="text" name="edited_material_desc" th:value="${material.getDescription()}">
                 </td>
                 <td th:unless="${session.edit_material != i.index}">
                     <button type="submit" name="edit_material" th:value="'done '+${i.index}" th:id="'edit_material_'+ ${i.index}">Save</button>
@@ -147,7 +143,6 @@
             </select>
             <input type="number" name="material_width" placeholder="Material width in mm">
             <input type="number" name="material_depth" placeholder="Material depth in mm">
-            <input type="text" name="material_description" placeholder="Material description">
             <input type="submit" value="Add">
         </form>
     </div>
