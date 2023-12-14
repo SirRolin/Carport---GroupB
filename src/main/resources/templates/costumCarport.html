@@ -5,7 +5,7 @@
     <title>make your damn carport</title>
 </head>
 <body>
-    <form method="post" id="carportWithNormalRoof" action="/checkOut">
+    <form method="post" id="carportWithNormalRoof" action="/costumerDetail">
         <div name = "form_flat_roof">
             <div name = "width">
                 <p>brædde</p>
@@ -110,7 +110,7 @@
         </div>
         <div name="roof_slope" th:if="${session.roof_type == true}"><!---->
             <p>tag hældning</p>
-            <select name="slope_options" >
+            <select name="slope_options" th:value="${0}">
                 <option value="0">0</option>
                 <option value="1">1</option>
                 <option  value="2">2</option>
@@ -118,7 +118,6 @@
                 <option  value="4">4</option>
                 <option  value="5">5</option>
                 <option  value="6">6</option>
-
             </select>
         </div>
         <div name="short_description">

@@ -135,6 +135,10 @@ public class OrderDTO {
         return date;
     }
 
+    public boolean getAssembler(){
+        return hasAssembler;
+    }
+
     public String getNotice() {
         return notice;
     }
@@ -144,6 +148,10 @@ public class OrderDTO {
     }
     public void setName(String name){
         this.name = name;
+    }
+
+    public void setHasAssembler(boolean hasAssembler){
+        this.hasAssembler = hasAssembler;
     }
 
     public void SetEmail(String email){
