@@ -2,11 +2,9 @@ package app.persistence;
 
 import app.entities.OrderDTO;
 import app.exceptions.DatabaseException;
+import org.objectweb.asm.Type;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 
 public class OrderMapper {
 
@@ -21,7 +19,7 @@ public class OrderMapper {
                 ps.setInt(4,order.getShedWidthCm());
                 ps.setInt(5,order.getSlopeDegrees());
                 ps.setBoolean(6,order.isHasAssembler());
-                ps.setObject(7,order.getStatus());
+                ps.setObject(7,order.getStatus(), Types.OTHER);
 
                 int rowsAffected = ps.executeUpdate();
                 if(rowsAffected < 1){
