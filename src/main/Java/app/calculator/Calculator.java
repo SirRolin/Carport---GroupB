@@ -72,7 +72,7 @@ public class Calculator {
                 // sets the amount and removes the beam from the list and goes again.
                 currentBeam.setAmount(totalBeams);
                 beamOptions.remove(i);
-                // a check to make sure it only adds a beam if it',s needed.
+                // a check to make sure it only adds a beam if it's needed.
                 if (currentBeam.getAmount() != 0) {
                     neededBeams.add(currentBeam);
                 }

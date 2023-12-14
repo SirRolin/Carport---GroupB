@@ -14,7 +14,9 @@ public class OrderEditController {
     public static void showChosenOrderByID(Context ctx, ConnectionPool connectionPool) {
     }
 
-    public static void showOrdersByName(Context ctx, ConnectionPool connectionPool) {
+    public static void showOrdersByNameOrEmail(Context ctx, ConnectionPool connectionPool){
+
+
     }
 
     public static void showOrdersByEmail(Context ctx, ConnectionPool connectionPool) {
