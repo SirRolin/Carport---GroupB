@@ -1,6 +1,6 @@
 package app.svg.shapes;
 
-public class Triangle implements Shape {
+public class Triangle extends Shape {
   private final float x;
   private final float y;
   private final float sizeX;
@@ -29,10 +29,12 @@ public class Triangle implements Shape {
   }
 
   @Override
-  public String draw(double offsetX, double offsetY) {
+  public String draw(float offsetX, float offsetY, float scale) {
     String points = ""; 
-    double x2 = x + offsetX;
-    double y2 = y + offsetY;
+    float x2 = (x + offsetX) * scale;
+    float y2 = (y + offsetY) * scale;
+    float sizeX = this.sizeX * scale;
+    float sizeY = this.sizeY * scale;
     switch (direction){
       case right -> {
         points = x2 + "," + y2 + " " + (x2 + sizeX) + "," + (y2 + sizeY/2) + " " + x2 + "," + (y2 + sizeY);
@@ -59,6 +61,10 @@ public class Triangle implements Shape {
         points = x2 + "," + y2 + " " + (x2 + sizeX) + "," + (y2 + sizeY) + " " + (x2 + sizeX) + "," + y2;
       }
     }
-    return "<polyline points='" + points + "' fill='" + colour + "' stroke='" + colour + "' />";
+    return "<polyline points='" + points
+        + "' fill='" + colour
+        + "' stroke='" + colour
+        + "'" + ((opacity != 1) ? "opacity:" + opacity: "")
+        + "/>";
   }
 }

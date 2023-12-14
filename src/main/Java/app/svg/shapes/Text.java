@@ -1,6 +1,6 @@
 package app.svg.shapes;
 
-public class Text implements Shape {
+public class Text extends Shape {
   private final float x;
   private final float y;
   private final String txt;
@@ -38,13 +38,14 @@ public class Text implements Shape {
   }
 
   @Override
-  public String draw(double offsetX, double offsetY) {
-    return "<text x='" + (x + offsetX)
-        + "' y='" + (y + offsetY)
+  public String draw(float offsetX, float offsetY, float scale) {
+    return "<text x='" + (x + offsetX) * scale
+        + "' y='" + (y + offsetY) * scale
         + "' dominant-baseline='" + baseline
         + "' text-anchor='" + anchor
         + "' style='font-size:" + size + ";"
         + " fill:" + colour + ";"
+        + ((opacity != 1) ? "opacity:" + opacity: "")
         + "'>" + txt + "</text>";
   }
 }

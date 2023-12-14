@@ -3,134 +3,179 @@ package app.svg;
 import app.svg.shapes.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class SVG {
+  //// a set of invalid directions to try and draw measurements with.
+  private static Direction[] validDirections = new Direction[]{Direction.up, Direction.left};
+
+  //// the SVG content
   private final ArrayList<Shape> svgContent = new ArrayList<>();
   private final ArrayList<Measurement> measures = new ArrayList<>();
+
+  //// window information for drawing
   private float minX = 0;
   private float maxX = 0;
-  private float startX;
   private float minY = 0;
   private float maxY = 0;
+
+  //// start of the current drawing
+  private float startX;
   private float startY;
-  private float unitPerCentiPixel = 100;
+
+  //// scaling
+  public float scaling = 1;
+
+  //// Settings we can tweak to see better results with texts.
+  static public float extraTextRoomX = 20;
+  static public float extraTextRoomY = 10;
 
   /**
-   * Default Constructor, a 100 by 100 window.
-   * You use this to draw shapes, once done use toString to get the code.
+   * The SVG class can be used to draw with shapes and measurement which automatically expands as needed.
    */
   public SVG() {
-    setWindow(0, 100, 0, 100);
+    setWindow(0, 0);
   }
 
   /**
-   * Constructor with windows size defined.
-   * You use this to draw shapes, once done use toString to get the code.
-   * @param sizeX
-   * Horizontal Size.
-   * @param sizeY
-   * Vertical Size.
-   */
-  public SVG(float sizeX, float sizeY) {
-    setWindow(0, sizeX, 0, sizeY);
-  }
-
-  /**
-   * resizes the window, without changing the starting position.
+   * Changes the start position of the drawing, allowing multiple measurement positions.
    * @param startX
-   * Horizontal left limit
-   * @param endX
-   * Horizontal right limit
+   * Horizontal start
    * @param startY
-   * Vertical upper limit
-   * @param endY
-   * Vertical lower limit
+   * Vertical start
    */
-  public void setWindow(float startX, float endX, float startY, float endY) {
+  public void setWindow(float startX, float startY) {
     this.startX = startX;
-    if(startX < minX) minX = startX;
-    if(endX > maxX) maxX = endX;
     this.startY = startY;
-    if(startY < minY) minY = startY;
-    if(endY > maxY) maxY = endY;
   }
 
   /**
-   *
-   * @param upp
+   * Draws a rectangle at the given cordinates (after scaling)
+   * @param x left offset from the start
+   * @param x2 right offset from the start
+   * @param y upper offset from the start
+   * @param y2 lower offset from the start
    */
-  public void setUnitPerCentiPixel(float upp){
-    unitPerCentiPixel = upp;
-  }
-
-  private float upp(){
-    return 100 / unitPerCentiPixel;
-  }
-
   public void drawRect(float x, float x2, float y, float y2) {
-    svgContent.add(new Rectangle(startX + (x * upp()), startY + (y * upp()),(x2-x) * upp(),(y2-y) * upp()));
+    if(x + startX - 10 < minX){
+      minX = (x) + startX - 10;
+    }
+    if(y + startY - 10 < minY){
+      minY = (y) + startY - 10;
+    }
+    if(x2 + startX > maxX){
+      maxX = (x2) + startX + 5;
+    }
+    if(y2 + startY > maxY){
+      maxY = (y2) + startY + 5;
+    }
+    svgContent.add(new Rectangle(startX + (x), startY + (y),(x2-x),(y2-y)));
   }
+
+  /**
+   * Draws an equal sided square with the center at x, y.
+   * @param x Horizontal offset from the start
+   * @param y Vertical offset from the start
+   * @param size diameter of square
+   */
 
   public void drawRectCenter(float x, float y, float size) {
-    drawRect(x - size / 2, x + size / 2,y - size / 2, y + size / 2);
+    drawRect(x - (size / 2), x + (size / 2),y - (size / 2), y + (size / 2));
   }
 
-  public void drawRectWithMeasurement(float x, float x2, float y, float y2, float measurementDistance){
+  /**
+   * Draws a Measurement if it doesn't already exist without adding anything else to the drawing.
+   * @param direction
+   * @param startOffset
+   * @param length
+   * @param measurementDistance
+   * @throws IllegalArgumentException throws an error if an invalid (not implemented) direction is input.
+   */
+  public void drawMeasurement(Direction direction,float startOffset, float length, float measurementDistance) throws IllegalArgumentException {
+    if(!Arrays.stream(validDirections).anyMatch(dir -> dir == direction)){
+      throw new IllegalArgumentException("direction can be up or left, cause I don't want to implement the other unless needed."); //// though I did start a bit.
+    }
+    boolean alreadyExists = false;
+    for (Measurement measurement : measures) {
+      if (measurement.isSameMeasuremeant(direction, startX, startY, startOffset, length)) {
+        alreadyExists = true;
+        break;
+      }
+    }
+    if (!alreadyExists) {
+      switch (direction){
+        case left -> {
+          if(startX - measurementDistance - 20 < minX){
+            minX = startX - measurementDistance - 20;
+          }
+        }
+        case up -> {
+          if(startY - measurementDistance - 20 < minY){
+            minY = startY - measurementDistance - 20;
+          }
+        }
+        case right -> {
+          if(startX + measurementDistance + 20 > maxX){
+            maxX = startX + measurementDistance + 20;
+          }
+        }
+        case down -> {
+          if(startY + measurementDistance + 20 < maxY){
+            maxY = startY + measurementDistance + 20;
+          }
+        }
+      }
+      measures.add(
+          new Measurement(direction,
+              measurementDistance,
+              startX + ((direction == Direction.up || direction == Direction.down) ? startOffset : 0),
+              startY + ((direction == Direction.left || direction == Direction.right) ? startOffset : 0),
+              length,
+              String.format("%.2f",length / 100)
+          )
+      );
+    }
+  }
+
+  /**
+   * Combines Drawing a rectangle and drawing its measurements in 1 call.
+   * @param x left offset from the start
+   * @param x2 right offset from the start
+   * @param y upper offset from the start
+   * @param y2 lower offset from the start
+   * @param measurementHorizontal null for no measurement, otherwise changes the distance the measurements are drawn at from the main starting point.
+   * @param measurementVertical null for no measurement, otherwise changes the distance the measurements are drawn at from the main starting point.
+   */
+  public void drawRectWithMeasurement(float x, float x2, float y, float y2, Float measurementHorizontal, Float measurementVertical){
     drawRect(x, x2, y, y2);
-    if(x-10<minX){
-      minX = x - 10;
-    }
-    if(y-10<minY){
-      minY = y - 10;
-    }
-
-    //// Horizontal
-    boolean newHorizontal = true;
-    for (Measurement measurement : measures) {
-      if (measurement.isSameMeasuremeant(BiDirection.horizontal, x, x2 - x)) {
-        newHorizontal = false;
-        break;
-      }
-    }
-    if(newHorizontal) {
-      measures.add(new Measurement(BiDirection.horizontal, measurementDistance, x, y, x2 - x, String.valueOf((x2 - x) / unitPerCentiPixel)));
-    }
-
-    //// Vertical
-    boolean newVertical = true;
-    for (Measurement measurement : measures) {
-      if (measurement.isSameMeasuremeant(BiDirection.vertical, y, y2 - y)) {
-        newVertical = false;
-        break;
-      }
-    }
-    if(newVertical) {
-      measures.add(new Measurement(BiDirection.vertical, measurementDistance, x, y, y2-y, String.valueOf((y2-y)/unitPerCentiPixel)));
-    }
+    if(measurementHorizontal!=null) drawMeasurement(Direction.up, x, x2 - x, measurementHorizontal);
+    if(measurementVertical!=null) drawMeasurement(Direction.left, y, y2 - y, measurementVertical);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    svgContent.forEach(shape -> {
-      sb.append(shape.draw(-startX, -startY));
-    });
     measures.forEach(measurement -> {
-      sb.append(measurement.draw(-startX, -startY));
+      sb.append(measurement.draw(-minX, -minY, scaling)).append("\n");
+    });
+    svgContent.forEach(shape -> {
+      sb.append(shape.draw(-minX, -minY, scaling)).append("\n");
     });
     return "<svg" +
-        " width='" + (maxX - minX) + "'" +
-        " height='" + (maxY - minY) + "'" +
-        ">" + sb
-        + "\nSorry your browser does not support inline svg, we cannot show a drawing in this browser.\n</svg>";
+        " width='" + ((maxX - minX) * scaling) + "'" +
+        " height='" + ((maxY - minY) * scaling) + "'" +
+        ">\n" + sb
+        + "Sorry your browser does not support inline svg, we cannot show a drawing in this browser.\n</svg>";
   }
 
   //// For Testing
+  //// Draws a rectangle with measurement + 3 measurements spanning over it
   public static void main(String[] args){
-    SVG svg = new SVG(200, 200);
-    svg.drawRectWithMeasurement(50,200, 50, 200, 10);
-    svg.drawRectWithMeasurement(50,200, 50, 100, 30);
-    svg.drawRectWithMeasurement(50,150, 50, 200, 30);
+    SVG svg = new SVG();
+    svg.drawRectWithMeasurement(0,100, 0, 50, 30F, 10F);
+    svg.drawMeasurement(Direction.up, 100 / 3F * 0, 100 / 3F, 10F);
+    svg.drawMeasurement(Direction.up, 100 / 3F * 1, 100 / 3F, 10F);
+    svg.drawMeasurement(Direction.up, 100 / 3F * 2, 100 / 3F, 10F);
     System.out.println(svg);
   }
 }

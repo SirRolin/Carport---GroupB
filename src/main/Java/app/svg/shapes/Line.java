@@ -1,6 +1,6 @@
 package app.svg.shapes;
 
-public class Line implements Shape {
+public class Line extends Shape {
   private final float x1;
   private final float y1;
   private final float x2;
@@ -40,13 +40,13 @@ public class Line implements Shape {
   }
 
   @Override
-  public String draw(double offsetX, double offsetY) {
-    return "<line x1='" + (x1 + offsetX)
-        + "' y1='" + (y1 + offsetY)
-        + "' x2='" + (x2 + offsetX)
-        + "' y2='" + (y2 + offsetY)
+  public String draw(float offsetX, float offsetY, float scale) {
+    return "<line x1='" + (x1 + offsetX) * scale
+        + "' y1='" + (y1 + offsetY) * scale
+        + "' x2='" + (x2 + offsetX) * scale
+        + "' y2='" + (y2 + offsetY) * scale
         + "' style='stroke:" + stroke
-        + "; stroke-width:" + stroke_width + ";"
+        + "; stroke-width:" + stroke_width * scale + ";"
         + (opacity==1 ? "": "opacity:" + opacity + ";")
         + "'/>";
   }

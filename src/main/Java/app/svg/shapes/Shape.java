@@ -1,5 +1,6 @@
 package app.svg.shapes;
 
-public interface Shape {
-  String draw(double offsetX, double offsetY);
+public abstract class Shape {
+  public float opacity = 1;
+  public abstract String draw(float offsetX, float offsetY, float scale);
 }

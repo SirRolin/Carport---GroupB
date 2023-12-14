@@ -1,6 +1,6 @@
 package app.svg.shapes;
 
-public class Rectangle implements Shape {
+public class Rectangle extends Shape {
 
   private final float x;
   private final float y;
@@ -20,13 +20,13 @@ public class Rectangle implements Shape {
   }
 
   @Override
-  public String draw(double offsetX, double offsetY) {
-    return "<rect x='" + (x + offsetX) + "'" +
-        " y='" + (y + offsetY) + "'" +
-        " rx='" + roundX + "'" +
-        " ry='" + roundY + "'" +
-        " width='" + width + "'" +
-        " height='" + height + "'" +
+  public String draw(float offsetX, float offsetY, float scale) {
+    return "<rect x='" + (x + offsetX) * scale + "'" +
+        " y='" + (y + offsetY) * scale + "'" +
+        " rx='" + roundX * scale + "'" +
+        " ry='" + roundY * scale + "'" +
+        " width='" + width * scale + "'" +
+        " height='" + height * scale + "'" +
         style() +
         "/>";
   }
@@ -36,6 +36,7 @@ public class Rectangle implements Shape {
         "fill:" + fill + ";" +
         "stroke:" + stroke + ";" +
         "stroke-width:" + stroke_width + ";" +
-        "opacity:" + 1 + ";' ";
+        ((opacity != 1) ? "opacity:" + opacity + ";": "")
+        + "' ";
   }
 }
