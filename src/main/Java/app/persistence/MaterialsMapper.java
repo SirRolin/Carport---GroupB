@@ -65,9 +65,6 @@ public class MaterialsMapper {
                     int materialVariantID = rs.getInt("mvID");
                     int length = rs.getInt("length_cm");
                     int price = rs.getInt("price");
-
-
-
                     switch (type.toString()) {
                         case "pillar" -> {
                             availableMaterials.add(new PillarDTO(materialID, name, Mtype.pillar, description, width_mm, depth_mm, materialVariantID, length, price));

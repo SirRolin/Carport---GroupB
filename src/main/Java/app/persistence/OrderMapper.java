@@ -1,11 +1,14 @@
 package app.persistence;
 
 import app.entities.OrderDTO;
+import app.entities.SearchDTO;
 import app.entities.Status;
 import app.exceptions.DatabaseException;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 public class OrderMapper {
@@ -87,4 +90,70 @@ public class OrderMapper {
         return true;
     }
 
+    public static List<OrderDTO> getOrdersBySearchDTO(SearchDTO searchDTO, ConnectionPool connectionPool) throws DatabaseException {
+        List<OrderDTO> orderList = new ArrayList<>();
+        String sql = null;
+        String searchParameterString = null;
+        int searchParameterInt = 0;
+        if (!searchDTO.getName().isEmpty()) {
+            sql = "select * from orders where name = ?";
+            searchParameterString = searchDTO.getName();
+        } else if(!searchDTO.getEmail().isEmpty()) {
+            sql = "select * from orders where email = ?";
+            searchParameterString = searchDTO.getEmail();
+        } else if(searchDTO.getOrderID() > 0){
+            sql = "select * from orders where \"orderID\" = ?";
+            searchParameterInt = searchDTO.getOrderID();
+        }
+        try (Connection connection = connectionPool.getConnection()) {
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                if(searchParameterInt > 0){
+                    ps.setInt(1, searchParameterInt);
+                } else {
+                    ps.setString(1, searchParameterString);
+                }
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    int orderID = rs.getInt("orderID");
+                    int length = rs.getInt("length_cm");
+                    int width = rs.getInt("width_cm");
+                    int shedL = rs.getInt("shed_length_cm");
+                    int shedW = rs.getInt("shed_width_cm");
+                    int slope = rs.getInt("slope_degrees");
+                    boolean assembler = rs.getBoolean("hire_assembler");
+                    int price = rs.getInt("price");
+                    Object status = rs.getObject("status");
+                    String svg = rs.getString("svg_text");
+                    String nameOfCustomer = rs.getString("name");
+                    String emailOfCustomer = rs.getString("email");
+                    Date date = rs.getDate("date");
+                    java.util.Date javadate = new Date(date.getTime());
+                    String notice = rs.getString("notice");
+                    switch (status.toString()) {
+                        case "initialised" -> {
+                            orderList.add(new OrderDTO(orderID, length, width, shedL, shedW, slope, assembler, price, Status.initialised, svg, nameOfCustomer, emailOfCustomer, javadate, notice));
+                        }
+                        case "processing" -> {
+                            orderList.add(new OrderDTO(orderID, length, width, shedL, shedW, slope, assembler, price, Status.processing, svg, nameOfCustomer, emailOfCustomer, javadate, notice));
+                        }
+                        case "waiting_for_customer" -> {
+                            orderList.add(new OrderDTO(orderID, length, width, shedL, shedW, slope, assembler, price, Status.waiting_for_customer, svg, nameOfCustomer, emailOfCustomer, javadate, notice));
+                        }
+                        case "accepted" -> {
+                            orderList.add(new OrderDTO(orderID, length, width, shedL, shedW, slope, assembler, price, Status.accepted, svg, nameOfCustomer, emailOfCustomer, javadate, notice));
+                        }
+                        case "paid" -> {
+                            orderList.add(new OrderDTO(orderID, length, width, shedL, shedW, slope, assembler, price, Status.paid, svg, nameOfCustomer, emailOfCustomer, javadate, notice));
+                        }
+                    }
+                }
+                if (orderList.isEmpty()) {
+                    throw new DatabaseException("No orders matched what you entered");
+                }
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Error in database" + e.getMessage());
+        }
+        return orderList;
+    }
 }
