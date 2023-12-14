@@ -53,6 +53,7 @@ package "Orders" #00CDFF {
         boolean hire_assembler
         Double price
         STATUS status
+        String notice
     }
 }
 
