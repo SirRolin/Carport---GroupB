@@ -30,6 +30,9 @@ public class SVG {
   static public float extraTextRoomX = 20;
   static public float extraTextRoomY = 10;
 
+  //// Text formatting
+  public static String textFormat = "%.2f";
+
   /**
    * The SVG class can be used to draw with shapes and measurement which automatically expands as needed.
    */
@@ -97,7 +100,7 @@ public class SVG {
     }
     boolean alreadyExists = false;
     for (Measurement measurement : measures) {
-      if (measurement.isSameMeasuremeant(direction, startX, startY, startOffset, length)) {
+      if (measurement.isSameMeasurement(direction, startX, startY, startOffset, length)) {
         alreadyExists = true;
         break;
       }
@@ -131,7 +134,7 @@ public class SVG {
               startX + ((direction == Direction.up || direction == Direction.down) ? startOffset : 0),
               startY + ((direction == Direction.left || direction == Direction.right) ? startOffset : 0),
               length,
-              String.format("%.2f",length / 100)
+              String.format(textFormat,length / 100)
           )
       );
     }

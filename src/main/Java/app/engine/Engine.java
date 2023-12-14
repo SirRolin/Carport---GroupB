@@ -1,12 +1,9 @@
 package app.engine;
 
 import app.svg.SVG;
-import app.svg.shapes.Direction;
+import app.svg.Direction;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 public class Engine {
@@ -89,6 +86,7 @@ public class Engine {
     ArrayList<Float> testArr = getBeamLengths("");
     System.out.println(getBestLengthFromArr(testArr, 450F));
     System.out.println(testArr);
+
 
     ArrayList<Object> partsList = new ArrayList<>();
     System.out.println(drawCarportDraft1(partsList, 400,300));

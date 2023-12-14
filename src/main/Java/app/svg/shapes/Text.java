@@ -1,5 +1,7 @@
 package app.svg.shapes;
 
+import app.svg.Direction;
+
 public class Text extends Shape {
   private final float x;
   private final float y;

@@ -1,4 +1,4 @@
-package app.svg.shapes;
+package app.svg;
 
 public enum Direction {
   left,

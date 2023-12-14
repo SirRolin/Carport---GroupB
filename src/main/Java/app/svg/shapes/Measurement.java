@@ -1,5 +1,7 @@
 package app.svg.shapes;
 
+import app.svg.Direction;
+
 public class Measurement extends Shape {
   private float startX;
   private float startY;
@@ -14,7 +16,6 @@ public class Measurement extends Shape {
   public static String defaultAssistLineColour = "green";
   public static String defaultTextColour = "black";
   public static String defaultTextSize = "1em";
-  public static int decimals = 2;
 
   public Measurement(Direction direction, float measureDistance, float x, float y, float length, String text, String arrowColour, String assistLineColour, String textColour) {
     startX = x;
@@ -59,7 +60,7 @@ public class Measurement extends Shape {
     this(direction, measureDistance, x, y, length, text, defaultArrowColour, defaultAssistLineColour, defaultTextColour);
   }
 
-  public boolean isSameMeasuremeant(Direction direction, float startX, float startY, float start, float length) {
+  public boolean isSameMeasurement(Direction direction, float startX, float startY, float start, float length) {
     if(this.direction!=direction) return false;
     switch (direction){
       case left -> {
@@ -76,6 +77,12 @@ public class Measurement extends Shape {
 
   @Override
   public String draw(float offsetX, float offsetY, float scale) {
+    line.opacity = opacity;
+    firstArrowhead.opacity = opacity;
+    secondArrowhead.opacity = opacity;
+    firstSide.opacity = opacity/2;
+    secondSide.opacity = opacity/2;
+    text.opacity = opacity;
     return line.draw(offsetX,offsetY, scale) + "\n"
         + firstArrowhead.draw(offsetX, offsetY, scale) + "\n"
         + secondArrowhead.draw(offsetX, offsetY, scale) + "\n"
