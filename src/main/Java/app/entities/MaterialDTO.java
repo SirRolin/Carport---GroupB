@@ -1,62 +1,75 @@
 package app.entities;
 
 public abstract class MaterialDTO implements Comparable<MaterialDTO> {
-    int materialID;
-    String name;
-    String type;
-    int amount;
-    String costumInfo;
-    int width_mm;
-    int depth_mm;
 
-    public MaterialDTO(int materialID, String name, String type, int amount, String costumInfo, int width_mm, int depth_mm) {
-        this.materialID = materialID;
+    private int materialId;
+    private String name;
+    private Mtype type;
+    private int widthMm;
+    private int depthMm;
+    private String description;
+    private int amount;
+    private int length;
+
+    public MaterialDTO(int materialId, String name, Mtype type, int widthMm, int depthMm, String description){
+        this.materialId = materialId;
+        this.name = name;
+        this.type = type;
+        this.widthMm = widthMm;
+        this.depthMm = depthMm;
+        this.description = description;
+    }
+
+    public MaterialDTO(String name, Mtype type, int widthMm, int depthMm, String description){
+        this.name = name;
+        this.type = type;
+        this.widthMm = widthMm;
+        this.depthMm = depthMm;
+        this.description = description;
+    }
+
+    public MaterialDTO(int materialID, String name, Mtype type, int amount,int width_mm,int depth_mm, String description){
+        this.materialId = materialID;
         this.name = name;
         this.type = type;
         this.amount = amount;
-        this.costumInfo = costumInfo;
-        this.width_mm = width_mm;
-        this.depth_mm = depth_mm;
-    }
-    public MaterialDTO(int materialID, String name, String type, String costumInfo, int width_mm, int depth_mm) {
-        this.materialID = materialID;
-        this.name = name;
-        this.type = type;
-        this.costumInfo = costumInfo;
-        this.width_mm = width_mm;
-        this.depth_mm = depth_mm;
+        this.widthMm = width_mm;
+        this.depthMm = depth_mm;
+        this.description = description;
     }
 
-    public int getMaterialID() {
-        return materialID;
+    public int getMaterialId() {
+        return materialId;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getType() {
+    public Mtype getType() {
         return type;
     }
 
-    public int getAmount() {
-        return amount;
+    public int getWidthMm() {
+        return widthMm;
     }
+
+    public int getDepthMm() {
+        return depthMm;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+    public int getLength(){return length;}
 
     public abstract String getUnitType();
 
-    public String getCostumInfo() {
-        return costumInfo;
-    }
+    public abstract int getMaterialVariantID();
 
-    public int getWidth_mm() {
-        return width_mm;
-    }
+    public void setAmount(int amount){this.amount = amount;}
 
-    public int getDepth_mm() {
-        return depth_mm;
-    }
-    public  abstract int getMaterialVariantID();
-    public abstract void setAmount(int amount);
-    public abstract int getLength();
+    public int getAmount(){
+        return amount;
+    };
 }

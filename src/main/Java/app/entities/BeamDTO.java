@@ -8,14 +8,14 @@ public class BeamDTO extends MaterialDTO implements Comparable<MaterialDTO> {
     private int price =0;
     private String unitType = "stk";  // TODO it should not be hard coded
 
-    public BeamDTO(int materialID, String name, String type, int amount, String costumInfo, int width_mm, int depth_mm, int materialVariantID, int length, int price) {
-        super(materialID, name, type, amount, costumInfo, width_mm, depth_mm);
+    public BeamDTO(int materialID, String name, Mtype type, int amount, String description, int width_mm, int depth_mm, int materialVariantID, int length, int price) {
+        super(materialID, name, type, amount, width_mm, depth_mm,description);
         this.materialVariantID = materialVariantID;
         this.length = length;
         this.price = price;
     }
-    public BeamDTO(int materialID, String name, String type, String costumInfo, int width_mm, int depth_mm, int materialVariantID, int length, int price) {
-        super(materialID, name, type, costumInfo, width_mm, depth_mm);
+    public BeamDTO(int materialID, String name, Mtype type, String description, int width_mm, int depth_mm, int materialVariantID, int length, int price) {
+        super(materialID, name, type, width_mm, depth_mm, description);
         this.materialVariantID = materialVariantID;
         this.length = length;
         this.price = price;
@@ -40,7 +40,7 @@ public class BeamDTO extends MaterialDTO implements Comparable<MaterialDTO> {
 
     @Override
     public void setAmount(int amount) {
-        this.amount = amount;
+        super.setAmount(amount);
     }
 
     @Override
