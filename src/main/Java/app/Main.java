@@ -2,10 +2,7 @@ package app;
 
 import app.config.ThymeleafConfig;
 import app.controllers.admin.AdminController;
-import app.entities.OrderDTO;
-import app.entities.Status;
 import app.persistence.ConnectionPool;
-import app.persistence.OrderMapper;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 import io.javalin.http.Context;

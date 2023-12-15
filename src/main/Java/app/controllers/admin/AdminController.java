@@ -17,7 +17,8 @@ public class AdminController {
 
     //ADD, EDIT, REMOVE ORDERS VIA ADMIN.
     public static void AddRenders(Javalin app, ConnectionPool connectionPool){
-        app.get("/", ctx -> AdminController.loadAdminSite(connectionPool, ctx)); // ToDo remove test
+        app.get("/" , ctx -> ctx.redirect("/admin"));
+        app.get("/admin", ctx -> AdminController.loadAdminSite(connectionPool, ctx)); // ToDo remove test
         app.post("/chooseVariantOrMaterial", ctx -> AdminController.variantOrMaterial(connectionPool, ctx));
         app.post("/editMaterial", ctx -> AdminController.pickEditableMaterial(connectionPool, ctx));
         app.post("/editVariant", ctx -> AdminController.pickEditableVariant(connectionPool, ctx));
