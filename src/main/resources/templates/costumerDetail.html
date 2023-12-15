@@ -10,10 +10,15 @@
     <form method="post" id="costumerDetail" action="/receipt">
         <div name="contact_form_thing">
             <div name="nameBox">
-                <input type="text" placeholder="navn" name="costumer_name">
+                <input type="text" placeholder="navn" name="costumer_name" required>
             </div>
             <div>
-                <input type="text" placeholder="email" name="user_email">
+                <input type="email" placeholder="email" name="user_email" required>
+                <div th:if="emailError != null">
+                    <p th:text="${emailError}"></p>
+                </div>
+
+
             </div>
             <input type="submit" value="næste" >
         </div>

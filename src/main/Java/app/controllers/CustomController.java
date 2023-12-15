@@ -4,9 +4,21 @@ import app.entities.OrderDTO;
 import app.entities.Status;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
+import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 public class CustomController {
+
+    public  void addRender(Javalin app, ConnectionPool connectionPool){
+        app.get("/",ctx ->ctx.render("index.html"));
+        app.get("/submitCostumCarport",ctx->ctx.render("submitCostumCarport"));
+        app.post("/costumerDetail",ctx -> sendOrderDTO(ctx,connectionPool));
+        app.post("/costumCarport",ctx -> renderCostumCarportFile(ctx,connectionPool));
+        app.post("/receipt",ctx -> sendOrderDtoToReceipt(ctx,connectionPool));
+        app.post("/checkout",ctx ->ctx.render("receipt.html"));
+        app.post("/congratsYouDidIt",ctx-> sendOrderDtoToDatabase(ctx,connectionPool));
+    }
+
     public void sendOrderDTO(Context ctx, ConnectionPool connectionPool){
         try{
             int widthOption = Integer.parseInt(ctx.formParam("width_option"));
@@ -50,10 +62,12 @@ public class CustomController {
     }
 
     public void sendOrderDtoToDatabase(Context ctx, ConnectionPool connectionPool){
-        boolean hasAssembler = Boolean.parseBoolean(ctx.formParam("assembler"));
+        boolean hasAssembler = Boolean.parseBoolean(ctx.formParam("assembleCarport"));
         try {
             OrderDTO orderDTO = ctx.sessionAttribute("current_order");
+
             orderDTO.setHasAssembler(hasAssembler);
+            System.out.println(orderDTO.getAssembler());
             OrderDTO finalDTO = new OrderDTO(orderDTO.getId(),orderDTO.getLengthCm(),orderDTO.getWidthCm(),orderDTO.getShedLengthCm(),orderDTO.getShedWidthCm(),orderDTO.getSlopeDegrees(),orderDTO.getAssembler(),orderDTO.getPrice(),orderDTO.getStatus(),orderDTO.getSvg(),orderDTO.getName(),orderDTO.getEmail(),orderDTO.getDate(),orderDTO.getNotice());
 
             try {
@@ -71,6 +85,18 @@ public class CustomController {
         }
     }
 
+    public boolean emailValidator(Context ctx, String email){
+        if(email ==""){
+            String errorMessage = "invalid email no characters";
+            ctx.sessionAttribute("emailError",errorMessage);
+            ctx.render("/costumerDetail");
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
     public void sendOrderDtoToReceipt(Context ctx, ConnectionPool connectionPool){
 
         try {
@@ -78,23 +104,14 @@ public class CustomController {
             String name = ctx.formParam("costumer_name");
 
             String email = ctx.formParam("user_email");
-
-            orderDTO.setName(name);
-            orderDTO.setEmail(email);
-            ctx.sessionAttribute("current_order",orderDTO);
-
-
-            /*if(email != null || email != "null"){
-
+            if(emailValidator(ctx,email)){
                 orderDTO.setName(name);
-                orderDTO.setEmail(email);
-                System.out.println(orderDTO.getName());
-                System.out.println(orderDTO.getEmail());
-                ctx.sessionAttribute("current_order",orderDTO);
 
-            }else if(orderDTO.getName() != null){
-                System.out.println("name :" +orderDTO.getName());
-            }*/
+                orderDTO.setEmail(email);
+                ctx.sessionAttribute("current_order",orderDTO);
+            }else{
+                ctx.render("/costumerDetail");
+            }
 
         }catch (Exception e){
             System.out.println(e);
