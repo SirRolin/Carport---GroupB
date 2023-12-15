@@ -17,7 +17,8 @@ public class AdminController {
     public static void AddRenders(Javalin app, ConnectionPool connectionPool){
         app.get("/" , ctx -> ctx.redirect("/admin"));
         app.get("/admin", ctx -> AdminController.loadAdminSite(connectionPool, ctx)); // ToDo remove test
-        app.post("/chooseVariantOrMaterial", ctx -> AdminController.variantOrMaterial(connectionPool, ctx));
+        app.post("/chooseAddVariantOrMaterial", ctx -> AdminController.addVariantOrMaterial(connectionPool, ctx));
+        app.post("/chooseRemoveVariantOrMaterial", ctx -> AdminController.removeVariantOrMaterial(connectionPool,ctx));
         app.post("/editMaterial", ctx -> AdminController.pickEditableMaterial(connectionPool, ctx));
         app.post("/editVariant", ctx -> AdminController.pickEditableVariant(connectionPool, ctx));
         app.post("/filterMaterials", ctx -> AdminController.filterMaterials(connectionPool, ctx));
@@ -81,7 +82,7 @@ public class AdminController {
         ctx.render("adminPage.html");
     }
 
-    public static void variantOrMaterial(ConnectionPool connectionPool, Context ctx){
+    public static void addVariantOrMaterial(ConnectionPool connectionPool, Context ctx){
         String picked = ctx.formParam("add_select");
         try{
             if(picked.equalsIgnoreCase("Material")){
@@ -95,6 +96,19 @@ public class AdminController {
         }
     }
 
+    public static void removeVariantOrMaterial(ConnectionPool connectionPool, Context ctx){
+        String picked = ctx.formParam("remove_select");
+        try{
+            if(picked.equalsIgnoreCase("Material")){
+                ctx.sessionAttribute("remove_material",true);
+            }else if(picked.equalsIgnoreCase("Variant")){
+                ctx.sessionAttribute("remove_material",false);
+            }
+            loadAdminSite(connectionPool, ctx);
+        }catch(NullPointerException e){
+            e.printStackTrace();
+        }
+    }
 
     public static void pickEditableMaterial(ConnectionPool connectionPool, Context ctx){
         try{
@@ -152,7 +166,11 @@ public class AdminController {
                 int length = Validator.userInput(ctx.formParam("edited_variant_length"),pickedVariant.getLengthCm());
                 double price = Validator.userInput(ctx.formParam("edited_variant_price"),pickedVariant.getPrice());
                 MaterialVariantDTO newVariant = new MaterialVariantDTO(pickedVariant.getMvId(),pickedVariant.getMaterialId(),length,price);
-                VariantsMapper.updateVariant(connectionPool,newVariant,finalId);
+                if(newVariant != null){
+                    if(!newVariant.equals(pickedVariant)){
+                        VariantsMapper.updateVariant(connectionPool,newVariant,finalId);
+                    }
+                }
                 ctx.sessionAttribute("edit_variant",-1);
             }else {
                 int pickedEditInt = Integer.parseInt(pickedEdit);

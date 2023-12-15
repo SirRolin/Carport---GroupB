@@ -10,7 +10,7 @@ public enum Mtype {
         this.name = name;
     }
 
-    String getName(){
+    public String getName(){
         return name;
     }
 

@@ -36,7 +36,7 @@ public class MaterialVariantDTO {
         return price;
     }
 
-    public boolean compareToObject(MaterialVariantDTO other){
+    public boolean equals(MaterialVariantDTO other){
         if(this.getLengthCm() != other.getLengthCm()){
             return false;
         } else if (this.getPrice() != other.getPrice()) {

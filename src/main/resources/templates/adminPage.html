@@ -31,7 +31,7 @@
             <tr th:each="material, i :  ${session.material_list}">
                 <td th:if="${session.edit_material != i.index}" th:text="${material.getMaterialId()}">Material Id</td>
                 <td th:if="${session.edit_material != i.index}" th:text="${material.getName()}">Name</td>
-                <td th:if="${session.edit_material != i.index}" th:text="${material.getType()}">Type</td>
+                <td th:if="${session.edit_material != i.index}" th:text="${material.getType().getName()}">Type</td>
                 <td th:if="${session.edit_material != i.index}" th:text="${material.getWidthMm()}">Width in mm</td>
                 <td th:if="${session.edit_material != i.index}" th:text="${material.getDepthMm()}">Depth in mm</td>
                 <td th:if="${session.edit_material != i.index}">
@@ -62,7 +62,7 @@
                         <option name="cover_planks" th:text="'cover planks'">cover planks</option>
                     </select>
                     <select th:if="${#strings.equals(material.getType().toString(), 'cover_planks')}" name="edited_material_type">
-                        <option name="cover_planks" th:text="'cover planks'">cover planks</option>
+                        <option name="cover planks" th:text="'cover planks'">cover planks</option>
                         <option name="roof" th:text="roof">roof</option>
                         <option name="beam" th:text="beam">beam</option>
                         <option name="pillar" th:text="pillar">pillar</option>
@@ -121,7 +121,7 @@
     <br>
 
     <div class="changeAddType">
-        <form method="post" th:action="@{/chooseVariantOrMaterial}">
+        <form method="post" th:action="@{/chooseAddVariantOrMaterial}">
             <select id="addSelect" name="add_select" onchange="this.form.submit()">
                 <option>Add</option>
                 <option name="Material">Material</option>
@@ -155,6 +155,42 @@
             <input type="number" name="variant_length" placeholder="Material length in cm">
             <input type="number" name="variant_price" placeholder="Price">
             <input type="submit" value="Add">
+        </form>
+    </div>
+
+    <div class="changeRemoveType">
+        <form method="post" th:action="@{/chooseRemoveVariantOrMaterial}">
+            <select id="removeSelect" name="remove_select" onchange="this.form.submit()">
+                <option>Remove</option>
+                <option name="Material">Material</option>
+                <option name="Variant">Variant</option>
+            </select>
+        </form>
+    </div>
+
+    <div th:unless="${session.remove_material == false || session.remove_material == null}" class="removeProduct">
+        <form method="post" th:action="@{/removeMaterial}">
+            <input type="text" name="material_name" placeholder="Material Name">
+            <select id="typeSelectRemove" name="type_select">
+                <option name="roof">Roof</option>
+                <option name="pillar">Pillar</option>
+                <option name="beam">Beam</option>
+                <option name="cover_planks">Cover Planks</option>
+            </select>
+            <input type="number" name="material_width" placeholder="Material width in mm">
+            <input type="number" name="material_depth" placeholder="Material depth in mm">
+            <input type="submit" value="Remove">
+        </form>
+    </div>
+
+    <br>
+
+    <div th:unless="${session.remove_material == true || session.remove_material == null}" class="removeProduct">
+        <form method="post" th:action="@{/removeVariant}">
+            <input type="number" name="variant_material_id" placeholder="Material Id">
+            <input type="number" name="variant_length" placeholder="Material length in cm">
+            <input type="number" name="variant_price" placeholder="Price">
+            <input type="submit" value="Remove">
         </form>
     </div>
 
