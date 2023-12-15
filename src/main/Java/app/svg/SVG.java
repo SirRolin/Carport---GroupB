@@ -2,10 +2,11 @@ package app.svg;
 
 import app.svg.shapes.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class SVG {
+public class SVG implements Serializable {
   //// a set of invalid directions to try and draw measurements with.
   private static Direction[] validDirections = new Direction[]{Direction.up, Direction.left};
 

@@ -115,7 +115,8 @@ package app.engine {
     class Engine {
         + String drawCarportDraft1(ArrayList<Object>, float, float)
         - ArrayList<float> getBeamLengths(String)
-        - float getBestLengthFromArr(ArrayList<Float>, float)
+        - float getBestLengthOver(ArrayList<Float>, float)
+        - float getBestLengthUnder(ArrayList<Float>, float)
         + int frontPillarDistance
         + int backPillarDistance
         + int sidePillarDistance
