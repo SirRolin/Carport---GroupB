@@ -37,14 +37,12 @@ public class Main {
 
     }
     //Render start
+    //// Admin
+    AdminController.AddRenders(app, connectionPool);
+
     // tests
     //app.get("/", Main::testLoading);
 
-    app.get("/", ctx -> AdminController.loadAdminSite(connectionPool, ctx));
-    app.post("/chooseVariantOrMaterial", ctx -> AdminController.variantOrMaterial(connectionPool, ctx));
-    app.post("/editMaterial", ctx -> AdminController.pickEditableMaterial(connectionPool, ctx));
-    app.post("/editVariant", ctx -> AdminController.pickEditableVariant(connectionPool, ctx));
-    app.post("/filterMaterials", ctx -> AdminController.filterMaterials(connectionPool, ctx));
     // tests
     app.get("/SynchronousVisitsTestPage", Main::testLoading);
   }

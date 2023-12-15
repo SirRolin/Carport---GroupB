@@ -6,6 +6,7 @@ import app.persistence.ConnectionPool;
 import app.persistence.MaterialsMapper;
 import app.persistence.OrderMapper;
 import app.persistence.VariantsMapper;
+import io.javalin.Javalin;
 import io.javalin.http.Context;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,6 +16,14 @@ import java.util.List;
 public class AdminController {
 
     //ADD, EDIT, REMOVE ORDERS VIA ADMIN.
+    public static void AddRenders(Javalin app, ConnectionPool connectionPool){
+        app.get("/", ctx -> AdminController.loadAdminSite(connectionPool, ctx)); // ToDo remove test
+        app.post("/chooseVariantOrMaterial", ctx -> AdminController.variantOrMaterial(connectionPool, ctx));
+        app.post("/editMaterial", ctx -> AdminController.pickEditableMaterial(connectionPool, ctx));
+        app.post("/editVariant", ctx -> AdminController.pickEditableVariant(connectionPool, ctx));
+        app.post("/filterMaterials", ctx -> AdminController.filterMaterials(connectionPool, ctx));
+    }
+
 
     public static void addOrder(ConnectionPool connectionPool, Context ctx){
 
