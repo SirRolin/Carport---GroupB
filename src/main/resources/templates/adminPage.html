@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin site</title>
+</head>
+<body>
+
+<div id="Content">
+    <div class="materialList" th:unless="${session.material_list == null || session.material_list.isEmpty()}">
+        <p>Filter by materialtype:</p>
+        <form method="post" th:action="@{/filterMaterials}" onchange="this.form.submit()">
+            <select>
+                <option name="filter" value="all" th:text="all"></option>
+                <option name="filter" value="pillar" th:text="pillar"></option>
+                <option name="filter" value="roof" th:text="roof"></option>
+                <option name="filter" value="beam" th:text="beam"></option>
+                <option name="filter" value="cover_planks" th:text="'cover planks'"></option>
+            </select>
+        </form>
+        <form method="post" th:action="@{/editMaterial}">
+        <table id="material_table">
+            <tr class="tableHeader">
+                <th>Material ID</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Width in MM</th>
+                <th>Depth in MM</th>
+                <th>Action</th>
+            </tr>
+            <tr th:each="material, i :  ${session.material_list}">
+                <td th:if="${session.edit_material != i.index}" th:text="${material.getMaterialId()}">Material Id</td>
+                <td th:if="${session.edit_material != i.index}" th:text="${material.getName()}">Name</td>
+                <td th:if="${session.edit_material != i.index}" th:text="${material.getType()}">Type</td>
+                <td th:if="${session.edit_material != i.index}" th:text="${material.getWidthMm()}">Width in mm</td>
+                <td th:if="${session.edit_material != i.index}" th:text="${material.getDepthMm()}">Depth in mm</td>
+                <td th:if="${session.edit_material != i.index}">
+                    <button type="submit" name="edit_material" th:value="${i.index}" th:id="'edit_material_'+ ${i.index}">Edit</button>
+                </td>
+
+                <td th:unless="${session.edit_material != i.index}" name="edited_material_id" th:text="${material.getMaterialId()}"></td>
+                <td th:unless="${session.edit_material != i.index}">
+                    <input type="text" name="edited_material_name" th:value="${material.getName()}">
+                </td>
+                <td th:unless="${session.edit_material != i.index}">
+                    <select th:if="${#strings.equals(material.getType().toString(), 'pillar')}" name="edited_material_type">
+                        <option name="pillar" th:text="pillar">pillar</option>
+                        <option name="roof" th:text="roof">roof</option>
+                        <option name="beam" th:text="beam">beam</option>
+                        <option name="cover_planks" th:text="'cover planks'">cover planks</option>
+                    </select>
+                    <select th:if="${#strings.equals(material.getType().toString(), 'roof')}" name="edited_material_type">
+                        <option name="roof" th:text="roof">roof</option>
+                        <option name="pillar" th:text="pillar">pillar</option>
+                        <option name="beam" th:text="beam">beam</option>
+                        <option name="cover_planks" th:text="'cover planks'">cover planks</option>
+                    </select>
+                    <select th:if="${#strings.equals(material.getType().toString(), 'beam')}" name="edited_material_type">
+                        <option name="beam" th:text="beam">beam</option>
+                        <option name="roof" th:text="roof">roof</option>
+                        <option name="pillar" th:text="pillar">pillar</option>
+                        <option name="cover_planks" th:text="'cover planks'">cover planks</option>
+                    </select>
+                    <select th:if="${#strings.equals(material.getType().toString(), 'cover_planks')}" name="edited_material_type">
+                        <option name="cover_planks" th:text="'cover planks'">cover planks</option>
+                        <option name="roof" th:text="roof">roof</option>
+                        <option name="beam" th:text="beam">beam</option>
+                        <option name="pillar" th:text="pillar">pillar</option>
+                    </select>
+                </td>
+                <td th:unless="${session.edit_material != i.index}">
+                    <input type="number" name="edited_material_width" th:value="${material.getWidthMm()}">
+                </td>
+                <td th:unless="${session.edit_material != i.index}">
+                    <input type="number" name="edited_material_depth" th:value="${material.getDepthMm()}">
+                </td>
+                <td th:unless="${session.edit_material != i.index}">
+                    <button type="submit" name="edit_material" th:value="'done '+${i.index}" th:id="'edit_material_'+ ${i.index}">Save</button>
+                </td>
+            </tr>
+        </table>
+        </form>
+    </div>
+
+    <br>
+
+    <div class="variantList" th:unless="${session.variant_list == null || session.variant_list.isEmpty()}">
+        <form method="post" th:action="@{/editVariant}">
+        <table id="variant_table">
+            <tr class="tableHeader">
+                <th>Material Variant Id</th>
+                <th>Material Id</th>
+                <th>Length in CM</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+            <tr th:each="variant, i : ${session.variant_list}">
+                <td th:if="${session.edit_variant != i.index}" th:text="${variant.getMvId()}">Variant Id</td>
+                <td th:if="${session.edit_variant != i.index}" th:text="${variant.getMaterialId()}">Material Id</td>
+                <td th:if="${session.edit_variant != i.index}" th:text="${variant.getLengthCm()}">Length in cm</td>
+                <td th:if="${session.edit_variant != i.index}" th:text="${variant.getPrice()}">Price</td>
+                <td th:if="${session.edit_variant != i.index}">
+                    <button type="submit" name="edit_variant" th:value="${i.index}" th:id="'edit_variant_'+ ${i.index}">Edit</button>
+                </td>
+                <td th:unless="${session.edit_variant != i.index}" th:text="${variant.getMvId()}"></td>
+                <td th:unless="${session.edit_variant != i.index}" th:text="${variant.getMaterialId()}"></td>
+                <td th:unless="${session.edit_variant != i.index}">
+                    <input type="number" name="edited_variant_length" th:value="${variant.getLengthCm()}">
+                </td>
+                <td th:unless="${session.edit_variant != i.index}">
+                    <input type="number" name="edited_variant_price" th:value="${variant.getPrice()}">
+                </td>
+                <td th:unless="${session.edit_variant != i.index}">
+                    <button type="submit" name="edit_variant" th:value="'done '+${i.index}" th:id="'edit_variant_'+ ${i.index}">Save</button>
+                </td>
+            </tr>
+        </table>
+        </form>
+    </div>
+
+    <br>
+
+    <div class="changeAddType">
+        <form method="post" th:action="@{/chooseVariantOrMaterial}">
+            <select id="addSelect" name="add_select" onchange="this.form.submit()">
+                <option>Add</option>
+                <option name="Material">Material</option>
+                <option name="Variant">Variant</option>
+            </select>
+        </form>
+    </div>
+
+    <br>
+
+    <div th:unless="${session.add_material == false || session.add_material == null}" class="addProduct">
+        <form method="post" th:action="@{/addMaterial}">
+            <input type="text" name="material_name" placeholder="Material Name">
+            <select id="typeSelect" name="type_select">
+                <option name="roof">Roof</option>
+                <option name="pillar">Pillar</option>
+                <option name="beam">Beam</option>
+                <option name="cover_planks">Cover Planks</option>
+            </select>
+            <input type="number" name="material_width" placeholder="Material width in mm">
+            <input type="number" name="material_depth" placeholder="Material depth in mm">
+            <input type="submit" value="Add">
+        </form>
+    </div>
+
+    <br>
+
+    <div th:unless="${session.add_material == true || session.add_material == null}" class="addProduct">
+        <form method="post" th:action="@{/addVariant}">
+            <input type="number" name="variant_material_id" placeholder="Material Id">
+            <input type="number" name="variant_length" placeholder="Material length in cm">
+            <input type="number" name="variant_price" placeholder="Price">
+            <input type="submit" value="Add">
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>
