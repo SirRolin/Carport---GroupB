@@ -66,15 +66,14 @@ public class CustomController {
         try {
             OrderDTO orderDTO = ctx.sessionAttribute("current_order");
 
-            orderDTO.setHasAssembler(hasAssembler);
+
             System.out.println(orderDTO.getAssembler());
             OrderDTO finalDTO = new OrderDTO(orderDTO.getId(),orderDTO.getLengthCm(),orderDTO.getWidthCm(),orderDTO.getShedLengthCm(),orderDTO.getShedWidthCm(),orderDTO.getSlopeDegrees(),orderDTO.getAssembler(),orderDTO.getPrice(),orderDTO.getStatus(),orderDTO.getSvg(),orderDTO.getName(),orderDTO.getEmail(),orderDTO.getDate(),orderDTO.getNotice());
 
             try {
                 OrderDTO savedDTO = OrderMapper.addOrder(connectionPool,finalDTO);
-                String dtoName = savedDTO.getName();
-                System.out.println(dtoName);
-                ctx.render("index.html");
+
+                ctx.redirect("/");
             }catch (Exception e){
                 System.out.println(finalDTO.getName());
                 System.out.println("error with db try again");
@@ -85,17 +84,7 @@ public class CustomController {
         }
     }
 
-    public boolean emailValidator(Context ctx, String email){
-        if(email ==""){
-            String errorMessage = "invalid email no characters";
-            ctx.sessionAttribute("emailError",errorMessage);
-            ctx.render("/costumerDetail");
-            return false;
-        }
-        else{
-            return true;
-        }
-    }
+
 
     public void sendOrderDtoToReceipt(Context ctx, ConnectionPool connectionPool){
 
@@ -104,14 +93,11 @@ public class CustomController {
             String name = ctx.formParam("costumer_name");
 
             String email = ctx.formParam("user_email");
-            if(emailValidator(ctx,email)){
-                orderDTO.setName(name);
+            orderDTO.setName(name);
 
-                orderDTO.setEmail(email);
-                ctx.sessionAttribute("current_order",orderDTO);
-            }else{
-                ctx.render("/costumerDetail");
-            }
+            orderDTO.setEmail(email);
+            ctx.sessionAttribute("current_order",orderDTO);
+
 
         }catch (Exception e){
             System.out.println(e);
