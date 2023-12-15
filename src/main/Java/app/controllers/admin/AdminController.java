@@ -87,7 +87,6 @@ public class AdminController {
         }
     }
 
-    //int lengthCm = (ctx.sessionAttribute("length") != null) ? ctx.sessionAttribute("length") : order.getLengthCm();
 
     public static void pickEditableMaterial(ConnectionPool connectionPool, Context ctx){
         try{
@@ -98,10 +97,10 @@ public class AdminController {
                 List<MaterialDTO> materials = ctx.sessionAttribute("material_list");
                 int finalId = materials.get(id).getMaterialId();
                 MaterialDTO pickedMaterial = MaterialsMapper.getMaterialById(connectionPool, finalId);
-                String name = (ctx.formParam("edited_material_name") != null || !ctx.formParam("edited_material_name").isEmpty()) ? ctx.formParam("edited_material_name") : pickedMaterial.getName();
-                String type = (ctx.formParam("edited_material_type") != null || !ctx.formParam("edited_material_type").isEmpty()) ? ctx.formParam("edited_material_type") : pickedMaterial.getUnitType();
-                int width = Integer.parseInt((ctx.formParam("edited_material_width") != null || !ctx.formParam("edited_material_width").isEmpty()) ? ctx.formParam("edited_material_width") : String.valueOf(pickedMaterial.getWidthMm()));
-                int depth = Integer.parseInt((ctx.formParam("edited_material_depth") != null || !ctx.formParam("edited_material_depth").isEmpty()) ? ctx.formParam("edited_material_depth") : String.valueOf(pickedMaterial.getDepthMm()));
+                String name = userInput(ctx.formParam("edited_material_name"),pickedMaterial.getName());
+                String type = userInput(ctx.formParam("edited_material_type"),pickedMaterial.getType().toString());
+                int width = Integer.parseInt(userInput(ctx.formParam("edited_material_width"),String.valueOf(pickedMaterial.getWidthMm())));
+                int depth = Integer.parseInt(userInput(ctx.formParam("edited_material_depth"),String.valueOf(pickedMaterial.getDepthMm())));
                 MaterialDTO newMaterial = null;
                 switch(type){
                     case "pillar":
@@ -135,7 +134,13 @@ public class AdminController {
         try{
             String pickedEdit = ctx.formParam("edit_variant");
             if(pickedEdit.contains("done")){
-                //call edit variant function //TODO EDIT VARIANT FUNCTION REFERENCE.
+                String[] editString = pickedEdit.split(" ");
+                int id = Integer.parseInt(editString[1]);
+                List<MaterialVariantDTO> variants = ctx.sessionAttribute("variant_list");
+                int finalId = variants.get(id).getMvId();
+                MaterialVariantDTO pickedVariant = VariantsMapper.getVariantById(connectionPool,finalId);
+                int length = Integer.parseInt((ctx.formParam("edited_variant_length") != null || !ctx.formParam("edited_variant_length").isEmpty() || Integer.parseInt(ctx.formParam("edited_variant_length")) > 0) ? ctx.formParam("edited_variant_length") : String.valueOf(pickedVariant.getLengthCm()));
+                double price = Double.parseDouble((ctx.formParam("edited_variant_price") != null || !ctx.formParam("edited_variant_price").isEmpty() || Double.parseDouble(ctx.formParam("edited_variant_price")) > 0) ? ctx.formParam("edited_variant_price") : String.valueOf(pickedVariant.getPrice()));
                 ctx.sessionAttribute("edit_variant",-1);
             }else {
                 int pickedEditInt = Integer.parseInt(pickedEdit);
@@ -163,6 +168,37 @@ public class AdminController {
             case "cover_planks":
                 break;
         }
+    }
+
+    private static String userInput(String formParam, String alt){
+        if(validateInput(formParam)){
+           return formParam;
+        }
+        return alt;
+    }
+
+    private static boolean validateInput(String str){
+        if(str == null || str.isEmpty()){
+            return false;
+        }
+
+        if(containsNumber(str)){
+            int number = Integer.parseInt(str);
+            if(number <= 0){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static boolean containsNumber(String str){
+        for(char c : str.toCharArray()){
+            if(Character.isDigit(c)){
+                return true;
+            }
+        }
+        return false;
     }
 
     //TODO YOU HAVE ALL THESE METHODS LEFT!
