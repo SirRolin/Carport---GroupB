@@ -1,13 +1,10 @@
 package app.controllers;
 
-import app.entities.CarportChoiceEntity;
 import app.entities.OrderDTO;
 import app.entities.Status;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
 import io.javalin.http.Context;
-
-import java.util.Date;
 
 public class CustomController {
     public void sendOrderDTO(Context ctx, ConnectionPool connectionPool){
@@ -62,6 +59,7 @@ public class CustomController {
             try {
                 OrderDTO savedDTO = OrderMapper.addOrder(connectionPool,finalDTO);
                 String dtoName = savedDTO.getName();
+                System.out.println(dtoName);
                 ctx.render("index.html");
             }catch (Exception e){
                 System.out.println(finalDTO.getName());
@@ -73,26 +71,36 @@ public class CustomController {
         }
     }
 
-    public void sendOrderDtoToReciept(Context ctx, ConnectionPool connectionPool){
+    public void sendOrderDtoToReceipt(Context ctx, ConnectionPool connectionPool){
 
         try {
             OrderDTO orderDTO = ctx.sessionAttribute("current_order");
             String name = ctx.formParam("costumer_name");
+
             String email = ctx.formParam("user_email");
-            if(email != null || email != "null"){
+
+            orderDTO.setName(name);
+            orderDTO.setEmail(email);
+            ctx.sessionAttribute("current_order",orderDTO);
+
+
+            /*if(email != null || email != "null"){
+
                 orderDTO.setName(name);
                 orderDTO.setEmail(email);
                 System.out.println(orderDTO.getName());
                 System.out.println(orderDTO.getEmail());
                 ctx.sessionAttribute("current_order",orderDTO);
-            }else if(orderDTO.getName() == null){
+
+            }else if(orderDTO.getName() != null){
                 System.out.println("name :" +orderDTO.getName());
-            }
+            }*/
 
         }catch (Exception e){
             System.out.println(e);
         }
-
+        //ctx.redirect("/checkOut");
+        ctx.render("checkOut.html");
     }
 
     public void renderCostumCarportFile(Context ctx, ConnectionPool connectionPool){

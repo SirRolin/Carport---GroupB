@@ -162,5 +162,6 @@ public class OrderDTO {
     public void setDate(Date date){this.date = date;}
 
     public void setEmail(String email) {
+        this.email = email;
     }
 }

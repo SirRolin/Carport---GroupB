@@ -5,9 +5,6 @@ import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 import app.controllers.CustomController;
-import io.javalin.http.Context;
-
-import java.util.TimerTask;
 
 
 public class Main {
@@ -37,9 +34,9 @@ private static ConnectionPool connectionPool = null;
         app.get("/submitCostumCarport",ctx->ctx.render("submitCostumCarport"));
         app.post("/costumerDetail",ctx ->customController.sendOrderDTO(ctx,connectionPool));
         app.post("/costumCarport",ctx ->customController.renderCostumCarportFile(ctx,connectionPool));
-        app.post("/checkOut",ctx ->customController.sendOrderDtoToReciept(ctx,connectionPool));
-        app.post("/receipt",ctx ->ctx.render("receipt.html"));
-        app.post("/",ctx->customController.sendOrderDtoToDatabase(ctx,connectionPool));
+        app.post("/receipt",ctx ->customController.sendOrderDtoToReceipt(ctx,connectionPool));
+        //app.post("/checkout",ctx ->ctx.render("receipt.html"));
+        app.post("/congratsYouDidIt",ctx->customController.sendOrderDtoToDatabase(ctx,connectionPool));
 
 
         //app.get("/SynchronousVisitsTestPage", ctx -> testLoading(ctx));
