@@ -16,7 +16,7 @@ public class Engine {
 
   /**
    * draws a carport
-   * @param items styklist
+   * @param items parts list
    * @param width width of the carport
    * @param height height of the carport
    * @return the HTML for the SVG drawing.
@@ -27,6 +27,8 @@ public class Engine {
     ArrayList<Float> beamLengths = getBeamLengths("");
     float beamLimit = beamLengths.stream().max(Float::compareTo).orElse(0F);
     if(beamLimit == 0F) throw new Exception("An error has occurred, there's no beams.");
+
+    float beamWidth = 10;
 
 
     //// should get some info on the pillars beforehand here.
@@ -40,38 +42,34 @@ public class Engine {
     int horizontalPilarDistance = (int) getBestLengthOver(beamLengths, (width - frontPillarDistance - backPillarDistance) / (horizontalPillars-1));
     int verticalPilarDistance = (int) getBestLengthOver(beamLengths, (height - (2*sidePillarDistance)) / (verticalPillars-1));*/
 
-    float horizontalPilarDistance = (width - frontPillarDistance - backPillarDistance) / (horizontalPillars-1);
-    float verticalPilarDistance = (height - (2*sidePillarDistance)) / (verticalPillars-1);
+    float horizontalPillarDistance = (width - frontPillarDistance - backPillarDistance) / (horizontalPillars-1);
+    float verticalPillarDistance = (height - (2*sidePillarDistance)) / (verticalPillars-1);
 
 
 
 
     SVG svg = new SVG();
     //// Frame
-    svg.drawRectWithMeasurement(0, width, 0, height, 40F, 40F);
+    svg.drawRectWithMeasurement(0, width, 0, height, 40F, 50F);
 
     //// Pillars
     svg.drawMeasurement(Direction.up, 0, frontPillarDistance, 10);
-    svg.drawMeasurement(Direction.up, width-backPillarDistance, backPillarDistance, 10);
-    svg.drawMeasurement(Direction.left, 0, 35, 10);
-    svg.drawMeasurement(Direction.left, height-35, 35, 10);
-    for(int horizontal = frontPillarDistance; horizontal < width ; horizontal += horizontalPilarDistance){
-      svg.drawMeasurement(Direction.up, horizontal, horizontalPilarDistance, 10);
-      for(int vertical = 35; vertical < height; vertical += verticalPilarDistance){
+    svg.drawMeasurement(Direction.left, 0, sidePillarDistance, 10);
+    for(float horizontal = frontPillarDistance; horizontal < width ; horizontal += horizontalPillarDistance){
+      svg.drawMeasurement(Direction.up, horizontal, Math.min(width - horizontal, horizontalPillarDistance), 10);
+      for(float vertical = 35; vertical < height; vertical += verticalPillarDistance){
         svg.drawRectCenter(horizontal,vertical, pillarWidth);
-        svg.drawMeasurement(Direction.left, vertical, verticalPilarDistance, 10);
+        svg.drawMeasurement(Direction.left, vertical, Math.min(height - vertical, verticalPillarDistance), 10);
         items.add("Pillar"); //// TODO change to pillarDTO.
       }
     }
-    /*
-    for(int horizontal = frontPillarDistance; horizontal < width ; horizontal += horizontalPilarDistance) {
-      svg.drawRectCenter(horizontal,height - 35, pillarWidth);
-    }
-    svg.drawRectCenter(width-backPillarDistance, 35, pillarWidth);
-    svg.drawMeasurement(Direction.left, height - 35, 35, 10);
-    items.add("Pillar"); //// TODO change to pillarDTO.*/
 
     //// Beams
+    svg.drawRect(0,width, sidePillarDistance - beamWidth/2, sidePillarDistance + beamWidth/2);
+    svg.drawRect(0,width, height - sidePillarDistance - beamWidth/2, height - sidePillarDistance + beamWidth/2);
+    //svg.drawRect(0,width, sidePillarDistance + pillarWidth/2, sidePillarDistance + pillarWidth/2 + beamWidth);
+    //svg.drawRect(0,width, height - sidePillarDistance - pillarWidth/2 - beamWidth, height - sidePillarDistance - pillarWidth/2);
+
 
 
     return svg;

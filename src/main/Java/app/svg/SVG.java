@@ -28,8 +28,8 @@ public class SVG implements Serializable {
   public float scaling = 1;
 
   //// Settings we can tweak to see better results with texts.
-  static public float extraTextRoomX = 20;
-  static public float extraTextRoomY = 10;
+  static public float extraTextRoomX = 40;
+  static public float extraTextRoomY = 25;
 
   //// Text formatting
   public static String textFormat = "%.2f";
@@ -109,23 +109,23 @@ public class SVG implements Serializable {
     if (!alreadyExists) {
       switch (direction){
         case left -> {
-          if(startX - measurementDistance - 20 < minX){
-            minX = startX - measurementDistance - 20;
+          if(startX - measurementDistance - extraTextRoomX < minX){
+            minX = startX - measurementDistance - extraTextRoomX;
           }
         }
         case up -> {
-          if(startY - measurementDistance - 20 < minY){
-            minY = startY - measurementDistance - 20;
+          if(startY - measurementDistance - extraTextRoomY < minY){
+            minY = startY - measurementDistance - extraTextRoomY;
           }
         }
         case right -> {
-          if(startX + measurementDistance + 20 > maxX){
-            maxX = startX + measurementDistance + 20;
+          if(startX + measurementDistance + extraTextRoomX > maxX){
+            maxX = startX + measurementDistance + extraTextRoomX;
           }
         }
         case down -> {
-          if(startY + measurementDistance + 20 < maxY){
-            maxY = startY + measurementDistance + 20;
+          if(startY + measurementDistance + extraTextRoomY < maxY){
+            maxY = startY + measurementDistance + extraTextRoomY;
           }
         }
       }
