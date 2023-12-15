@@ -48,6 +48,24 @@ public class BeamDTO extends MaterialDTO implements Comparable<MaterialDTO> {
     }
 
     @Override
+    public boolean equals(MaterialDTO other) {
+        if(other instanceof BeamDTO bOther){
+            if(getMaterialVariantID() !=  bOther.getMaterialVariantID()){
+                return false;
+            }else if(getLength() != bOther.getLength()){
+                return false;
+            }else if(getPrice() != bOther.getPrice()){
+                return false;
+            }else if(getUnitType() != bOther.getUnitType()){
+                return false;
+            }
+        }else {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public int compareTo(@NotNull MaterialDTO o) {
         String strLength = String.valueOf(length);
         return strLength.compareTo(String.valueOf(o.getLength()));

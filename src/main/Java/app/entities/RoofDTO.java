@@ -50,6 +50,24 @@ public class RoofDTO extends MaterialDTO implements Comparable<MaterialDTO>{
     }
 
     @Override
+    public boolean equals(MaterialDTO other) {
+        if(other instanceof RoofDTO rOther){
+            if(getMaterialVariantID() !=  rOther.getMaterialVariantID()){
+                return false;
+            }else if(getLength() != rOther.getLength()){
+                return false;
+            }else if(getPrice() != rOther.getPrice()){
+                return false;
+            }else if(getUnitType() != rOther.getUnitType()){
+                return false;
+            }
+        }else {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public int compareTo(@NotNull MaterialDTO o) {
        String strLength = String.valueOf(length);
        return strLength.compareTo(String.valueOf(o.getLength()));

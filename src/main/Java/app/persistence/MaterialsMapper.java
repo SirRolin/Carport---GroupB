@@ -78,6 +78,9 @@ public class MaterialsMapper {
                         case "cover_planks" -> {
                             availableMaterials.add(new CrossbeamDTO(materialID, name, Mtype.cover_planks, width_mm, depth_mm, materialVariantID, length, price));
                         }
+                        case "roof" -> {
+                            availableMaterials.add(new RoofDTO(materialID,name,Mtype.roof,width_mm,depth_mm,materialVariantID,length,price));
+                        }
                         // Add more cases as more material is needed
                         default -> {
                         }

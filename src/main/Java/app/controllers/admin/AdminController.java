@@ -1,14 +1,12 @@
 package app.controllers.admin;
 
 import app.entities.*;
-import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.MaterialsMapper;
-import app.persistence.OrderMapper;
 import app.persistence.VariantsMapper;
+import app.validators.Validator;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,10 +105,10 @@ public class AdminController {
                 List<MaterialDTO> materials = ctx.sessionAttribute("material_list");
                 int finalId = materials.get(id).getMaterialId();
                 MaterialDTO pickedMaterial = MaterialsMapper.getMaterialById(connectionPool, finalId);
-                String name = userInput(ctx.formParam("edited_material_name"),pickedMaterial.getName());
-                String type = userInput(ctx.formParam("edited_material_type"),pickedMaterial.getType().toString());
-                int width = Integer.parseInt(userInput(ctx.formParam("edited_material_width"),String.valueOf(pickedMaterial.getWidthMm())));
-                int depth = Integer.parseInt(userInput(ctx.formParam("edited_material_depth"),String.valueOf(pickedMaterial.getDepthMm())));
+                String name = Validator.userInput(ctx.formParam("edited_material_name"),pickedMaterial.getName());
+                String type = Validator.userInput(ctx.formParam("edited_material_type"),pickedMaterial.getType().toString());
+                int width = Validator.userInput(ctx.formParam("edited_material_width"),pickedMaterial.getWidthMm());
+                int depth = Validator.userInput(ctx.formParam("edited_material_depth"),pickedMaterial.getDepthMm());
                 MaterialDTO newMaterial = null;
                 switch(type){
                     case "pillar":
@@ -127,7 +125,9 @@ public class AdminController {
                         break;
                 }
                 if(newMaterial != null){
-                    MaterialsMapper.updateMaterial(connectionPool, newMaterial);
+                    if(!pickedMaterial.equals(newMaterial)){
+                        MaterialsMapper.updateMaterial(connectionPool, newMaterial);
+                    }
                 }
                 ctx.sessionAttribute("edit_material",-1);
             }else{
@@ -135,7 +135,7 @@ public class AdminController {
                 ctx.sessionAttribute("edit_material",pickedEditInt);
             }
         }catch(Exception e){
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
         loadAdminSite(connectionPool,ctx);
     }
@@ -149,8 +149,10 @@ public class AdminController {
                 List<MaterialVariantDTO> variants = ctx.sessionAttribute("variant_list");
                 int finalId = variants.get(id).getMvId();
                 MaterialVariantDTO pickedVariant = VariantsMapper.getVariantById(connectionPool,finalId);
-                int length = Integer.parseInt((ctx.formParam("edited_variant_length") != null || !ctx.formParam("edited_variant_length").isEmpty() || Integer.parseInt(ctx.formParam("edited_variant_length")) > 0) ? ctx.formParam("edited_variant_length") : String.valueOf(pickedVariant.getLengthCm()));
-                double price = Double.parseDouble((ctx.formParam("edited_variant_price") != null || !ctx.formParam("edited_variant_price").isEmpty() || Double.parseDouble(ctx.formParam("edited_variant_price")) > 0) ? ctx.formParam("edited_variant_price") : String.valueOf(pickedVariant.getPrice()));
+                int length = Validator.userInput(ctx.formParam("edited_variant_length"),pickedVariant.getLengthCm());
+                double price = Validator.userInput(ctx.formParam("edited_variant_price"),pickedVariant.getPrice());
+                MaterialVariantDTO newVariant = new MaterialVariantDTO(pickedVariant.getMvId(),pickedVariant.getMaterialId(),length,price);
+                VariantsMapper.updateVariant(connectionPool,newVariant,finalId);
                 ctx.sessionAttribute("edit_variant",-1);
             }else {
                 int pickedEditInt = Integer.parseInt(pickedEdit);
@@ -161,6 +163,8 @@ public class AdminController {
         }
         loadAdminSite(connectionPool,ctx);
     }
+
+
 
     public static void filterMaterials(ConnectionPool connectionPool, Context ctx){
         String filter = ctx.formParam("filter");
@@ -180,36 +184,6 @@ public class AdminController {
         }
     }
 
-    private static String userInput(String formParam, String alt){
-        if(validateInput(formParam)){
-           return formParam;
-        }
-        return alt;
-    }
-
-    private static boolean validateInput(String str){
-        if(str == null || str.isEmpty()){
-            return false;
-        }
-
-        if(containsNumber(str)){
-            int number = Integer.parseInt(str);
-            if(number <= 0){
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private static boolean containsNumber(String str){
-        for(char c : str.toCharArray()){
-            if(Character.isDigit(c)){
-                return true;
-            }
-        }
-        return false;
-    }
 
     //TODO YOU HAVE ALL THESE METHODS LEFT!
     public static boolean addNewMaterial(ConnectionPool connectionPool, Context ctx){

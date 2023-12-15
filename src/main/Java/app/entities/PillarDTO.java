@@ -52,6 +52,25 @@ public class PillarDTO extends MaterialDTO implements Comparable<MaterialDTO>{
     }
 
     @Override
+    public boolean equals(MaterialDTO other) {
+        if(other instanceof PillarDTO pOther){
+            if(getMaterialVariantID() !=  pOther.getMaterialVariantID()){
+                return false;
+            }else if(getLength() != pOther.getLength()){
+                return false;
+            }else if(getPrice() != pOther.getPrice()){
+                return false;
+            }else if(getUnitType() != pOther.getUnitType()){
+                return false;
+            }
+        }else {
+            return false;
+        }
+        return true;
+    }
+
+
+    @Override
     public int compareTo(@NotNull MaterialDTO o) {
        String strLength = String.valueOf(length);
        return strLength.compareTo(String.valueOf(o.getLength()));

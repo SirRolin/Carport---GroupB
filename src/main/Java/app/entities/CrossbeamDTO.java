@@ -46,6 +46,25 @@ public class CrossbeamDTO extends MaterialDTO implements Comparable<MaterialDTO>
     }
 
     @Override
+    public boolean equals(MaterialDTO other) {
+        if(other instanceof CrossbeamDTO cOther){
+            if(getMaterialVariantID() !=  cOther.getMaterialVariantID()){
+                return false;
+            }else if(getLength() != cOther.getLength()){
+                return false;
+            }else if(getPrice() != cOther.getPrice()){
+                return false;
+            }else if(getUnitType() != cOther.getUnitType()){
+                return false;
+            }
+        }else {
+            return false;
+        }
+        return true;
+    }
+
+
+    @Override
     public int compareTo(@NotNull MaterialDTO o) {
         String strLength = String.valueOf(length);
         return strLength.compareTo(String.valueOf(o.getLength()));
