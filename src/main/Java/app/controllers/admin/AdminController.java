@@ -200,58 +200,18 @@ public class AdminController {
             }
         }
 
-        switch(filter){
-            case "all":
-                try{
-                    List<MaterialDTO> materials = MaterialsMapper.getAllMaterialInfo(connectionPool);
-                    ctx.sessionAttribute("modified_list",materials);
-                    ctx.sessionAttribute("already_selected","all");
-                }catch(Exception e){
-                    throw new DatabaseException("Error while fetching materials list");
-                }
-                loadAdminSite(connectionPool, ctx);
-                break;
-            case "pillar":
-                try{
-                    List<MaterialDTO> materials = MaterialsMapper.getMaterialInfoByType(connectionPool,Mtype.pillar);
-                    ctx.sessionAttribute("modified_list",materials);
-                    ctx.sessionAttribute("already_selected","pillar");
-                }catch(Exception e){
-                    throw new DatabaseException("Error while fetching materials list");
-                }
-                loadAdminSite(connectionPool, ctx);
-                break;
-            case "beam":
-                try{
-                    List<MaterialDTO> materials = MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.beam);
-                    ctx.sessionAttribute("modified_list",materials);
-                    ctx.sessionAttribute("already_selected","beam");
-                }catch(Exception e){
-                    throw new DatabaseException("Error while fetching materials list");
-                }
-                loadAdminSite(connectionPool, ctx);
-                break;
-            case "roof":
-                try{
-                    List<MaterialDTO> materials = MaterialsMapper.getMaterialInfoByType(connectionPool,Mtype.roof);
-                    ctx.sessionAttribute("modified_list",materials);
-                    ctx.sessionAttribute("already_selected","roof");
-                }catch(Exception e){
-                    throw new DatabaseException("Error while fetching materials list");
-                }
-                loadAdminSite(connectionPool, ctx);
-                break;
-            case "cover_planks":
-                try{
-                    List<MaterialDTO> materials = MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.cover_planks);
-                    ctx.sessionAttribute("modified_list",materials);
-                    ctx.sessionAttribute("already_selected","cover_planks");
-                }catch(Exception e){
-                    throw new DatabaseException("Error while fetching materials list");
-                }
-                loadAdminSite(connectionPool, ctx);
-                break;
+        if(filter != null && filter.isEmpty() == false){
+            if(filter.equalsIgnoreCase("all")){
+                List<MaterialDTO> materials = MaterialsMapper.getAllMaterialInfo(connectionPool);
+                ctx.sessionAttribute("modified_list",materials);
+                ctx.sessionAttribute("already_selected",filter);
+            }else{
+                List<MaterialDTO> materials = MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.valueOf(filter));
+                ctx.sessionAttribute("modified_list",materials);
+                ctx.sessionAttribute("already_selected",filter);
+            }
         }
+        loadAdminSite(connectionPool, ctx);
     }
 
 
