@@ -7,30 +7,28 @@
 </head>
 
 <body>
-<div>
-<p> <h1>Enter ID for the order you want to edit. Alternately enter name or email to see if there is any orders associated with them</h1></p>
-</div>
 <div id="Content">
     <div class="order_chosen" th:unless="${session.chosen_order == null}">
-        <p th:if="${message != null}" th:text="${message}"></p>
         <h1>Here we can customize the costumers order!</h1>
+        <p th:if="${message != null}" th:text="${message}"></p>
         <form th:action="@{/updateOrder}" method="post">
             <h5>Edit the order length in cm:</h5>
             <input type="number" id="newOrderLength" name="new_length_input" th:value="${session.chosen_order.getLengthCm()}"/>
             <h5>Edit the order width in cm:</h5>
-            <input type="number" id="newOrderWidth" name="new_length_input" th:value="${session.chosen_order.getWidthCm()}"/>
+            <input type="number" id="newOrderWidth" name="new_width_input" th:value="${session.chosen_order.getWidthCm()}"/>
             <h5>Edit the order shed length in cm:</h5>
-            <input type="number" id="newOrderShedLength" name="new_length_input" th:value="${session.chosen_order.getShedLengthCm()}"/>
+            <input type="number" id="newOrderShedLength" name="new_shed_length_input" th:value="${session.chosen_order.getShedLengthCm()}"/>
             <h5>Edit the order shed width in cm:</h5>
-            <input type="number" id="newOrderShedWidth" name="new_length_input" th:value="${session.chosen_order.getShedWidthCm()}"/>
+            <input type="number" id="newOrderShedWidth" name="new_shed_width_input" th:value="${session.chosen_order.getShedWidthCm()}"/>
             <h5>Edit the order slope degrees:</h5>
-            <input type="number" id="newSlopeDegrees" name="new_length_input" th:value="${session.chosen_order.getSlopeDegrees()}"/>
+            <input type="number" id="newSlopeDegrees" name="new_slopedegrees_input" th:value="${session.chosen_order.getSlopeDegrees()}"/>
             <h5>Edit if the order need an assembler:</h5>
             <label>
-                <input type="checkbox" id="newHasAssembler" name="new_length_input" th:checked="${session.chosen_order.isHasAssembler()}"/>
+                <input type="checkbox" id="newHasAssembler" name="new_has_assembler_input" th:checked="${session.chosen_order.isHasAssembler()}"/>
             </label>
             <h5>Edit the Order price:</h5>
-            <input type="number" id="newPrice" name="new_length_input" th:value="${session.chosen_order.getPrice()}"/>
+            <p th:if="${price_message != null}" th:text="${price_message}"></p>
+            <input type="number" id="newPrice" name="new_price_input" th:value="${session.chosen_order.getPrice()}"/>
             <h5>Edit the Order status:</h5>
             <select th:if="${#strings.equals(session.chosen_order.getStatus().toString(), 'initialised')}" name="edited_order_status">
                 <option name="initialised" th:text="initialised">initialised</option>
@@ -68,13 +66,27 @@
                 <option name="waiting_for_customer" th:text="'waiting_for_customer'">waiting_for_customer</option>
             </select>
             <h5>Edit the Order Notice:</h5>
-            <input type="text" id="newNotice" name="new_length_input" th:value="${session.chosen_order.getNotice()}"/>
-
+            <input type="text" id="newNotice" name="new_notice_input" th:value="${session.chosen_order.getNotice()}"/>
             <button type="submit" name="edit_order">Edit Order</button>
+            <div>
+            <p th:if="${saved_message != null}" th:text="${saved_message}"></p>
+            </div>
         </form>
+        <br>
+        <form th:action="@{/generateBillOfMaterial}" method="post">
+            <button type="submit" name="generate_BillOfMaterial">Generate bill of material</button>
+        </form>
+        <br>
+        <form th:action="@{/showBillOfMaterial}" method="post">
+            <button type="submit" name="show_BillOfMaterial">Show and/or edit bill of material</button>
+        </form>
+
     </div>
 
     <div class="no_order_chosen" th:if="${session.chosen_order == null}">
+        <div>
+            <p> <h1>Enter ID for the order you want to edit. Alternately enter name or email to see if there is any orders associated with them</h1></p>
+        </div>
         <p th:if="${message != null}" th:text="${message}"></p>
         <form th:action="@{/submitOrderID}" method="post">
             <label for="orderID_input">Enter Order ID:</label>
@@ -97,7 +109,7 @@
         </div>
         <div class="show_orders" th:unless="${session.costumer_orders == null || session.costumer_orders.isEmpty() == true}">
             <p th:if="${message != null}" th:text="${message}"></p>
-            <h1> Her vises Kundens ordre info</h1>
+            <h1> Her vises Kundens ordre info:</h1>
             <form action="/submitOrderID" method="post">
             <table id="material_table">
                 <tr class="tableHeader">

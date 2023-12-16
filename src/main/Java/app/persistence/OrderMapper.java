@@ -55,7 +55,7 @@ public class OrderMapper {
     }
 
     public static boolean updateOrder(ConnectionPool connectionPool, OrderDTO newOrder) throws DatabaseException{
-        String sql = "update orders set length_cm = ?, width_cm = ?, shed_length_cm = ?, shed_width_cm = ?, slope_degrees = ?, hire_assembler = ?, price = ?, status = ?, svg_text = ?, name = ?, email = ?, date = ?, notice = ? where orderID = ?";
+        String sql = "update orders set length_cm = ?, width_cm = ?, shed_length_cm = ?, shed_width_cm = ?, slope_degrees = ?, hire_assembler = ?, price = ?, status = ?, svg_text = ?, name = ?, email = ?, date = ?, notice = ? where \"orderID\" = ?";
         try(Connection connection = connectionPool.getConnection()){
             try(PreparedStatement ps = connection.prepareStatement(sql)){
                 ps.setInt(1,newOrder.getLengthCm());

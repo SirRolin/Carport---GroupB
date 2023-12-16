@@ -2,6 +2,7 @@ package app;
 
 import app.config.ThymeleafConfig;
 import app.controllers.OrderEditController;
+import app.controllers.admin.BillOfMaterialEditController;
 import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
@@ -36,11 +37,11 @@ public class Main {
 
         }
         try{
-            app.get("/", ctx -> OrderEditController.loadOrderEditSite(ctx,connectionPool));
-            app.post("/submitOrderID", ctx -> OrderEditController.showChosenOrderByID(ctx,connectionPool));
-            app.post("/submitCostumerName", ctx -> OrderEditController.getOrdersByNameOrEmail(ctx,connectionPool));
-            app.post("/submitCostumerEmail", ctx -> OrderEditController.getOrdersByNameOrEmail(ctx,connectionPool));
-            app.post("/updateOrder",ctx -> OrderEditController.UpdateOrder(ctx,connectionPool));
+            // Order edit site:
+            OrderEditController.addRenders(app,connectionPool);
+            // Bill of Material edit site:
+            BillOfMaterialEditController.addRenders(app,connectionPool);
+
         }catch (Exception e){
 
         }

@@ -7,7 +7,6 @@ public class PillarDTO extends MaterialDTO implements Comparable<MaterialDTO>{
     private int materialVariantID;
     private int length;
     private int price;
-    private int amount = 0;
     private String unitType = "stk"; // TODO it should not be hard coded
 
     //int materialId, String name, Mtype type, int widthMm, int depthMm, String description
@@ -44,11 +43,6 @@ public class PillarDTO extends MaterialDTO implements Comparable<MaterialDTO>{
     @Override
     public int getMaterialVariantID() {
         return materialVariantID;
-    }
-
-    @Override
-    public void setAmount(int amount) {
-        this.amount = amount;
     }
 
     @Override

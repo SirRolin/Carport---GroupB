@@ -145,6 +145,7 @@ public class OrderDTO {
     public void setId(int id) {
         this.id = id;
     }
-    public void setSvg(String svg){this.svg = svg;};
+    public void setSvg(String svg){this.svg = svg;}
     public void setDate(Date date){this.date = date;}
+    public void setPrice(int price){this.price = price;}
 }

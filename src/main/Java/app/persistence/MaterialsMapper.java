@@ -51,7 +51,6 @@ public class MaterialsMapper {
     public static List<MaterialDTO> getAllMaterialInfo(ConnectionPool connectionPool) throws DatabaseException {
         List<MaterialDTO> availableMaterials = new ArrayList<>();
         String sql = "SELECT * FROM material_variant JOIN material using(\"materialID\")";
-
         try (Connection connection = connectionPool.getConnection()) {
             try (PreparedStatement ps = connection.prepareStatement(sql)) {
                 ResultSet rs = ps.executeQuery();
@@ -88,5 +87,20 @@ public class MaterialsMapper {
             throw new DatabaseException("Error while connecting to database: "+ e.getMessage());
         }
 
+    }
+
+    public static void deleteOrderItemsByOrderID(int id, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "DELETE FROM order_item WHERE \"orderID\" = ?";
+        try (Connection connection = connectionPool.getConnection()) {
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                ps.setInt(1,id);
+                int rowsEffected = ps.executeUpdate();
+                if(rowsEffected < 1){
+                    // ignore this case
+                }
+            }
+        }catch (SQLException e) {
+            throw new DatabaseException("unable to connect to delete the materials: " + e.getMessage());
+        }
     }
 }

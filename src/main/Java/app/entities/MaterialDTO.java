@@ -72,4 +72,5 @@ public abstract class MaterialDTO implements Comparable<MaterialDTO> {
     public int getAmount(){
         return amount;
     };
+    public abstract int getPrice();
 }
