@@ -7,17 +7,18 @@
 <body>
 
 <div id="Content">
+    <p>Filter by materialtype:</p>
+    <form method="post" th:action="@{/filterMaterials}">
+        <select name="filter" onchange="this.form.submit()">
+            <option name="select" value="select" th:text="Select"></option>
+            <option name="all" value="all" th:text="all"></option>
+            <option name="pillar" value="pillar" th:text="pillar"></option>
+            <option name="roof" value="roof" th:text="roof"></option>
+            <option name="beam" value="beam" th:text="beam"></option>
+            <option name="cover_planks" value="cover_planks" th:text="'cover planks'">Cover planks</option>
+        </select>
+    </form>
     <div class="materialList" th:unless="${session.material_list == null || session.material_list.isEmpty()}">
-        <p>Filter by materialtype:</p>
-        <form method="post" th:action="@{/filterMaterials}" onchange="this.form.submit()">
-            <select>
-                <option name="filter" value="all" th:text="all"></option>
-                <option name="filter" value="pillar" th:text="pillar"></option>
-                <option name="filter" value="roof" th:text="roof"></option>
-                <option name="filter" value="beam" th:text="beam"></option>
-                <option name="filter" value="cover_planks" th:text="'cover planks'"></option>
-            </select>
-        </form>
         <form method="post" th:action="@{/editMaterial}">
         <table id="material_table">
             <tr class="tableHeader">

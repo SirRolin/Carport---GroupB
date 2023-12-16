@@ -1,6 +1,7 @@
 package app.controllers.admin;
 
 import app.entities.*;
+import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.MaterialsMapper;
 import app.persistence.VariantsMapper;
@@ -8,6 +9,7 @@ import app.validators.Validator;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,10 @@ public class AdminController {
         app.post("/editMaterial", ctx -> AdminController.pickEditableMaterial(connectionPool, ctx));
         app.post("/editVariant", ctx -> AdminController.pickEditableVariant(connectionPool, ctx));
         app.post("/filterMaterials", ctx -> AdminController.filterMaterials(connectionPool, ctx));
+        app.post("/addNewMaterial", ctx-> addNewMaterial(connectionPool,ctx));
+        app.post("/addNewVariant", ctx-> addNewVariant(connectionPool,ctx));
+        app.post("removeMaterial",ctx->removeMaterial(connectionPool, ctx));
+        app.post("removeVariant",ctx->removeVariant(connectionPool,ctx));
     }
 
 
@@ -184,20 +190,66 @@ public class AdminController {
 
 
 
-    public static void filterMaterials(ConnectionPool connectionPool, Context ctx){
+    public static void filterMaterials(ConnectionPool connectionPool, Context ctx) throws DatabaseException{
         String filter = ctx.formParam("filter");
+        String alreadySelected = ctx.sessionAttribute("already_selected");
+        if(alreadySelected != null && alreadySelected.isEmpty() == false){
+            if(filter.equalsIgnoreCase(alreadySelected)){
+                loadAdminSite(connectionPool,ctx);
+                return;
+            }
+        }
+
         switch(filter){
             case "all":
-                //getAllMaterialInfo //TODO FILTER MATERIALS
+                try{
+                    List<MaterialDTO> materials = MaterialsMapper.getAllMaterialInfo(connectionPool);
+                    ctx.sessionAttribute("modified_list",materials);
+                    ctx.sessionAttribute("already_selected","all");
+                }catch(Exception e){
+                    throw new DatabaseException("Error while fetching materials list");
+                }
+                loadAdminSite(connectionPool, ctx);
                 break;
             case "pillar":
-                //getAllMaterialInfoByType
+                try{
+                    List<MaterialDTO> materials = MaterialsMapper.getMaterialInfoByType(connectionPool,Mtype.pillar);
+                    ctx.sessionAttribute("modified_list",materials);
+                    ctx.sessionAttribute("already_selected","pillar");
+                }catch(Exception e){
+                    throw new DatabaseException("Error while fetching materials list");
+                }
+                loadAdminSite(connectionPool, ctx);
                 break;
             case "beam":
+                try{
+                    List<MaterialDTO> materials = MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.beam);
+                    ctx.sessionAttribute("modified_list",materials);
+                    ctx.sessionAttribute("already_selected","beam");
+                }catch(Exception e){
+                    throw new DatabaseException("Error while fetching materials list");
+                }
+                loadAdminSite(connectionPool, ctx);
                 break;
             case "roof":
+                try{
+                    List<MaterialDTO> materials = MaterialsMapper.getMaterialInfoByType(connectionPool,Mtype.roof);
+                    ctx.sessionAttribute("modified_list",materials);
+                    ctx.sessionAttribute("already_selected","roof");
+                }catch(Exception e){
+                    throw new DatabaseException("Error while fetching materials list");
+                }
+                loadAdminSite(connectionPool, ctx);
                 break;
             case "cover_planks":
+                try{
+                    List<MaterialDTO> materials = MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.cover_planks);
+                    ctx.sessionAttribute("modified_list",materials);
+                    ctx.sessionAttribute("already_selected","cover_planks");
+                }catch(Exception e){
+                    throw new DatabaseException("Error while fetching materials list");
+                }
+                loadAdminSite(connectionPool, ctx);
                 break;
         }
     }
@@ -219,4 +271,6 @@ public class AdminController {
     public static boolean removeVariant(ConnectionPool connectionPool, Context ctx){
         return true;
     }
+
+    //TODO: MAYBE ADD FILTER VARIANTS?
 }
