@@ -26,6 +26,10 @@ public class RoofDTO extends MaterialDTO implements Comparable<MaterialDTO>{
        super(materialId,name,type,widthMm,depthMm);
     }
 
+    public RoofDTO(String name, Mtype type, int width, int length) {
+        super(name,type,width,length);
+    }
+
     public int getLength() {
         return length;
     }

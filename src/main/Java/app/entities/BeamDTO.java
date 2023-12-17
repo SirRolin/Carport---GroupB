@@ -25,6 +25,10 @@ public class BeamDTO extends MaterialDTO implements Comparable<MaterialDTO> {
         super(materialID,name,type,widthMm,depthMm);
     }
 
+    public BeamDTO(String name, Mtype type, int width, int length) {
+        super(name,type,width,length);
+    }
+
     public int getLength() {
         return length;
     }

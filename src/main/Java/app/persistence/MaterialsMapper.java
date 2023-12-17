@@ -171,4 +171,26 @@ public class MaterialsMapper {
         return material;
     }
 
+    public static boolean addMaterial(ConnectionPool connectionPool, MaterialDTO material) throws DatabaseException{
+        if(material != null){
+            String sql = "insert into materials (name, type, width_mm, depth_mm) values (?,?,?,?)";
+            try(Connection connection = connectionPool.getConnection()){
+                try(PreparedStatement ps = connection.prepareStatement(sql)){
+                    ps.setString(1,material.getName());
+                    ps.setObject(2, material.getType(), Types.OTHER);
+                    ps.setInt(3,material.getWidthMm());
+                    ps.setInt(4,material.getDepthMm());
+                }catch(Exception e){
+                    throw new DatabaseException("Error while adding material: "+e);
+                }
+            }catch(Exception e){
+                throw new DatabaseException("Error while connecting to database:" +e);
+            }
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+
 }

@@ -28,6 +28,10 @@ public class PillarDTO extends MaterialDTO implements Comparable<MaterialDTO>{
        super(materialId,name,type,widthMm,depthMm);
     }
 
+    public PillarDTO(String name, Mtype type, int width, int length) {
+        super(name,type,width,length);
+    }
+
     public int getLength() {
         return length;
     }
