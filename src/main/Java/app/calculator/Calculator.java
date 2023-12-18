@@ -11,16 +11,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Calculator {
 
-    public static List<MaterialDTO> generateBillOfMaterials(OrderDTO order, ConnectionPool connectionPool) throws SQLException {
+    public static List<MaterialDTO> generateBillOfMaterials(OrderDTO order, ConnectionPool connectionPool) throws DatabaseException {
         List<MaterialDTO> billOfMaterials = new ArrayList<>();
         // find the different materials we currently have available based on type.
         try {
-            billOfMaterials.add((MaterialDTO) getPillers(order.getLengthCm(), order.getWidthCm(), MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.pillar)));
-            billOfMaterials.add((MaterialDTO) getBeams(order.getLengthCm(), order.getWidthCm(), MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.beam)));
-            billOfMaterials.add((MaterialDTO) getCrossbeams(order.getLengthCm(), order.getWidthCm(), MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.cover_planks)));
+            billOfMaterials.addAll(getPillers(order.getLengthCm(), order.getWidthCm(), MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.pillar)));
+            billOfMaterials.addAll(getBeams(order.getLengthCm(), order.getWidthCm(), MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.beam)));
+            billOfMaterials.addAll(getCrossbeams(order.getLengthCm(), order.getWidthCm(), MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.cover_planks)));
             OrderItemMapper.saveBillOfMaterials(billOfMaterials, order.getId(), connectionPool);
         } catch (DatabaseException e) {
             // TODO add logic incase of database exception
@@ -72,7 +73,7 @@ public class Calculator {
                 // sets the amount and removes the beam from the list and goes again.
                 currentBeam.setAmount(totalBeams);
                 beamOptions.remove(i);
-                // a check to make sure it only adds a beam if it',s needed.
+                // a check to make sure it only adds a beam if it's needed.
                 if (currentBeam.getAmount() != 0) {
                     neededBeams.add(currentBeam);
                 }
@@ -98,7 +99,7 @@ public class Calculator {
             }
         }
         // adds the amount need of the chosen crossbeam to out needCrossBeam array if one was chosen.
-        if(!choosenCrossBeam.equals(null)) {
+        if(choosenCrossBeam != null) {
             while (totalCrossBeams * distanceBetweenCrossBeams <= carportLength) {
                 totalCrossBeams++;
             }
@@ -106,8 +107,12 @@ public class Calculator {
             neededCrossbeams.add(choosenCrossBeam);
         }
 
-        if(choosenCrossBeam.equals(null)){
+        if(choosenCrossBeam == null){
             // TODO NICE TO HAVE: add logic if no single CrossBeam is long enough to cover the width of the carport on its own.
+            // choose the longest beam available. subtract its length from width. and do new check all over again with the
+            // the remaining width. now find the crossbeam with the sortes length that can cover that remaining width.
+            // and start the count. if the length of the shortest crossbeam is more than twice the remaining length divide
+            // the shortest crossbeam count by 2.
         }
         return neededCrossbeams;
     }

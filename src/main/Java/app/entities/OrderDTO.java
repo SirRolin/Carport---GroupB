@@ -20,7 +20,24 @@ public class OrderDTO {
     private Date date;
     private String notice;
 
-    //FULL CONSTRUCTOR FOR FULL ORDER | ONLY NEEDED IN ORDERMAPPER WHEN WRITING TO DATABASE.
+    //FULL CONSTRUCTOR FOR FULL ORDER | ONLY NEEDED IN ORDERMAPPER WHEN WRITING TO OR GETTING FROM DATABASE.
+    /**
+     *
+     * @param id
+     * @param lengthCm
+     * @param widthCm
+     * @param shedLengthCm
+     * @param shedWidthCm
+     * @param slopeDegrees
+     * @param hasAssembler
+     * @param price
+     * @param status
+     * @param svg
+     * @param name
+     * @param email
+     * @param date
+     * @param notice
+     */
     public OrderDTO(int id, int lengthCm, int widthCm, int shedLengthCm, int shedWidthCm, int slopeDegrees, boolean hasAssembler, double price, Status status, String svg, String name, String email, Date date, String notice) {
         this.id = id;
         this.lengthCm = lengthCm;
@@ -128,6 +145,7 @@ public class OrderDTO {
     public void setId(int id) {
         this.id = id;
     }
-    public void setSvg(String svg){this.svg = svg;};
+    public void setSvg(String svg){this.svg = svg;}
     public void setDate(Date date){this.date = date;}
+    public void setPrice(int price){this.price = price;}
 }
