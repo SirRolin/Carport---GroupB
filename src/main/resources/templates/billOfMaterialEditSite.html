@@ -8,29 +8,49 @@
 <body>
     <div class="order_chosen" th:unless="${session.bill_of_materials == null}">
         <h1>Edit the bill of material:</h1>
+        <p th:if="${message != null}" th:text="${message}"></p>
         <form action="/submitEditedBillOfMaterial" method="post" onchange="this.form.submit()">
             <table id="material_table">
                 <tr class="tableHeader">
                     <th>Material ID</th>
+                    <th>Material Variant ID</th>
                     <th>Material Name:</th>
-                    <th>Material quantity:</th>
+                    <th>Material Type:</th>
+                    <th>Material Length:</th>
+                    <th>Material Quantity:</th>
+                    <th>Material Notice</th>
                 </tr>
                 <tr th:each="material, i :  ${session.bill_of_materials}">
+                    <td th:text="${material.getMaterialId()}">No info</td>
+                    <td th:text="${material.getMaterialVariantID}">No info</td>
                     <td th:text="${material.getName}">No info</td>
                     <td th:text="${material.getType}">No info</td>
+                    <td th:text="${material.getLength()}">No info</td>
                     <td>
                         <input type="number" id="newAmount" name="new_amount_input" th:value="${material.getAmount}"/>
                     </td>
                     <td>
-                        <button type="submit" name="material_input" th:value="${material.getMaterialVariantID}" th:id="'Material_'+ ${i.index}">Save Bill Of Material</button>
+                        <input type="text" id="newNotice" name="new_desciption_input" th:value="${material.getDescription()}"/>
+                    </td>
+                    <td>
+                        <button type="submit" name="material_input" th:value="${material.getMaterialVariantID}" th:id="'Material_'+ ${i.index}">Save Changes</button>
                     </td>
                 </tr>
             </table>
         </form>
+        <form th:action="@{/back_to_order}" method="post">
+            <button type="submit" name="show_BillOfMaterial">Go Back</button>
+        </form>
     </div>
     <div th:if="${session.bill_of_materials == null}">
-    <h1>There is no Bill of Material information right now, enter ID for the order you want to see a Bill Of Material</h1>
-    <form th:action="@{/back_to_order}" method="post">
+    <h1>There is no Bill of Material information right now, generate one?</h1>
+        <form th:action="@{/getBillOfMaterialByOrderID}" method="post">
+            <label for="orderID_input">Enter Order ID:</label>
+            <input type="number" id="orderID_input" name="orderID_input"/>
+            <button type="submit">Get Bill Of Material for current order</button>
+        </form>
+        <br>
+        <form th:action="@{/back_to_order}" method="post">
         <button type="submit" name="show_BillOfMaterial">Go Back</button>
     </form>
     </div>

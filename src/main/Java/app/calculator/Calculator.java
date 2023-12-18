@@ -22,7 +22,6 @@ public class Calculator {
             billOfMaterials.addAll(getPillers(order.getLengthCm(), order.getWidthCm(), MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.pillar)));
             billOfMaterials.addAll(getBeams(order.getLengthCm(), order.getWidthCm(), MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.beam)));
             billOfMaterials.addAll(getCrossbeams(order.getLengthCm(), order.getWidthCm(), MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.cover_planks)));
-            OrderItemMapper.saveBillOfMaterials(billOfMaterials, order.getId(), connectionPool);
         } catch (DatabaseException e) {
             // TODO add logic incase of database exception
         }

@@ -2,6 +2,7 @@ package app.persistence;
 
 import app.entities.*;
 import app.exceptions.DatabaseException;
+import io.javalin.http.Context;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -101,6 +102,46 @@ public class MaterialsMapper {
             }
         }catch (SQLException e) {
             throw new DatabaseException("unable to connect to delete the materials: " + e.getMessage());
+        }
+    }
+
+    public static List<MaterialDTO> getALlMaterialInfo(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+        List<MaterialDTO> availableMaterials = new ArrayList<>();
+        String sql = "SELECT * FROM material_variant JOIN material";
+        try (Connection connection = connectionPool.getConnection()) {
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    int materialID = rs.getInt("materialID");
+                    String name = rs.getString("name");
+                    Object type = rs.getObject("type");
+                    String description = rs.getString("description");
+                    int width_mm = rs.getInt("width_mm");
+                    int depth_mm = rs.getInt("depth_mm");
+                    int materialVariantID = rs.getInt("mvID");
+                    int length = rs.getInt("length_cm");
+                    int price = rs.getInt("price");
+                    switch (type.toString()) {
+                        case "pillar" -> {
+                            availableMaterials.add(new PillarDTO(materialID, name, Mtype.pillar, description, width_mm, depth_mm, materialVariantID, length, price));
+                        }
+                        case "beam" -> {
+                            availableMaterials.add(new BeamDTO(materialID, name, Mtype.beam, description, width_mm, depth_mm, materialVariantID, length, price));
+                        }
+                        case "cover_planks" -> {
+                            availableMaterials.add(new CrossbeamDTO(materialID, name, Mtype.cover_planks, description, width_mm, depth_mm, materialVariantID, length, price));
+                        }
+                        // Add more cases as more material is needed
+                        default -> {
+                        }
+                    }
+                }
+            } catch (SQLException e) {
+                throw new DatabaseException("unable to connect to get materials: " + e.getMessage());
+            }
+            return availableMaterials;
+        }catch(Exception e) {
+            throw new DatabaseException("Error while connecting to database: "+ e.getMessage());
         }
     }
 }

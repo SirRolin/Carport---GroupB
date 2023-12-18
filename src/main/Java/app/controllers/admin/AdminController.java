@@ -1,13 +1,10 @@
 package app.controllers.admin;
 
 import app.entities.*;
-import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.MaterialsMapper;
-import app.persistence.OrderMapper;
 import app.persistence.VariantsMapper;
 import io.javalin.http.Context;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
