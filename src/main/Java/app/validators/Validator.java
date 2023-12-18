@@ -10,6 +10,7 @@ public class Validator {
         return alt;
     }
 
+
     public static int userInput(String formParam, int alt){
         if(validateInt(formParam)){
             return Integer.parseInt(formParam);
@@ -24,7 +25,7 @@ public class Validator {
         return alt;
     }
 
-    private static boolean validateDouble(String str){
+    public static boolean validateDouble(String str){
         if(str == null || str.isEmpty()){
             return false;
         }
@@ -40,7 +41,7 @@ public class Validator {
         return str.matches("[0-9]+(\\.[0-9]+)?");
     }
 
-    private static boolean validateInt(String str){
+    public static boolean validateInt(String str){
         if(str == null || str.isEmpty()){
             return false;
         }
@@ -56,14 +57,14 @@ public class Validator {
         return false;
     }
 
-    private static boolean validateString(String str){
+    public static boolean validateString(String str){
         if(str == null || str.isEmpty()){
             return false;
         }
         return true;
     }
 
-    private static boolean containsOnlyNumbers(String str){
+    public static boolean containsOnlyNumbers(String str){
         for(char c : str.toCharArray()){
             if(!Character.isDigit(c)){
                 return false;

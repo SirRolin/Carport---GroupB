@@ -134,7 +134,7 @@
     <br>
 
     <div th:unless="${session.add_material == false || session.add_material == null}" class="addProduct">
-        <form method="post" th:action="@{/addMaterial}">
+        <form method="post" th:action="@{/addNewMaterial}">
             <input type="text" name="material_name" placeholder="Material Name">
             <select id="typeSelect" name="type_select">
                 <option name="roof">Roof</option>

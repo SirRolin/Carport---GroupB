@@ -44,7 +44,7 @@ public class AdminController {
         List<MaterialVariantDTO> variants = new ArrayList<>();
 
         try{
-            materials = MaterialsMapper.getAllMaterialInfo(connectionPool);
+            materials = MaterialsMapper.getAllMaterials(connectionPool);
             variants = VariantsMapper.getVariantInfo(connectionPool);
             if(ctx.sessionAttribute("modified_list")==null){
                 ctx.sessionAttribute("material_list",materials);
@@ -172,11 +172,11 @@ public class AdminController {
 
         if(filter != null && filter.isEmpty() == false){
             if(filter.equalsIgnoreCase("all")){
-                List<MaterialDTO> materials = MaterialsMapper.getAllMaterialInfo(connectionPool);
+                List<MaterialDTO> materials = MaterialsMapper.getAllMaterials(connectionPool);
                 ctx.sessionAttribute("modified_list",materials);
                 ctx.sessionAttribute("already_selected",filter);
             }else{
-                List<MaterialDTO> materials = MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.valueOf(filter));
+                List<MaterialDTO> materials = MaterialsMapper.getAllMaterialsByType(connectionPool, Mtype.valueOf(filter));
                 ctx.sessionAttribute("modified_list",materials);
                 ctx.sessionAttribute("already_selected",filter);
             }
@@ -185,10 +185,9 @@ public class AdminController {
     }
 
 
-    //TODO YOU HAVE ALL THESE METHODS LEFT!
     public static boolean addNewMaterial(ConnectionPool connectionPool, Context ctx) throws Exception{
-        String name = Validator.userInput(ctx.formParam("material_name"), "unnamed");
-        Mtype type = Mtype.valueOf(ctx.formParam("type_select"));
+        String name = (Validator.validateString(ctx.formParam("material_name")) ? ctx.formParam("material_name") : null);
+        Mtype type = Mtype.valueOf(ctx.formParam("type_select").toLowerCase());
         int width = Validator.userInput(ctx.formParam("material_width"),10);
         int length = Validator.userInput(ctx.formParam("material_depth"),10);
         MaterialDTO material = null;
@@ -209,8 +208,9 @@ public class AdminController {
             }
             MaterialsMapper.addMaterial(connectionPool,material);
         }catch(Exception e){
-            throw new Exception("Error while adding material");
+            throw new Exception("Error while adding material:"+e);
         }
+        loadAdminSite(connectionPool,ctx);
         return true;
     }
 

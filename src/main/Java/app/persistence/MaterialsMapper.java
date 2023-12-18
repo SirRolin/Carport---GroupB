@@ -89,12 +89,90 @@ public class MaterialsMapper {
             } catch (SQLException e) {
                 throw new DatabaseException("unable to connect to get materials: " + e.getMessage());
             }
-            return availableMaterials;
         }catch(Exception e) {
             throw new DatabaseException("Error while connecting to database: "+ e.getMessage());
         }
-
+        return availableMaterials;
     }
+
+    public static List<MaterialDTO> getAllMaterials(ConnectionPool connectionPool) throws DatabaseException{
+        List<MaterialDTO> materials = new ArrayList<>();
+        String sql = "select * from material";
+
+        try(Connection connection = connectionPool.getConnection()){
+            try(PreparedStatement ps = connection.prepareStatement(sql)){
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()){
+                    int materialId = rs.getInt("materialID");
+                    String name = rs.getString("name");
+                    Object type = rs.getObject("type");
+                    int width = rs.getInt("width_mm");
+                    int depth = rs.getInt("depth_mm");
+
+                    switch(type.toString()){
+                        case "beam":
+                            materials.add(new BeamDTO(materialId,name,Mtype.valueOf(type.toString()),width,depth));
+                            break;
+                        case "pillar":
+                            materials.add(new PillarDTO(materialId,name,Mtype.valueOf(type.toString()),width,depth));
+                            break;
+                        case "roof":
+                            materials.add(new RoofDTO(materialId,name,Mtype.valueOf(type.toString()),width,depth));
+                            break;
+                        case "cover_planks":
+                            materials.add(new CrossbeamDTO(materialId,name,Mtype.valueOf(type.toString()),width,depth));
+                            break;
+                    }
+                }
+            }catch(Exception e){
+                throw new DatabaseException("Error while fetching materials: "+e);
+            }
+        }catch(Exception e){
+            throw new DatabaseException("Error while connecting to database: "+e);
+        }
+        return materials;
+    }
+
+
+    public static List<MaterialDTO> getAllMaterialsByType(ConnectionPool connectionPool, Mtype filter) throws DatabaseException{
+        List<MaterialDTO> materials = new ArrayList<>();
+        String sql = "select * from material where type = ?";
+
+        try(Connection connection = connectionPool.getConnection()){
+            try(PreparedStatement ps = connection.prepareStatement(sql)){
+                ps.setObject(1,filter, Types.OTHER);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()){
+                    int materialId = rs.getInt("materialID");
+                    String name = rs.getString("name");
+                    Object type = rs.getObject("type");
+                    int width = rs.getInt("width_mm");
+                    int depth = rs.getInt("depth_mm");
+
+                    switch(type.toString()){
+                        case "beam":
+                            materials.add(new BeamDTO(materialId,name,Mtype.valueOf(type.toString()),width,depth));
+                            break;
+                        case "pillar":
+                            materials.add(new PillarDTO(materialId,name,Mtype.valueOf(type.toString()),width,depth));
+                            break;
+                        case "roof":
+                            materials.add(new RoofDTO(materialId,name,Mtype.valueOf(type.toString()),width,depth));
+                            break;
+                        case "cover_planks":
+                            materials.add(new CrossbeamDTO(materialId,name,Mtype.valueOf(type.toString()),width,depth));
+                            break;
+                    }
+                }
+            }catch(Exception e){
+                throw new DatabaseException("Error while fetching materials: "+e);
+            }
+        }catch(Exception e){
+            throw new DatabaseException("Error while connecting to database: "+e);
+        }
+        return materials;
+    }
+
 
 
     public static boolean updateMaterial(ConnectionPool connectionPool, MaterialDTO newMaterial) throws DatabaseException{
@@ -173,13 +251,18 @@ public class MaterialsMapper {
 
     public static boolean addMaterial(ConnectionPool connectionPool, MaterialDTO material) throws DatabaseException{
         if(material != null){
-            String sql = "insert into materials (name, type, width_mm, depth_mm) values (?,?,?,?)";
+            String sql = "insert into material (name, type, width_mm, depth_mm) values (?,?,?,?)";
             try(Connection connection = connectionPool.getConnection()){
                 try(PreparedStatement ps = connection.prepareStatement(sql)){
                     ps.setString(1,material.getName());
                     ps.setObject(2, material.getType(), Types.OTHER);
                     ps.setInt(3,material.getWidthMm());
                     ps.setInt(4,material.getDepthMm());
+
+                    int rowsAffected = ps.executeUpdate();
+                    if(rowsAffected < 1 ){
+                        throw new DatabaseException("Failed to add material");
+                    }
                 }catch(Exception e){
                     throw new DatabaseException("Error while adding material: "+e);
                 }
