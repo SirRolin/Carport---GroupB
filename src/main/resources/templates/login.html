@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+
+<div id="Content">
+  <div id="loginBox">
+    <form id="loginForm" method="post" th:action="@{/login}">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password">
+      <input type="submit" id="loginBtn" value="Login">
+    </form>
+    <p th:unless="${#ctx.message == null}" id="ErrorMsg" th:text="${#ctx.message}"></p>
+  </div>
+</div>
+
+
+</body>
+</html>

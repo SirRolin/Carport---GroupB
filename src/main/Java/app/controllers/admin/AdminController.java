@@ -2,6 +2,7 @@ package app.controllers.admin;
 
 import app.entities.*;
 import app.exceptions.DatabaseException;
+import app.persistence.AdminMapper;
 import app.persistence.ConnectionPool;
 import app.persistence.MaterialsMapper;
 import app.persistence.VariantsMapper;
@@ -15,7 +16,6 @@ import java.util.List;
 
 public class AdminController {
 
-    //ADD, EDIT, REMOVE ORDERS VIA ADMIN.
     public static void AddRenders(Javalin app, ConnectionPool connectionPool){
         app.get("/admin", ctx -> AdminController.loadAdminSite(connectionPool, ctx));
         app.post("/chooseAddVariantOrMaterial", ctx -> AdminController.addVariantOrMaterial(connectionPool, ctx));
@@ -27,17 +27,10 @@ public class AdminController {
         app.post("/addNewVariant", ctx-> addNewVariant(connectionPool,ctx));
         app.post("removeMaterial",ctx->removeMaterial(connectionPool, ctx));
         app.post("removeVariant",ctx->removeVariant(connectionPool,ctx));
-        app.get("/" , ctx -> ctx.redirect("/admin"));
+        app.post("/login", ctx -> AdminController.login(connectionPool,ctx));
+        app.get("/" , ctx -> ctx.render("login.html"));
     }
 
-
-    public static void addOrder(ConnectionPool connectionPool, Context ctx){
-
-    }
-
-    public static void removeOrder(ConnectionPool connectionPool, Context ctx){
-
-    }
 
     public static void loadAdminSite(ConnectionPool connectionPool, Context ctx){
         List<MaterialDTO> materials = new ArrayList<>();
@@ -51,8 +44,10 @@ public class AdminController {
             }else {
                 ctx.sessionAttribute("material_list",ctx.sessionAttribute("modified_list"));
             }
+
             if(ctx.sessionAttribute("modified_variant_list")==null){
                 ctx.sessionAttribute("variant_list",variants);
+                ctx.sessionAttribute("showVariants",false);
             }else{
                 ctx.sessionAttribute("variant_list",ctx.sessionAttribute("modified_variant_list"));
             }
@@ -95,6 +90,7 @@ public class AdminController {
         try{
             String pickedEdit = ctx.formParam("edit_material");
             if(pickedEdit.contains("done")){
+                ctx.sessionAttribute("showVariants",false);
                 String[] editString = pickedEdit.split(" ");
                 int id = Integer.parseInt(editString[1]);
                 List<MaterialDTO> materials = ctx.sessionAttribute("material_list");
@@ -128,9 +124,10 @@ public class AdminController {
                 ctx.sessionAttribute("edit_material",-1);
             }else{
                int pickedEditInt =  Integer.parseInt(pickedEdit);
-                List<MaterialDTO> materials = ctx.sessionAttribute("material_list");
-                ctx.sessionAttribute("modified_variant_list", filterVariants(connectionPool,materials.get(pickedEditInt).getMaterialId()));
-                ctx.sessionAttribute("edit_material",pickedEditInt);
+               ctx.sessionAttribute("showVariants",true);
+               List<MaterialDTO> materials = ctx.sessionAttribute("material_list");
+               ctx.sessionAttribute("modified_variant_list", filterVariants(connectionPool,materials.get(pickedEditInt).getMaterialId()));
+               ctx.sessionAttribute("edit_material",pickedEditInt);
             }
         }catch(Exception e){
             System.out.println(e.getMessage());
@@ -297,6 +294,23 @@ public class AdminController {
 
     public static List<MaterialVariantDTO> filterVariants(ConnectionPool connectionPool, int id) throws DatabaseException{
         return VariantsMapper.getVariantByMaterialId(connectionPool, id);
+    }
+
+    public static boolean login(ConnectionPool connectionPool, Context ctx){
+        String name = ctx.formParam("username");
+        String password = ctx.formParam("password");
+        try{
+            Admin admin = AdminMapper.login(connectionPool,name,password);
+            if(admin != null){
+                ctx.sessionAttribute("loggedIn",true);
+                loadAdminSite(connectionPool,ctx);
+                return true;
+            }
+        }catch(Exception e){
+            ctx.redirect("login.html");
+            ctx.attribute("message", "Error while logging in, Try again later");
+        }
+        return false;
     }
 
 }

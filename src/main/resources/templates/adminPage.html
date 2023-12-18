@@ -8,6 +8,7 @@
 
 <div id="Content">
     <p>Filter by materialtype:</p>
+    <div class="materialList">
     <form method="post" th:action="@{/filterMaterials}">
         <select name="filter" onchange="this.form.submit()">
             <option name="select" value="select" th:text="Select"></option>
@@ -18,7 +19,7 @@
             <option name="cover_planks" value="cover_planks" th:text="'cover planks'">Cover planks</option>
         </select>
     </form>
-    <div class="materialList" th:unless="${session.material_list == null || session.material_list.isEmpty()}">
+    <div th:unless="${session.material_list == null || session.material_list.isEmpty()}">
         <form method="post" th:action="@{/editMaterial}">
         <table id="material_table">
             <tr class="tableHeader">
@@ -82,10 +83,10 @@
         </table>
         </form>
     </div>
-
+    </div>
     <br>
 
-    <div class="variantList" th:unless="${session.variant_list == null || session.variant_list.isEmpty()}">
+    <div class="variantList" th:unless="${session.variant_list == null || session.variant_list.isEmpty() || session.showVariants == false}">
         <form method="post" th:action="@{/editVariant}">
         <table id="variant_table">
             <tr class="tableHeader">
