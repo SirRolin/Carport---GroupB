@@ -67,15 +67,14 @@ public class CustomController {
             OrderDTO orderDTO = ctx.sessionAttribute("current_order");
 
 
-            System.out.println(orderDTO.getAssembler());
-            OrderDTO finalDTO = new OrderDTO(orderDTO.getId(),orderDTO.getLengthCm(),orderDTO.getWidthCm(),orderDTO.getShedLengthCm(),orderDTO.getShedWidthCm(),orderDTO.getSlopeDegrees(),orderDTO.getAssembler(),orderDTO.getPrice(),orderDTO.getStatus(),orderDTO.getSvg(),orderDTO.getName(),orderDTO.getEmail(),orderDTO.getDate(),orderDTO.getNotice());
 
+            OrderDTO finalDTO = new OrderDTO(orderDTO.getId(),orderDTO.getLengthCm(),orderDTO.getWidthCm(),orderDTO.getShedLengthCm(),orderDTO.getShedWidthCm(),orderDTO.getSlopeDegrees(),orderDTO.getAssembler(),orderDTO.getPrice(),orderDTO.getStatus(),orderDTO.getSvg(),orderDTO.getName(),orderDTO.getEmail(),orderDTO.getDate(),orderDTO.getNotice());
             try {
                 OrderDTO savedDTO = OrderMapper.addOrder(connectionPool,finalDTO);
 
                 ctx.redirect("/");
             }catch (Exception e){
-                System.out.println(finalDTO.getName());
+
                 System.out.println("error with db try again");
             }
 

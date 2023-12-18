@@ -5,6 +5,24 @@
     <title>Title</title>
 </head>
 <body>
+<div>
+  <table>
+    <tr>
+      <th>
+      <td th:text="${session.current_order.getName()}"></td>
+      <td th:text="${session.current_order.getEmail()}"></td>
+      </th>
+    </tr>
+    <tr>
+
+      <td th:text="${session.current_order.getLengthCm()}"></td>
+      <td th:text="${session.current_order.getWidthCm()}"></td>
+      <td th:text="${session.current_order.getShedLengthCm()}"></td>
+      <td th:text="${session.current_order.getShedWidthCm()}"></td>
+      <td th:text="${session.current_order.getSlopeDegrees()}"></td>
+    </tr>
+  </table>
+</div>
   <form name="finalGokuForm" method="post" action="/congratsYouDidIt">
     <div id="checkOutFormula">
       <div id="theWhiteBox">
@@ -12,6 +30,9 @@
           <p>Tak for at bestille din carport hos os!</p><br>
           <p>Vores sælgere vil tage kontakt til dem, når en pris er blevet beregnet </p>
         </div>
+
+
+
         <div id="checkBoxForAssmbler">
           <input type="checkbox" name="assembleCarport" value="true">
         </div>
