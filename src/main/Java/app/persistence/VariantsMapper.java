@@ -65,4 +65,55 @@ public class VariantsMapper {
         }
     }
 
+    public static List<MaterialVariantDTO> getVariantByMaterialId(ConnectionPool connectionPool, int id) throws DatabaseException{
+        List<MaterialVariantDTO> variants = new ArrayList<>();
+        String sql = "select * from material_variant where \"materialID\" = ?";
+
+        try(Connection connection = connectionPool.getConnection()){
+            try(PreparedStatement ps = connection.prepareStatement(sql)){
+                ps.setInt(1,id);
+
+                ResultSet rs = ps.executeQuery();
+                while(rs.next()){
+                    int variantId = rs.getInt("mvID");
+                    int materialID = rs.getInt("materialID");
+                    int length = rs.getInt("length_cm");
+                    double price = rs.getDouble("price");
+                    variants.add(new MaterialVariantDTO(variantId,materialID,length,price));
+                }
+                return variants;
+            }catch(Exception e){
+                throw new DatabaseException("There was no material matching the ID: "+id);
+            }
+        }catch(Exception e){
+            throw new DatabaseException("Failed to connect to database.");
+        }
+    }
+
+
+    public static boolean updateVariant(ConnectionPool connectionPool, MaterialVariantDTO newVariant,int id) throws DatabaseException{
+        if(newVariant != null){
+            String sql = "update material_variant set length_cm = ?, price = ? where \"mvID\" = ?";
+            try(Connection connection = connectionPool.getConnection()){
+                try(PreparedStatement ps = connection.prepareStatement(sql)){
+                    ps.setInt(1,newVariant.getLengthCm());
+                    ps.setDouble(2,newVariant.getPrice());
+                    ps.setInt(3,newVariant.getMvId());
+
+                    int rowsAffected = ps.executeUpdate();
+                    if(rowsAffected < 0){
+                        throw new DatabaseException("Failed to update material");
+                    }
+                }catch(Exception e){
+                    throw new DatabaseException("Failed to update material: "+e);
+                }
+            }catch(Exception e){
+                throw new DatabaseException("Error while connnecting to database: "+e);
+            }
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 }

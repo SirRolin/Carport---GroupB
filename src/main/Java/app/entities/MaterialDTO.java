@@ -10,6 +10,7 @@ public abstract class MaterialDTO implements Comparable<MaterialDTO> {
     private int amount;
     private int length;
 
+
     public MaterialDTO(int materialId, String name, Mtype type, int widthMm, int depthMm){
         this.materialId = materialId;
         this.name = name;
@@ -54,7 +55,6 @@ public abstract class MaterialDTO implements Comparable<MaterialDTO> {
         return depthMm;
     }
 
-    public int getLength(){return length;}
 
     public abstract String getUnitType();
 
@@ -66,4 +66,22 @@ public abstract class MaterialDTO implements Comparable<MaterialDTO> {
         return amount;
     };
     public abstract int getPrice();
+
+    public int getLength(){return length;}
+    public boolean equals(MaterialDTO other){
+      if(getMaterialId() != other.getMaterialId()){
+          return false;
+      }else if(!getName().equals(other.getName())){
+          return false;
+      }else if(getType() != other.getType()){
+          return false;
+      }else if(getWidthMm() != other.getWidthMm()){
+          return false;
+      }else if(getDepthMm() != other.getDepthMm()){
+          return false;
+      }else if(getAmount() != other.getAmount()){
+          return false;
+      }
+      return true;
+    };
 }

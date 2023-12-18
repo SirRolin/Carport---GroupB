@@ -35,4 +35,17 @@ public class MaterialVariantDTO {
     public double getPrice() {
         return price;
     }
+
+    public boolean equals(MaterialVariantDTO other){
+        if(this.getLengthCm() != other.getLengthCm()){
+            return false;
+        } else if (this.getPrice() != other.getPrice()) {
+            return false;
+        } else if (this.mvId != other.getMvId()){
+            return false;
+        } else if(this.materialId != other.getMaterialId()){
+            return false;
+        }
+        return true;
+    }
 }

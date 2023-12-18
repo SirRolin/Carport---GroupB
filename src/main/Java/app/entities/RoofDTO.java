@@ -26,6 +26,10 @@ public class RoofDTO extends MaterialDTO implements Comparable<MaterialDTO>{
        super(materialId,name,type,widthMm,depthMm);
     }
 
+    public RoofDTO(String name, Mtype type, int width, int length) {
+        super(name,type,width,length);
+    }
+
     public int getLength() {
         return length;
     }
@@ -47,6 +51,24 @@ public class RoofDTO extends MaterialDTO implements Comparable<MaterialDTO>{
     @Override
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    @Override
+    public boolean equals(MaterialDTO other) {
+        if(other instanceof RoofDTO rOther){
+            if(getMaterialVariantID() !=  rOther.getMaterialVariantID()){
+                return false;
+            }else if(getLength() != rOther.getLength()){
+                return false;
+            }else if(getPrice() != rOther.getPrice()){
+                return false;
+            }else if(getUnitType() != rOther.getUnitType()){
+                return false;
+            }
+        }else {
+            return false;
+        }
+        return true;
     }
 
     @Override

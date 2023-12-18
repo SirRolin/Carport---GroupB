@@ -38,23 +38,24 @@ public class Main {
         try {
             // Order edit site:
             OrderEditController.addRenders(app, connectionPool);
-            // Bill of Material edit site:
-            BillOfMaterialEditController.addRenders(app, connectionPool);
-
-        } catch (Exception e) {
+        } catch (Exception ignore) {
 
         }
+        try {
+            // Bill of Material edit site:
+            BillOfMaterialEditController.addRenders(app, connectionPool);
+        } catch (Exception ignore) {
+
+        }
+        try {
+            //// Admin
+            AdminController.AddRenders(app, connectionPool);
+        } catch (Exception ignore) {
+
+        }
+        // tests
+        app.get("/SynchronousVisitsTestPage", Main::testLoading);
     }
-    //Render start
-    //// Admin
-    AdminController.AddRenders(app,connectionPool);
-
-    // tests
-    //app.get("/", Main::testLoading);
-
-    // tests
-    app.get("/SynchronousVisitsTestPage",Main::testLoading);
-}
 
     //// Testing Section:
     //// Testing How many people are trying to access the page

@@ -25,6 +25,10 @@ public class BeamDTO extends MaterialDTO implements Comparable<MaterialDTO> {
         super(materialID,name,type,widthMm,depthMm);
     }
 
+    public BeamDTO(String name, Mtype type, int width, int length) {
+        super(name,type,width,length);
+    }
+
     public int getLength() {
         return length;
     }
@@ -45,6 +49,24 @@ public class BeamDTO extends MaterialDTO implements Comparable<MaterialDTO> {
     @Override
     public void setAmount(int amount) {
         super.setAmount(amount);
+    }
+
+    @Override
+    public boolean equals(MaterialDTO other) {
+        if(other instanceof BeamDTO bOther){
+            if(getMaterialVariantID() !=  bOther.getMaterialVariantID()){
+                return false;
+            }else if(getLength() != bOther.getLength()){
+                return false;
+            }else if(getPrice() != bOther.getPrice()){
+                return false;
+            }else if(getUnitType() != bOther.getUnitType()){
+                return false;
+            }
+        }else {
+            return false;
+        }
+        return true;
     }
 
     @Override

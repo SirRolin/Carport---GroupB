@@ -4,12 +4,12 @@ import app.entities.*;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.MaterialsMapper;
-import app.persistence.OrderMapper;
 import app.persistence.VariantsMapper;
+import app.validators.Validator;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
-import org.jetbrains.annotations.NotNull;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,47 +17,23 @@ public class AdminController {
 
     //ADD, EDIT, REMOVE ORDERS VIA ADMIN.
     public static void AddRenders(Javalin app, ConnectionPool connectionPool){
-        app.get("/", ctx -> AdminController.loadAdminSite(connectionPool, ctx)); // ToDo remove test
-        app.post("/chooseVariantOrMaterial", ctx -> AdminController.variantOrMaterial(connectionPool, ctx));
+        app.get("/" , ctx -> ctx.redirect("/admin"));
+        app.get("/admin", ctx -> AdminController.loadAdminSite(connectionPool, ctx)); // ToDo remove test
+        app.post("/chooseAddVariantOrMaterial", ctx -> AdminController.addVariantOrMaterial(connectionPool, ctx));
+        app.post("/chooseRemoveVariantOrMaterial", ctx -> AdminController.removeVariantOrMaterial(connectionPool,ctx));
         app.post("/editMaterial", ctx -> AdminController.pickEditableMaterial(connectionPool, ctx));
         app.post("/editVariant", ctx -> AdminController.pickEditableVariant(connectionPool, ctx));
         app.post("/filterMaterials", ctx -> AdminController.filterMaterials(connectionPool, ctx));
+        app.post("/addNewMaterial", ctx-> addNewMaterial(connectionPool,ctx));
+        app.post("/addNewVariant", ctx-> addNewVariant(connectionPool,ctx));
+        app.post("removeMaterial",ctx->removeMaterial(connectionPool, ctx));
+        app.post("removeVariant",ctx->removeVariant(connectionPool,ctx));
     }
 
 
     public static void addOrder(ConnectionPool connectionPool, Context ctx){
 
     }
-
-    //TODO: NEEDS REFACTORING FOR WHEN WE KNOW WHAT TO EDIT IN THE ORDER.
-    /*
-    //int id, int lengthCm, int widthCm, int shedLengthCm, int shedWidthCm, int slopeDegrees, boolean hasAssembler, double price, Status status, String notice
-    public static boolean editOrder(ConnectionPool connectionPool, Context ctx) throws DatabaseException{
-        OrderDTO order = ctx.sessionAttribute("chosen_order");
-        OrderDTO newOrder;
-        if(order != null){
-            int chosenOrderId = order.getId();
-            int lengthCm = (ctx.sessionAttribute("length") != null) ? ctx.sessionAttribute("length") : order.getLengthCm();
-            int widthCm = (ctx.sessionAttribute("width") != null) ? ctx.sessionAttribute("width") : order.getWidthCm();
-            int shedLengthCm = (ctx.sessionAttribute("shed_length_cm") != null) ? ctx.sessionAttribute("shed_length_cm") : order.getShedLengthCm();
-            int shedWidthCm = (ctx.sessionAttribute("shed_width_cm") != null) ? ctx.sessionAttribute("shed_width_cm") : order.getShedWidthCm();
-            int slopeDegrees = (ctx.sessionAttribute("slope_degrees") != null) ? ctx.sessionAttribute("slope_degrees") : order.getSlopeDegrees();
-            boolean hasAssembler = (ctx.sessionAttribute("has_assembler") != null) ? ctx.sessionAttribute("has_assembler") : order.isHasAssembler();
-            double price = (ctx.sessionAttribute("price") != null) ? ctx.sessionAttribute("price") : order.getPrice();
-            Status status = (ctx.sessionAttribute("status") != null) ? ctx.sessionAttribute("status") : order.getStatus();
-            String notice = (ctx.sessionAttribute("notice") != null) ? ctx.sessionAttribute("notice") : order.getNotice();
-            String svg = (ctx.sessionAttribute("svg") != null) ? ctx.sessionAttribute("svg") : order.getSvg();
-            newOrder = new OrderDTO(chosenOrderId,lengthCm,widthCm,shedLengthCm,shedWidthCm,slopeDegrees,hasAssembler,price,status,notice,svg);
-            try{
-                OrderMapper.updateOrder(connectionPool,newOrder);
-                return true;
-            }catch(Exception e){
-                throw new DatabaseException("Error updating selected order!");
-            }
-
-        }
-        return false;
-    }*/
 
     public static void removeOrder(ConnectionPool connectionPool, Context ctx){
 
@@ -68,7 +44,7 @@ public class AdminController {
         List<MaterialVariantDTO> variants = new ArrayList<>();
 
         try{
-            materials = MaterialsMapper.getAllMaterialInfo(connectionPool);
+            materials = MaterialsMapper.getAllMaterials(connectionPool);
             variants = VariantsMapper.getVariantInfo(connectionPool);
             if(ctx.sessionAttribute("modified_list")==null){
                 ctx.sessionAttribute("material_list",materials);
@@ -82,7 +58,7 @@ public class AdminController {
         ctx.render("adminPage.html");
     }
 
-    public static void variantOrMaterial(ConnectionPool connectionPool, Context ctx){
+    public static void addVariantOrMaterial(ConnectionPool connectionPool, Context ctx){
         String picked = ctx.formParam("add_select");
         try{
             if(picked.equalsIgnoreCase("Material")){
@@ -96,6 +72,19 @@ public class AdminController {
         }
     }
 
+    public static void removeVariantOrMaterial(ConnectionPool connectionPool, Context ctx){
+        String picked = ctx.formParam("remove_select");
+        try{
+            if(picked.equalsIgnoreCase("Material")){
+                ctx.sessionAttribute("remove_material",true);
+            }else if(picked.equalsIgnoreCase("Variant")){
+                ctx.sessionAttribute("remove_material",false);
+            }
+            loadAdminSite(connectionPool, ctx);
+        }catch(NullPointerException e){
+            e.printStackTrace();
+        }
+    }
 
     public static void pickEditableMaterial(ConnectionPool connectionPool, Context ctx){
         try{
@@ -106,10 +95,10 @@ public class AdminController {
                 List<MaterialDTO> materials = ctx.sessionAttribute("material_list");
                 int finalId = materials.get(id).getMaterialId();
                 MaterialDTO pickedMaterial = MaterialsMapper.getMaterialById(connectionPool, finalId);
-                String name = userInput(ctx.formParam("edited_material_name"),pickedMaterial.getName());
-                String type = userInput(ctx.formParam("edited_material_type"),pickedMaterial.getType().toString());
-                int width = Integer.parseInt(userInput(ctx.formParam("edited_material_width"),String.valueOf(pickedMaterial.getWidthMm())));
-                int depth = Integer.parseInt(userInput(ctx.formParam("edited_material_depth"),String.valueOf(pickedMaterial.getDepthMm())));
+                String name = Validator.userInput(ctx.formParam("edited_material_name"),pickedMaterial.getName());
+                String type = Validator.userInput(ctx.formParam("edited_material_type"),pickedMaterial.getType().toString());
+                int width = Validator.userInput(ctx.formParam("edited_material_width"),pickedMaterial.getWidthMm());
+                int depth = Validator.userInput(ctx.formParam("edited_material_depth"),pickedMaterial.getDepthMm());
                 MaterialDTO newMaterial = null;
                 switch(type){
                     case "pillar":
@@ -126,7 +115,9 @@ public class AdminController {
                         break;
                 }
                 if(newMaterial != null){
-                    MaterialsMapper.updateMaterial(connectionPool, newMaterial);
+                    if(!pickedMaterial.equals(newMaterial)){
+                        MaterialsMapper.updateMaterial(connectionPool, newMaterial);
+                    }
                 }
                 ctx.sessionAttribute("edit_material",-1);
             }else{
@@ -134,7 +125,7 @@ public class AdminController {
                 ctx.sessionAttribute("edit_material",pickedEditInt);
             }
         }catch(Exception e){
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
         loadAdminSite(connectionPool,ctx);
     }
@@ -148,8 +139,14 @@ public class AdminController {
                 List<MaterialVariantDTO> variants = ctx.sessionAttribute("variant_list");
                 int finalId = variants.get(id).getMvId();
                 MaterialVariantDTO pickedVariant = VariantsMapper.getVariantById(connectionPool,finalId);
-                int length = Integer.parseInt((ctx.formParam("edited_variant_length") != null || !ctx.formParam("edited_variant_length").isEmpty() || Integer.parseInt(ctx.formParam("edited_variant_length")) > 0) ? ctx.formParam("edited_variant_length") : String.valueOf(pickedVariant.getLengthCm()));
-                double price = Double.parseDouble((ctx.formParam("edited_variant_price") != null || !ctx.formParam("edited_variant_price").isEmpty() || Double.parseDouble(ctx.formParam("edited_variant_price")) > 0) ? ctx.formParam("edited_variant_price") : String.valueOf(pickedVariant.getPrice()));
+                int length = Validator.userInput(ctx.formParam("edited_variant_length"),pickedVariant.getLengthCm());
+                double price = Validator.userInput(ctx.formParam("edited_variant_price"),pickedVariant.getPrice());
+                MaterialVariantDTO newVariant = new MaterialVariantDTO(pickedVariant.getMvId(),pickedVariant.getMaterialId(),length,price);
+                if(newVariant != null){
+                    if(!newVariant.equals(pickedVariant)){
+                        VariantsMapper.updateVariant(connectionPool,newVariant,finalId);
+                    }
+                }
                 ctx.sessionAttribute("edit_variant",-1);
             }else {
                 int pickedEditInt = Integer.parseInt(pickedEdit);
@@ -161,57 +158,59 @@ public class AdminController {
         loadAdminSite(connectionPool,ctx);
     }
 
-    public static void filterMaterials(ConnectionPool connectionPool, Context ctx){
+
+
+    public static void filterMaterials(ConnectionPool connectionPool, Context ctx) throws DatabaseException{
         String filter = ctx.formParam("filter");
-        switch(filter){
-            case "all":
-                //getAllMaterialInfo //TODO FILTER MATERIALS
-                break;
-            case "pillar":
-                //getAllMaterialInfoByType
-                break;
-            case "beam":
-                break;
-            case "roof":
-                break;
-            case "cover_planks":
-                break;
-        }
-    }
-
-    private static String userInput(String formParam, String alt){
-        if(validateInput(formParam)){
-           return formParam;
-        }
-        return alt;
-    }
-
-    private static boolean validateInput(String str){
-        if(str == null || str.isEmpty()){
-            return false;
-        }
-
-        if(containsNumber(str)){
-            int number = Integer.parseInt(str);
-            if(number <= 0){
-                return false;
+        String alreadySelected = ctx.sessionAttribute("already_selected");
+        if(alreadySelected != null && alreadySelected.isEmpty() == false){
+            if(filter.equalsIgnoreCase(alreadySelected)){
+                loadAdminSite(connectionPool,ctx);
+                return;
             }
         }
 
-        return true;
-    }
-
-    private static boolean containsNumber(String str){
-        for(char c : str.toCharArray()){
-            if(Character.isDigit(c)){
-                return true;
+        if(filter != null && filter.isEmpty() == false){
+            if(filter.equalsIgnoreCase("all")){
+                List<MaterialDTO> materials = MaterialsMapper.getAllMaterials(connectionPool);
+                ctx.sessionAttribute("modified_list",materials);
+                ctx.sessionAttribute("already_selected",filter);
+            }else{
+                List<MaterialDTO> materials = MaterialsMapper.getAllMaterialsByType(connectionPool, Mtype.valueOf(filter));
+                ctx.sessionAttribute("modified_list",materials);
+                ctx.sessionAttribute("already_selected",filter);
             }
         }
-        return false;
+        loadAdminSite(connectionPool, ctx);
     }
 
-    //TODO YOU HAVE ALL THESE METHODS LEFT!
-    public static boolean addNewMaterial(ConnectionPool connectionPool, Context ctx){
+
+    public static boolean addNewMaterial(ConnectionPool connectionPool, Context ctx) throws Exception{
+        String name = (Validator.validateString(ctx.formParam("material_name")) ? ctx.formParam("material_name") : null);
+        Mtype type = Mtype.valueOf(ctx.formParam("type_select").toLowerCase());
+        int width = Validator.userInput(ctx.formParam("material_width"),10);
+        int length = Validator.userInput(ctx.formParam("material_depth"),10);
+        MaterialDTO material = null;
+        try{
+            switch(type.getName()){
+                case "beam":
+                    material = new BeamDTO(name,type,width,length);
+                    break;
+                case "cover_planks":
+                    material = new CrossbeamDTO(name,type,width,length);
+                    break;
+                case "pillar":
+                    material = new PillarDTO(name,type,width,length);
+                    break;
+                case "roof":
+                    material = new RoofDTO(name,type,width,length);
+                    break;
+            }
+            MaterialsMapper.addMaterial(connectionPool,material);
+        }catch(Exception e){
+            throw new Exception("Error while adding material:"+e);
+        }
+        loadAdminSite(connectionPool,ctx);
         return true;
     }
 
@@ -226,4 +225,6 @@ public class AdminController {
     public static boolean removeVariant(ConnectionPool connectionPool, Context ctx){
         return true;
     }
+
+    //TODO: MAYBE ADD FILTER VARIANTS?
 }
