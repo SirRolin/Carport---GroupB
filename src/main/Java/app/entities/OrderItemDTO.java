@@ -35,7 +35,7 @@ public class OrderItemDTO extends MaterialDTO {
 
     @Override
     public int getMaterialVariantID() {
-        return 0;
+        return mvID;
     }
 
     @Override

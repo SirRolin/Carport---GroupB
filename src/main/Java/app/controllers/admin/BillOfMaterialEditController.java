@@ -73,15 +73,23 @@ public class BillOfMaterialEditController {
             ctx.render("billOfMaterialEditSite.html");
             return;
         }
-       /* for (MaterialDTO m: currentBillOfMaterial) {
-            if(m.getMaterialId() == editedMaterialID && m.getMaterialVariantID() == ){
+       for (MaterialDTO m: currentBillOfMaterial) {
+            if(m.getMaterialId() == editedMaterialID){
                 m.setAmount(newAmount);
                 m.setDescription(newDesciption);
-                ctx.attribute("message", "Bill of materials saved");
+                try {
+                    OrderItemMapper.updateOrderItem(m, orderID, connectionPool);
+                } catch (DatabaseException e) {
+                    ctx.attribute("message", "Database error:" +e.getMessage());
+                    ctx.render("billOfMaterialEditSite.html");
+                    return;
+                }
+            }else{
+                ctx.attribute("message", "You entered duplicate info, orderline not saved");
             }
-
         }
-        */
+        ctx.sessionAttribute("bill_of_materials",currentBillOfMaterial);
+        ctx.render("billOfMaterialEditSite.html");
         /*
         currentBillOfMaterial.stream()
                 .filter(orderLine -> orderLine.getMaterialVariantID() == editedMaterialID)
@@ -103,7 +111,5 @@ public class BillOfMaterialEditController {
                     }
                 });
                 */
-        ctx.sessionAttribute("bill_of_materials",currentBillOfMaterial);
-        ctx.render("billOfMaterialEditSite.html");
     }
 }

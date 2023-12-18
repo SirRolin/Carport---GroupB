@@ -22,18 +22,18 @@
                 </tr>
                 <tr th:each="material, i :  ${session.bill_of_materials}">
                     <td th:text="${material.getMaterialId()}">No info</td>
-                    <td th:text="${material.getMaterialVariantID}">No info</td>
-                    <td th:text="${material.getName}">No info</td>
-                    <td th:text="${material.getType}">No info</td>
+                    <td th:text="${material.getMaterialVariantID()}">No info</td>
+                    <td th:text="${material.getName()}">No info</td>
+                    <td th:text="${material.getType()}">No info</td>
                     <td th:text="${material.getLength()}">No info</td>
                     <td>
-                        <input type="number" id="newAmount" name="new_amount_input" th:value="${material.getAmount}"/>
+                        <input type="number" id="newAmount" name="new_amount_input" th:value="${material.getAmount()}"/>
                     </td>
                     <td>
                         <input type="text" id="newNotice" name="new_desciption_input" th:value="${material.getDescription()}"/>
                     </td>
                     <td>
-                        <button type="submit" name="material_input" th:value="${material.getMaterialVariantID}" th:id="'Material_'+ ${i.index}">Save Changes</button>
+                        <button type="submit" name="material_input" th:value="${material.getMaterialVariantID()}" th:id="'Material_'+ ${i.index}">Save Changes</button>
                     </td>
                 </tr>
             </table>
