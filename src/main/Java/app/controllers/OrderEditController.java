@@ -18,13 +18,13 @@ import java.util.List;
 public class OrderEditController {
 
     public static void addRenders(Javalin app, ConnectionPool connectionPool){
-        app.get("/", ctx -> OrderEditController.loadOrderEditSite(ctx,connectionPool)); // TODO REMEMBER TO CHANGE THIS PATH ON THE GO BACK BUTTOM IN BILLOFMATERIALSITE!
         app.post("/submitOrderID", ctx -> OrderEditController.showChosenOrderByID(ctx,connectionPool));
         app.get("/submitOrderID", ctx -> OrderEditController.loadOrderEditSite(ctx,connectionPool));
         app.post("/submitCostumerName", ctx -> OrderEditController.getOrdersByNameOrEmail(ctx,connectionPool));
         app.post("/submitCostumerEmail", ctx -> OrderEditController.getOrdersByNameOrEmail(ctx,connectionPool));
         app.post("/updateOrder",ctx -> OrderEditController.UpdateOrder(ctx,connectionPool));
         app.post("/generateBillOfMaterial",ctx -> OrderEditController.generateBillOfMaterial(ctx,connectionPool));
+        app.get("/", ctx -> OrderEditController.loadOrderEditSite(ctx,connectionPool)); // TODO REMEMBER TO CHANGE THIS PATH ON THE GO BACK BUTTOM IN BILLOFMATERIALSITE!
     }
     public static void loadOrderEditSite(Context ctx, ConnectionPool connectionPool){
         //ctx.sessionAttribute("chosen_order",null);

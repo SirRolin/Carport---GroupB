@@ -51,7 +51,7 @@ public class PillarDTO extends MaterialDTO implements Comparable<MaterialDTO>{
 
     @Override
     public void setAmount(int amount) {
-        this.setAmount(amount);
+        super.setAmount(amount);
     }
 
     @Override

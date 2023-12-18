@@ -28,13 +28,10 @@ public class Main {
             config.staticFiles.add("/public");
             JavalinThymeleaf.init(ThymeleafConfig.templateEngine());
         }).start(7070);
+
+        ConstructConnectionPool();
         // render start:
         // tests
-        try {
-            connectionPool = connectionPool.getInstance(DEFAULT_USER, DEFAULT_PASSWORD, DEFAULT_URL, DEFAULT_DB);
-        } catch (Exception e) {
-
-        }
         try {
             // Order edit site:
             OrderEditController.addRenders(app, connectionPool);
@@ -47,7 +44,7 @@ public class Main {
         } catch (Exception ignore) {
 
         }
-        try {
+        try{
             //// Admin
             AdminController.AddRenders(app, connectionPool);
         } catch (Exception ignore) {
@@ -55,6 +52,16 @@ public class Main {
         }
         // tests
         app.get("/SynchronousVisitsTestPage", Main::testLoading);
+    }
+
+    public static void ConstructConnectionPool(){
+        if(connectionPool== null) {
+            try {
+                connectionPool = connectionPool.getInstance(DEFAULT_USER, DEFAULT_PASSWORD, DEFAULT_URL, DEFAULT_DB);
+            } catch (Exception ignored) {
+
+            }
+        }
     }
 
     //// Testing Section:
