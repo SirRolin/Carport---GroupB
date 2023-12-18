@@ -276,4 +276,28 @@ public class MaterialsMapper {
     }
 
 
+    public static boolean removeMaterial(ConnectionPool connectionPool, MaterialDTO material)throws DatabaseException{
+        if(material != null){
+            String sql = "delete from material where name = ? and type = ? and width_mm = ? and depth_mm = ?";
+            try(Connection connection = connectionPool.getConnection()){
+                try(PreparedStatement ps = connection.prepareStatement(sql)){
+                    ps.setString(1,material.getName());
+                    ps.setObject(2,material.getType(), Types.OTHER);
+                    ps.setInt(3,material.getWidthMm());
+                    ps.setInt(4,material.getDepthMm());
+
+                    int rowsAffected = ps.executeUpdate();
+                    if(rowsAffected < 1){
+                        throw new DatabaseException("Failed to remove material");
+                    }
+                }catch(Exception e){
+                    throw new DatabaseException("Error while deleting material: "+e);
+                }
+            }catch(Exception e){
+                throw new DatabaseException("Failed to connect to database: "+e);
+            }
+        }
+        return true;
+    }
+
 }

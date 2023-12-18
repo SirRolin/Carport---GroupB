@@ -8,6 +8,7 @@ import app.exceptions.DatabaseException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,6 +115,56 @@ public class VariantsMapper {
         }else{
             return false;
         }
+    }
+
+
+    public static boolean addVariant(ConnectionPool connectionPool, MaterialVariantDTO variant) throws DatabaseException{
+        if(variant == null){
+            return false;
+        }
+        String sql = "insert into material_variant (\"materialID\", length_cm, price) values (?,?,?)";
+        try(Connection connection = connectionPool.getConnection()){
+            try(PreparedStatement ps = connection.prepareStatement(sql)){
+                ps.setInt(1,variant.getMaterialId());
+                ps.setInt(2,variant.getLengthCm());
+                ps.setDouble(3,variant.getPrice());
+
+                int rowsAffected = ps.executeUpdate();
+                if(rowsAffected < 1){
+                    throw new DatabaseException("Error while adding material");
+                }
+
+            }catch(Exception e){
+                throw new DatabaseException("Failed to add new variant: "+e);
+            }
+        }catch(Exception e){
+            throw new DatabaseException("Failed to connect to database: "+e);
+        }
+        return true;
+    }
+
+
+    public static boolean removeVariant(ConnectionPool connectionPool, MaterialVariantDTO variant)throws DatabaseException{
+        if(variant != null){
+            String sql = "delete from material_variant where \"materialID\" = ? and length_cm = ? and price = ?";
+            try(Connection connection = connectionPool.getConnection()){
+                try(PreparedStatement ps = connection.prepareStatement(sql)){
+                    ps.setInt(1,variant.getMaterialId());
+                    ps.setInt(2,variant.getLengthCm());
+                    ps.setDouble(3,variant.getPrice());
+
+                    int rowsAffected = ps.executeUpdate();
+                    if(rowsAffected < 1){
+                        throw new DatabaseException("Failed to remove variant");
+                    }
+                }catch(Exception e){
+                    throw new DatabaseException("Error while deleting variant: "+e);
+                }
+            }catch(Exception e){
+                throw new DatabaseException("Failed to connect to database: "+e);
+            }
+        }
+        return true;
     }
 
 }
