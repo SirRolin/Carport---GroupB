@@ -63,6 +63,10 @@ public class Main {
             }
         }
     }
+    public static ConnectionPool getConnectionPool(){
+        ConstructConnectionPool();
+        return connectionPool;
+    }
 
     //// Testing Section:
     //// Testing How many people are trying to access the page

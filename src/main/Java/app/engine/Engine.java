@@ -187,12 +187,27 @@ public class Engine {
     ArrayList<Float> testArr = getBeamLengths(1);
     System.out.println(getBestLengthOver(testArr, 450F));
     System.out.println(testArr);
-    Main.ConstructConnectionPool();
 
     ArrayList<MaterialDTO> partsList = new ArrayList<>();
     String output;
     try {
-      SVG svg = drawCarportDraft1(partsList, Main.connectionPool, 800,600, 1, 2);
+      Optional<MaterialDTO> optPillar = MaterialsMapper.getMaterialInfoByType(Main.getConnectionPool(), Mtype.pillar).stream().findFirst();
+      int pillarID = 0;
+      if(optPillar.isPresent()) {
+        pillarID = optPillar.get().getMaterialId();
+      } else {
+        System.out.println("No pillars in Database");
+        throw new DatabaseException("No pillars in Database");
+      }
+      Optional<MaterialDTO> optBeam = MaterialsMapper.getMaterialInfoByType(Main.getConnectionPool(), Mtype.beam).stream().findFirst();
+      int BeamID = 0;
+      if(optBeam.isPresent()) {
+        BeamID = optBeam.get().getMaterialId();
+      } else {
+        System.out.println("No pillars in Database");
+        throw new DatabaseException("No pillars in Database");
+      }
+      SVG svg = drawCarportDraft1(partsList, Main.connectionPool, 800,600, pillarID, BeamID);
       File appdata = File.createTempFile("carport", ".txt");
       OutputStream os = new FileOutputStream(appdata);
       ObjectOutputStream oos = new ObjectOutputStream(os);
