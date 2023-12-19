@@ -11,7 +11,7 @@ public class AdminMapper {
 
     public static Admin login(ConnectionPool connectionPool, String username, String password) throws DatabaseException{
         Admin admin = null;
-        String sql = "select * Admin where username = ? and password = ?";
+        String sql = "select * from Admin where username = ? and password = ?";
         try(Connection connection = connectionPool.getConnection()){
             try(PreparedStatement ps = connection.prepareStatement(sql)){
                 ps.setString(1,username);
