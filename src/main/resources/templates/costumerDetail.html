@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="../public/css/CostumerDetailCss.css" th:href="@{/css/CostumerDetailCss.css}">
 </head>
 <body>
 
-    <p> Kontaktoplysninger:</p>
+
     <form method="post" id="costumerDetail" action="/receipt">
-        <div name="contact_form_thing">
+        <div name="contact_form_thing" class="center">
+            <p> Kontaktoplysninger:</p>
             <div name="nameBox">
                 <input type="text" placeholder="navn" name="costumer_name" required>
             </div>
