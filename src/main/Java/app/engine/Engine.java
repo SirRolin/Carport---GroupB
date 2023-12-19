@@ -1,10 +1,7 @@
 package app.engine;
 
 import app.Main;
-import app.entities.BeamDTO;
-import app.entities.MaterialDTO;
-import app.entities.MaterialVariantDTO;
-import app.entities.Mtype;
+import app.entities.*;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.MaterialsMapper;
@@ -31,6 +28,9 @@ public class Engine {
   /**
    * draws a carport
    * @param items parts list
+   * @param connectionPool Connectionpool for pulling data from database
+   * @param beamID which materialID is requested for the beams and crossbeams
+   * @param pillarID which MaterialID is requested for the pillars
    * @param width width of the carport
    * @param height height of the carport
    * @return the HTML for the SVG drawing.
@@ -42,13 +42,24 @@ public class Engine {
     List<MaterialDTO> beams = getBeams(connectionPool, beamID);
     List<Float> beamLengths = beams.stream().map(b -> Float.valueOf(b.getLength())).toList();
     float maxBeamLength = beamLengths.stream().max(Float::compareTo).orElse(0F);
-    if(maxBeamLength == 0F) throw new DatabaseException("An error has occurred, there's no beams.");
+    if(maxBeamLength == 0F) {
+      throw new DatabaseException("No beams with materialID = '" + beamID + "'");
+    }
     float beamLimit = maxBeamLength / 2;
     float beamWidth = beams.stream().limit(1).map(b -> b.getWidthMm() / 10F).reduce((aFloat, aFloat2) -> aFloat).orElse(0F);
 
 
     //// should get some info on the pillars beforehand here.
-    float pillarWidth = 27;
+    Optional<MaterialDTO> firstPillar = pillars.stream().findFirst();
+    float pillarWidth;
+    if(firstPillar.isPresent()){
+      pillarWidth = firstPillar.get().getWidthMm()/10f;
+    } else {
+      pillarWidth = 10f;
+      System.out.println("No pillar with materialID = '" + pillarID + "'");
+      throw new DatabaseException("No pillar with materialID = '" + pillarID + "'");
+    }
+
     int horizontalPillars = (int) Math.max(2,
         Math.ceil((width - frontPillarDistance - backPillarDistance)/Math.min(310, beamLimit)) + 1);
     int verticalPillars = (int) Math.max(2,
@@ -94,6 +105,22 @@ public class Engine {
         addItem(items, getBestMaterialLengthOver(beams, currentBeam),1);
         horizontal += currentBeam;
         currentBeam = 0;
+      }
+    }
+
+    //// Crossbeams
+    for(float horizontal = frontPillarDistance; horizontal + beamWidth <= width; horizontal += horizontalPillarDistance){
+      boolean odd = false;
+      for(float vertical = sidePillarDistance; vertical + sidePillarDistance < height; vertical += verticalPillarDistance){
+        float currentBeam = getBestMaterialLengthOver(beams, verticalPillarDistance + (2*sidePillarDistance)).getLength();
+        svg.drawRect(horizontal - beamWidth + (odd ? beamWidth : 0),
+            horizontal + (odd ? beamWidth : 0),
+            vertical - sidePillarDistance,
+            vertical + verticalPillarDistance + sidePillarDistance
+        );
+
+        addItem(items, getBestMaterialLengthOver(beams, currentBeam),1);
+        odd = !odd;
       }
     }
 
@@ -165,7 +192,7 @@ public class Engine {
     ArrayList<MaterialDTO> partsList = new ArrayList<>();
     String output;
     try {
-      SVG svg = drawCarportDraft1(partsList, Main.connectionPool, 1500,600, 1, 2);
+      SVG svg = drawCarportDraft1(partsList, Main.connectionPool, 800,600, 1, 2);
       File appdata = File.createTempFile("carport", ".txt");
       OutputStream os = new FileOutputStream(appdata);
       ObjectOutputStream oos = new ObjectOutputStream(os);
