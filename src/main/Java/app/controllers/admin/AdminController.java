@@ -155,6 +155,8 @@ public class AdminController {
                     }
                 }
                 ctx.sessionAttribute("edit_variant",-1);
+                ctx.sessionAttribute("edit_material",-1);
+                ctx.sessionAttribute("showVariants",false);
             }else {
                 int pickedEditInt = Integer.parseInt(pickedEdit);
                 ctx.sessionAttribute("edit_variant",pickedEditInt);
@@ -162,6 +164,8 @@ public class AdminController {
         }catch(Exception e){
             ctx.sessionAttribute("message","Error while fetching variant: "+e);
             ctx.sessionAttribute("edit_variant",-1);
+            ctx.sessionAttribute("edit_material",-1);
+            ctx.sessionAttribute("showVariants",false);
         }
         loadAdminSite(connectionPool,ctx);
     }
@@ -207,7 +211,7 @@ public class AdminController {
             loadAdminSite(connectionPool, ctx);
             return false;
         }
-        Mtype type = Mtype.valueOf(ctx.formParam("type_select").toLowerCase());
+        Mtype type = Mtype.valueOf(ctx.formParam("type_select").toLowerCase().toString());
         int width = Validator.userInput(ctx.formParam("material_width"),10);
         int length = Validator.userInput(ctx.formParam("material_depth"),10);
         MaterialDTO material = null;
