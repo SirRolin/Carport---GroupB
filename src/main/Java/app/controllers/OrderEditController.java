@@ -23,7 +23,6 @@ public class OrderEditController {
         app.post("/submitCostumerName", ctx -> OrderEditController.getOrdersByNameOrEmail(ctx,connectionPool));
         app.post("/submitCostumerEmail", ctx -> OrderEditController.getOrdersByNameOrEmail(ctx,connectionPool));
         app.post("/updateOrder",ctx -> OrderEditController.UpdateOrder(ctx,connectionPool));
-        app.post("/generateBillOfMaterial",ctx -> OrderEditController.updateOrderWithBillOfMaterial(ctx,connectionPool));
         app.get("/", ctx -> OrderEditController.loadOrderEditSite(ctx,connectionPool)); // TODO REMEMBER TO CHANGE THIS PATH ON THE GO BACK BUTTOM IN BILLOFMATERIALSITE!
     }
     public static void loadOrderEditSite(Context ctx, ConnectionPool connectionPool){
@@ -121,7 +120,10 @@ public class OrderEditController {
         OrderDTO currentOrderEdited = new OrderDTO(currentOrder.getId(),newLength,newWidth,newShedLength,newShedWidth,newSlopedegrees,newHasAssembler,newPrice,currentStatus,currentOrder.getSvg(),currentOrder.getName(),currentOrder.getEmail(),currentOrder.getDate(),newNotice);
         try {
             OrderMapper.updateOrder(connectionPool, currentOrderEdited);
-            OrderItemMapper.saveBillOfMaterials(billOfMaterials, currentOrder.getId(), connectionPool);
+            /*if(billOfMaterials != null) {
+                MaterialsMapper.deleteOrderItemsByOrderID(currentOrder.getId(), connectionPool);
+                OrderItemMapper.saveBillOfMaterials(billOfMaterials, currentOrder.getId(), connectionPool);
+            }*/
             ctx.sessionAttribute("chosen_order",currentOrderEdited);
             ctx.attribute("saved_message", "Order got updated");
             ctx.render("orderEditSite.html");  // TODO make sure to change path when this code is part of the entire program. IT SHOULD NOT BE ROOT.
@@ -131,6 +133,8 @@ public class OrderEditController {
         }
     }
 
+
+    // TODO remove the bolow code when done.
     public static void updateOrderWithBillOfMaterial(Context ctx, ConnectionPool connectionPool){
         OrderDTO currentOrder = ctx.sessionAttribute("chosen_order");
 

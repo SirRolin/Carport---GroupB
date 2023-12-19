@@ -40,6 +40,9 @@ public class Calculator {
         while(totalPillars*maxDistanceBetweenPillars < carportLength*2){ // carportLength times two because there is two sides.
             totalPillars++;
         }
+        if(totalPillars <= 4){
+            totalPillars = 4;
+        }
         choosenPillar.setAmount(totalPillars);
         neededPillers.add(choosenPillar);
         return neededPillers;

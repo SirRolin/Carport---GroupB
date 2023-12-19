@@ -5,11 +5,15 @@ import org.jetbrains.annotations.NotNull;
 public class OrderItemDTO extends MaterialDTO {
     private int orderID;
     private int mvID;
+    private int length;
+    private int price;
 
-    public OrderItemDTO(int materialID, String name, Mtype type, int amount, String description, int orderID, int mvID) {
+    public OrderItemDTO(int materialID, String name, Mtype type, int amount, String description, int orderID, int mvID,int length,int price) {
         super(materialID, name, type, amount, description);
         this.orderID = orderID;
         this.mvID = mvID;
+        this.length = length;
+        this.price = price;
     }
 
     public int getOrderID() {
@@ -29,6 +33,11 @@ public class OrderItemDTO extends MaterialDTO {
     }
 
     @Override
+    public int getLength() {
+        return length;
+    }
+
+    @Override
     public String getUnitType() {
         return null;
     }
@@ -40,11 +49,12 @@ public class OrderItemDTO extends MaterialDTO {
 
     @Override
     public int getPrice() {
-        return 0;
+        return price;
     }
 
     @Override
     public int compareTo(@NotNull MaterialDTO o) {
-        return 0;
+        String strLength = String.valueOf(length);
+        return strLength.compareTo(String.valueOf(o.getLength()));
     }
 }

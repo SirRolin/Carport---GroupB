@@ -75,9 +75,11 @@ public class OrderItemMapper {
                         String name = rs.getString("name");
                         Object type = rs.getObject("type");
                         int materialVariantID = rs.getInt("mvID");
+                        int length = rs.getInt("length_cm");
+                        int price = rs.getInt("price");
                         int quantity = rs.getInt("quantity");
                         String description = rs.getString("description");
-                        billOfMaterial.add(new OrderItemDTO(materialID,name,Mtype.valueOf(type.toString()),quantity,description,orderID,materialVariantID));
+                        billOfMaterial.add(new OrderItemDTO(materialID,name,Mtype.valueOf(type.toString()),quantity,description,orderID,materialVariantID,length,price));
                     }
                 }
         }catch (Exception e) {

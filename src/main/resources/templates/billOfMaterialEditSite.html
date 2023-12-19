@@ -9,7 +9,7 @@
     <div class="order_chosen" th:unless="${session.bill_of_materials == null}">
         <h1>Edit the bill of material:</h1>
         <p th:if="${message != null}" th:text="${message}"></p>
-        <form action="/submitEditedBillOfMaterial" method="post" onchange="this.form.submit()">
+        <form action="/submitEditedBillOfMaterial" method="post">
             <table id="material_table">
                 <tr class="tableHeader">
                     <th>Material ID</th>
@@ -27,17 +27,26 @@
                     <td th:text="${material.getType()}">No info</td>
                     <td th:text="${material.getLength()}">No info</td>
                     <td>
-                        <input type="number" id="newAmount" name="new_amount_input" th:value="${material.getAmount()}"/>
+                        <input type="number" id="newAmount" th:name="'newAmount_' + ${i.index}" th:value="${material.getAmount()}"/>
                     </td>
                     <td>
-                        <input type="text" id="newNotice" name="new_desciption_input" th:value="${material.getDescription()}"/>
+                        <input type="text" id="newNotice" th:name="'newNotice_' + ${i.index}" th:value="${material.getDescription()}"/>
                     </td>
                     <td>
-                        <button type="submit" name="material_input" th:value="${material.getMaterialVariantID()}" th:id="'Material_'+ ${i.index}">Save Changes</button>
+                        <button type="submit" name="material_input" th:value="${i.index}" th:id="'Material_'+ ${i.index}">Save Changes</button>
                     </td>
                 </tr>
             </table>
         </form>
+        <br>
+        <form th:action="@{/saveBillOfMaterial}" method="post">
+            <button type="submit" name="save_BillOfMaterial">save bill of material to Order</button>
+        </form>
+        <br>
+        <form th:action="@{/generateBillOfMaterial}" method="post">
+            <button type="submit" name="generate_BillOfMaterial">Generate bill of material</button>
+        </form>
+        <br>
         <form th:action="@{/back_to_order}" method="post">
             <button type="submit" name="show_BillOfMaterial">Go Back</button>
         </form>
