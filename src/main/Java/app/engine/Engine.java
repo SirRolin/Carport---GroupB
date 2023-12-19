@@ -12,6 +12,7 @@ import app.svg.Direction;
 import java.io.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -191,7 +192,7 @@ public class Engine {
     ArrayList<MaterialDTO> partsList = new ArrayList<>();
     String output;
     try {
-      Optional<MaterialDTO> optPillar = MaterialsMapper.getMaterialInfoByType(Main.getConnectionPool(), Mtype.pillar).stream().findFirst();
+      Optional<MaterialDTO> optPillar = MaterialsMapper.getMaterialInfoByType(Main.getConnectionPool(), Mtype.pillar).stream().sorted(Comparator.comparingInt(MaterialDTO::getMaterialId)).findFirst();
       int pillarID = 0;
       if(optPillar.isPresent()) {
         pillarID = optPillar.get().getMaterialId();
@@ -199,7 +200,7 @@ public class Engine {
         System.out.println("No pillars in Database");
         throw new DatabaseException("No pillars in Database");
       }
-      Optional<MaterialDTO> optBeam = MaterialsMapper.getMaterialInfoByType(Main.getConnectionPool(), Mtype.beam).stream().findFirst();
+      Optional<MaterialDTO> optBeam = MaterialsMapper.getMaterialInfoByType(Main.getConnectionPool(), Mtype.beam).stream().sorted(Comparator.comparingInt(MaterialDTO::getMaterialId)).findFirst();
       int BeamID = 0;
       if(optBeam.isPresent()) {
         BeamID = optBeam.get().getMaterialId();
@@ -207,7 +208,7 @@ public class Engine {
         System.out.println("No pillars in Database");
         throw new DatabaseException("No pillars in Database");
       }
-      SVG svg = drawCarportDraft1(partsList, Main.connectionPool, 800,600, pillarID, BeamID);
+      SVG svg = drawCarportDraft1(partsList, Main.connectionPool, 780,600, pillarID, BeamID);
       File appdata = File.createTempFile("carport", ".txt");
       OutputStream os = new FileOutputStream(appdata);
       ObjectOutputStream oos = new ObjectOutputStream(os);
