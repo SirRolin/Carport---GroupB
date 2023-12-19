@@ -1,0 +1,22 @@
+.center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+form {
+    width: 50%;
+    text-align: left;
+}
+
+
+p {
+    margin: 10px 0;
+}
+
+select, input {
+    margin-bottom: 10px;
+}
