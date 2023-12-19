@@ -8,7 +8,7 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 public class CustomController {
-
+    //renders the website itself for the user and "constructs" the orderDTO
     public  void addRender(Javalin app, ConnectionPool connectionPool){
         app.get("/",ctx ->ctx.render("index.html"));
         app.get("/submitCostumCarport",ctx->ctx.render("submitCostumCarport"));
@@ -18,12 +18,11 @@ public class CustomController {
         app.post("/checkout",ctx ->ctx.render("receipt.html"));
         app.post("/congratsYouDidIt",ctx-> sendOrderDtoToDatabase(ctx,connectionPool));
     }
-
+    //add the detail for the order for the costumer
     public void sendOrderDTO(Context ctx, ConnectionPool connectionPool){
         try{
             int widthOption = Integer.parseInt(ctx.formParam("width_option"));
             int lengthOption = Integer.parseInt(ctx.formParam("length_options"));
-            //String chosenRoof = ctx.formParam("chosen_roof");
             String slopes = ctx.formParam("slope_options");
             int slopeOptions;
             if(slopes == null){
@@ -36,6 +35,7 @@ public class CustomController {
 
             int shedWidthOption = Integer.parseInt(ctx.formParam("shed_width_option"));
             int shedLengthOption = Integer.parseInt(ctx.formParam("shed_length_options"));
+            // TODO: combine svg generator with costumer order generator
             String svgText = "";
             String wishChangesText = ctx.formParam("wish_changes_text");
 
@@ -60,7 +60,7 @@ public class CustomController {
             System.out.println(e.getMessage());
         }
     }
-
+    //final construction of the dto contains name,email and specification for the carport
     public void sendOrderDtoToDatabase(Context ctx, ConnectionPool connectionPool){
         boolean hasAssembler = Boolean.parseBoolean(ctx.formParam("assembleCarport"));
         try {
@@ -84,7 +84,7 @@ public class CustomController {
     }
 
 
-
+    //adds the final piece to the dto where the costumer chooses if they want to have fog assemble it or not
     public void sendOrderDtoToReceipt(Context ctx, ConnectionPool connectionPool){
 
         try {
@@ -104,7 +104,7 @@ public class CustomController {
         //ctx.redirect("/checkOut");
         ctx.render("checkOut.html");
     }
-
+    //checks what sort of roof the user wants inclined or non inclined
     public void renderCostumCarportFile(Context ctx, ConnectionPool connectionPool){
         try{
             String choice = ctx.formParam("inclined");

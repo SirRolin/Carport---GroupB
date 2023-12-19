@@ -149,18 +149,18 @@ public class OrderDTO {
     public void setName(String name){
         this.name = name;
     }
-
+    //changes the status of the assembler
     public void setHasAssembler(boolean hasAssembler){
         this.hasAssembler = hasAssembler;
     }
-
+    //changes the users email
     public void SetEmail(String email){
         this.email = email;
     }
-
+    //changes the svg thingy
     public void setSvg(String svg){this.svg = svg;};
     public void setDate(Date date){this.date = date;}
-
+    //changes the email
     public void setEmail(String email) {
         this.email = email;
     }

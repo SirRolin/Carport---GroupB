@@ -18,12 +18,12 @@
       <div id = "formChoice" >
           <div name="button1">
               <form id="submitForFlat"  th:action="@{/costumCarport}" method="post"  >
-                <input type="submit" name="inclined" th:value="carport_without_incline" class=" sizeIncrease buttons">
+                  <button type="submit" name="inclined" th:value="carport_without_incline" class=" sizeIncrease buttons">tag uden hældning</button>
               </form>
           </div>
           <div name="button2">
               <form id ="submitForInclined"  th:action="@{/costumCarport}" method="post"  >
-                <input type="submit" name="inclined" th:value="carport_with_incline" class=" sizeIncrease buttons"  >
+                  <button type="submit" name="inclined" th:value="carport_with_incline" class=" sizeIncrease buttons"  >tag med hældning</button>
               </form>
           </div>
 
