@@ -21,7 +21,7 @@ public class Calculator {
         try {
             billOfMaterials.addAll(getPillers(order.getLengthCm(), order.getWidthCm(), MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.pillar)));
             billOfMaterials.addAll(getBeams(order.getLengthCm(), order.getWidthCm(), MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.beam)));
-            billOfMaterials.addAll(getCrossbeams(order.getLengthCm(), order.getWidthCm(), MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.cover_planks)));
+            billOfMaterials.addAll(getCrossbeams(order.getLengthCm(), order.getWidthCm(), MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.beam))); // what I used before Mtype.cover_planks
         } catch (DatabaseException e) {
             // TODO add logic incase of database exception
         }
@@ -81,6 +81,7 @@ public class Calculator {
                 }
             }
         }
+        //neededBeams = getCrossbeams(carportLength,carportWidth,beamOptions);
         return neededBeams;
     }
 

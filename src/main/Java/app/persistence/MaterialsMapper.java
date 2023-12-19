@@ -20,7 +20,7 @@ public class MaterialsMapper {
                 while (rs.next()){
                     int materialID = rs.getInt("materialID");
                     String name = rs.getString("name");
-                    String description = rs.getString("description");
+                    //String description = rs.getString("description");
                     int width_mm = rs.getInt("width_mm");
                     int depth_mm = rs.getInt("depth_mm");
                     int materialVariantID = rs.getInt("mvID");
@@ -28,13 +28,13 @@ public class MaterialsMapper {
                     int price = rs.getInt("price");
                     switch (type) {
                         case pillar -> {
-                            availableMaterials.add(new PillarDTO(materialID, name, type, description, width_mm, depth_mm, materialVariantID, length, price));
+                            availableMaterials.add(new PillarDTO(materialID, name, type, width_mm, depth_mm, materialVariantID, length, price));
                         }
                         case beam -> {
-                            availableMaterials.add(new BeamDTO(materialID, name, type, description, width_mm, depth_mm, materialVariantID, length, price));
+                            availableMaterials.add(new BeamDTO(materialID, name, type, width_mm, depth_mm, materialVariantID, length, price));
                         }
                         case cover_planks -> {
-                            availableMaterials.add(new CrossbeamDTO(materialID, name, type, description, width_mm, depth_mm, materialVariantID, length, price));
+                            availableMaterials.add(new CrossbeamDTO(materialID, name, type, width_mm, depth_mm, materialVariantID, length, price));
                         }
                         // Add more cases as more material is needed
                         default -> {
@@ -59,7 +59,6 @@ public class MaterialsMapper {
                     int materialID = rs.getInt("materialID");
                     String name = rs.getString("name");
                     Object type = rs.getObject("type");
-                    String description = rs.getString("description");
                     int width_mm = rs.getInt("width_mm");
                     int depth_mm = rs.getInt("depth_mm");
                     int materialVariantID = rs.getInt("mvID");
@@ -67,13 +66,13 @@ public class MaterialsMapper {
                     int price = rs.getInt("price");
                     switch (type.toString()) {
                         case "pillar" -> {
-                            availableMaterials.add(new PillarDTO(materialID, name, Mtype.pillar, description, width_mm, depth_mm, materialVariantID, length, price));
+                            availableMaterials.add(new PillarDTO(materialID, name, Mtype.pillar, width_mm, depth_mm, materialVariantID, length, price));
                         }
                         case "beam" -> {
-                            availableMaterials.add(new BeamDTO(materialID, name, Mtype.beam, description, width_mm, depth_mm, materialVariantID, length, price));
+                            availableMaterials.add(new BeamDTO(materialID, name, Mtype.beam, width_mm, depth_mm, materialVariantID, length, price));
                         }
                         case "cover_planks" -> {
-                            availableMaterials.add(new CrossbeamDTO(materialID, name, Mtype.cover_planks, description, width_mm, depth_mm, materialVariantID, length, price));
+                            availableMaterials.add(new CrossbeamDTO(materialID, name, Mtype.cover_planks, width_mm, depth_mm, materialVariantID, length, price));
                         }
                         // Add more cases as more material is needed
                         default -> {

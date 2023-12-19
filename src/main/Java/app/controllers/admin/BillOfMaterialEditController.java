@@ -24,11 +24,33 @@ public class BillOfMaterialEditController {
         app.post("/generateBillOfMaterial",ctx -> generateNewBilOfMaterial(ctx,connectionPool));
         //app.post("/getBillOfMaterialByOrderID", ctx -> getBillOfMaterial(ctx,connectionPool));
         app.post("/saveBillOfMaterial", ctx -> saveBilOfMaterialToOrder(ctx,connectionPool));
+        app.post("/addMaterialToBilOfMaterial", ctx -> addMaterialToBillOfMaterial(ctx));
+    }
+
+    private static void addMaterialToBillOfMaterial(Context ctx) {
+        int index = Integer.parseInt(ctx.formParam("selected_material_input"));
+        List<MaterialDTO> billOfMaterials = ctx.sessionAttribute("bill_of_materials");
+        List<MaterialDTO> listOfMaterials = ctx.sessionAttribute("material_list");
+        MaterialDTO chosenMaterial = listOfMaterials.get(index);
+        int checkVar = 0;
+        for (int i=0;i < billOfMaterials.size();i++){
+            if(billOfMaterials.get(i).getMaterialVariantID() == chosenMaterial.getMaterialVariantID()){
+                checkVar++;
+                int originalAmount = billOfMaterials.get(i).getAmount();
+                billOfMaterials.get(i).setAmount(originalAmount+1);
+                ctx.attribute("message","The chosen material was already in the bill of material, 1 was added to the quantity");
+            }
+        }
+        if(checkVar < 1){
+            billOfMaterials.add(chosenMaterial);
+        }
+        ctx.sessionAttribute("bill_of_materials",billOfMaterials);
+        ctx.render("billOfMaterialEditSite.html");
     }
 
     private static void generateNewBilOfMaterial(Context ctx, ConnectionPool connectionPool) {
         OrderDTO currentOrder = ctx.sessionAttribute("chosen_order");
-        List<MaterialDTO> billOfMaterials = ctx.sessionAttribute("bill_of_materials");
+        List<MaterialDTO> billOfMaterials;
         // calculates a bill of materials based on the specs of the current order, deletes existing ones first.
         try {
             MaterialsMapper.deleteOrderItemsByOrderID(currentOrder.getId(), connectionPool);
@@ -81,31 +103,39 @@ public class BillOfMaterialEditController {
     }
 
     public static void showBillOfMaterial(Context ctx, ConnectionPool connectionPool) {
-        List<MaterialDTO> materialList = ctx.sessionAttribute("bill_of_materials");
+        List<MaterialDTO> billOfMaterials = ctx.sessionAttribute("bill_of_materials");
         OrderDTO currentOrder = ctx.sessionAttribute("chosen_order");
-        List<MaterialDTO> materialListFromDB = null;
+        List<MaterialDTO> billOfMaterialListFromDB = null;
+        List<MaterialDTO> listOfMaterials = null;
         // if there is no material list, we try and get one.
-        if(materialList == null) {
+        if(billOfMaterials == null) {
             try {
-                materialListFromDB = OrderItemMapper.getOrderItemsByOrderID(currentOrder.getId(), connectionPool);
-                materialList = materialListFromDB;
+                billOfMaterialListFromDB = OrderItemMapper.getOrderItemsByOrderID(currentOrder.getId(), connectionPool);
+                billOfMaterials = billOfMaterialListFromDB;
             } catch (DatabaseException e) {
                 ctx.attribute("message", "was unable get to find order items"+e.getMessage());
                 ctx.render("billOfMaterialEditSite.html");
             }
         }
         // if there is no material list and there is nothing in the db, we generate one and save it.
-        if((materialList == null || materialList.isEmpty() ) && (materialListFromDB == null || materialListFromDB.isEmpty())){
+        if((billOfMaterials == null || billOfMaterials.isEmpty() ) && (billOfMaterialListFromDB == null || billOfMaterialListFromDB.isEmpty())){
             try {
-                materialList = Calculator.generateBillOfMaterials(currentOrder, connectionPool);
+                billOfMaterials = Calculator.generateBillOfMaterials(currentOrder, connectionPool);
                 MaterialsMapper.deleteOrderItemsByOrderID(currentOrder.getId(), connectionPool);
-                OrderItemMapper.saveBillOfMaterials(materialList,currentOrder.getId(),connectionPool);
+                OrderItemMapper.saveBillOfMaterials(billOfMaterials,currentOrder.getId(),connectionPool);
             }catch (DatabaseException e){
                 ctx.attribute("message", "unable to get any information"+e.getMessage());
                 ctx.render("billOfMaterialEditSite.html");
             }
         }
-        ctx.sessionAttribute("bill_of_materials",materialList);
+        ctx.sessionAttribute("bill_of_materials",billOfMaterials);
+        try {
+            listOfMaterials = MaterialsMapper.getAllMaterialInfo(connectionPool);
+        }catch (DatabaseException e){
+            ctx.attribute("message", "unable to get materiel information"+e.getMessage());
+            ctx.render("billOfMaterialEditSite.html");
+        }
+        ctx.sessionAttribute("material_list",listOfMaterials);
         ctx.render("billOfMaterialEditSite.html");
     }
 
@@ -114,31 +144,37 @@ public class BillOfMaterialEditController {
     }
     public static void editBillOfMaterial(Context ctx,ConnectionPool connectionPool){
         List<MaterialDTO> currentBillOfMaterial = ctx.sessionAttribute("bill_of_materials");
-        int indexOfMaterial;
         int newAmount;
-        try {
-            indexOfMaterial = Integer.parseInt(ctx.formParam("material_input"));
-            newAmount = Integer.parseInt(ctx.formParam("newAmount_"+indexOfMaterial));
-        }catch (NumberFormatException e){
-            ctx.attribute("message", "You somehow succeeded in not entering a number");
-            ctx.render("billOfMaterialEditSite.html");
-            return;
+        String[] options;
+        options = ctx.formParam("material_input").split("_");
+        int indexOfMaterial = Integer.parseInt(options[1]);
+        if(options[0].equals("save")) {
+            try {
+                newAmount = Integer.parseInt(ctx.formParam("newAmount_" + indexOfMaterial));
+            } catch (NumberFormatException e) {
+                ctx.attribute("message", "You somehow succeeded in not entering a number");
+                ctx.render("billOfMaterialEditSite.html");
+                return;
+            }
+            String newDesciption = ctx.formParam("newNotice_" + indexOfMaterial);
+            // incase newDescription is null, make sure it's not, to avoid issues later.
+            if (newDesciption == null) {
+                newDesciption = "No comment";
+            }
+            OrderDTO chosenOrder = ctx.sessionAttribute("chosen_order");
+            if (currentBillOfMaterial.get(indexOfMaterial).getAmount() == newAmount && currentBillOfMaterial.get(indexOfMaterial).getDescription().equals(newDesciption)) {
+                ctx.attribute("message", "You entered duplicate info, orderline not saved");
+                ctx.sessionAttribute("bill_of_materials", currentBillOfMaterial);
+                ctx.render("billOfMaterialEditSite.html");
+                return;
+            } else {
+                currentBillOfMaterial.get(indexOfMaterial).setAmount(newAmount);
+                currentBillOfMaterial.get(indexOfMaterial).setDescription(newDesciption);
+            }
         }
-        String newDesciption = ctx.formParam("newNotice_"+indexOfMaterial);
-        // incase newDescription is null, make sure it's not, to avoid issues later.
-        if(newDesciption == null){
-            newDesciption = "No comment";
+        if(options[0].equals("delete")){
+           currentBillOfMaterial.remove(indexOfMaterial);
         }
-        OrderDTO chosenOrder = ctx.sessionAttribute("chosen_order");
-                if(currentBillOfMaterial.get(indexOfMaterial).getAmount() == newAmount && currentBillOfMaterial.get(indexOfMaterial).getDescription().equals(newDesciption)){
-                    ctx.attribute("message", "You entered duplicate info, orderline not saved");
-                    ctx.sessionAttribute("bill_of_materials",currentBillOfMaterial);
-                    ctx.render("billOfMaterialEditSite.html");
-                    return;
-                }else{
-                     currentBillOfMaterial.get(indexOfMaterial).setAmount(newAmount);
-                     currentBillOfMaterial.get(indexOfMaterial).setDescription(newDesciption);
-                }
         ctx.attribute("message", "orderline updated");
         ctx.sessionAttribute("bill_of_materials",currentBillOfMaterial);
         ctx.render("billOfMaterialEditSite.html");

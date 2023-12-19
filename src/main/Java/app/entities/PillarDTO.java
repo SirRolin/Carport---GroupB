@@ -10,8 +10,8 @@ public class PillarDTO extends MaterialDTO implements Comparable<MaterialDTO>{
     private String unitType = "stk"; // TODO it should not be hard coded
 
     //int materialId, String name, Mtype type, int widthMm, int depthMm, String description
-   public PillarDTO(int materialID, String name, Mtype type, int amount, String description, int width_mm, int depth_mm, int materialVariantID, int length, int price) {
-        super(materialID, name, type, amount, width_mm, depth_mm,description);
+   public PillarDTO(int materialID, String name, Mtype type, int width_mm, int depth_mm, int materialVariantID, int length, int price) {
+        super(materialID, name, type, width_mm, depth_mm);
         this.materialVariantID = materialVariantID;
         this.length = length;
         this.price = price;
