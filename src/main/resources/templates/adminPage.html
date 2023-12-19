@@ -196,6 +196,9 @@
         </form>
     </div>
 
+
+    <p th:unless="${#ctx.message == null}" id="ErrorMsg" th:text="${#ctx.message}"></p>
+
 </div>
 
 </body>
