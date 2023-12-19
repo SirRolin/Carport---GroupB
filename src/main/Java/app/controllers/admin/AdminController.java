@@ -116,7 +116,7 @@ public class AdminController {
                         break;
                 }
                 if(newMaterial != null){
-                    if(!pickedMaterial.equals(newMaterial)){
+                    if(!pickedMaterial.equals(newMaterial)){ //TODO VIRKER IKKE
                         MaterialsMapper.updateMaterial(connectionPool, newMaterial);
                     }
                 }
