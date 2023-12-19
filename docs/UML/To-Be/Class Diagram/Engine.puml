@@ -1,0 +1,135 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+package Mappers {}
+package Controllers {}
+package app.svg.shapes {
+    abstract class Shape {
+        + float opacity
+        + {abstract} String draw(float, float, float)
+    }
+    class Line Extends Shape {
+        + Line(float, float, float,  float)
+        + float getX1()
+        + float getX2()
+        + float getY1()
+        + float getY2()
+        + void setColour(String)
+        + float opacity
+        + String stroke
+        + float stroke_width
+        - float x1
+        - float x2
+        - float y1
+        - float y2
+    }
+    class Rectangle Extends Shape {
+        + Rectangle(float, float, float, float)
+        - String style
+        + String fill
+        + float height
+        + float roundX
+        + float roundY
+        + String stroke
+        + float stroke_width
+        - float width
+        - float x
+        - float y
+    }
+    class Text Extends Shape {
+        + Text(float, float, String, Direction)
+        + setColour(String)
+        - String anchor
+        - String baseline
+        - String colour
+        + String size
+        - String txt
+        - float x
+        - float y
+    }
+    class Triangle Extends Shape {
+        + Triangle(float, float, float, Direction)
+        + Triangle(float, float, float, float, Direction)
+        + setColour(String)
+        - String colour
+        - Direction direction
+        - float sizeX
+        - float sizeY
+        - float x
+        - float y
+    }
+    class Measurement Extends Shape {
+        + Measurement(Direction, float, float, float, float, String)
+        + Measurement(Direction, float, float, float, float, String, String, String, String)
+        + boolean isSameMeasurement(Direction, float, float, float, float)
+        + String defaultArrowColour
+        + String defaultAssistLineColour
+        + String defaultTextColour
+        + float defaultTextSize
+        - Direction direction
+        - Triangle firstArrowhead
+        - Line firstSide
+        - Line line
+        - Triangle secondArrowhead
+        - Line secondSide
+        - float startX
+        - float startY
+        - String text
+    }
+}
+package app.svg {
+    enum Direction {
+        up
+        down
+        left
+        right
+        upperLeft
+        upperRight
+        lowerLeft
+        lowerRight
+        Direction opposite()
+    }
+    class SVG {
+        + void setWindow(float, float)
+        + void drawMeasurement
+        + void drawRect
+        + void drawRectCenter
+        + void drawRectWithMeasurement
+        + String toString()
+        + float extraTextRoomX
+        + float extraTextRoomY
+        + float scaling
+        - float minX
+        - float minY
+        - float maxX
+        - float maxY
+        + ArrayList<Measurement> measurements
+        - float startX
+        - float startY
+        - ArrayList<Shapes> svgContent
+        + String textFormat
+        - Direction[] validDirections
+    }
+}
+package app.engine {
+    class Engine {
+        + String drawCarportDraft1(ArrayList<Object>, float, float)
+        - ArrayList<float> getBeamLengths(String)
+        - float getBestLengthOver(ArrayList<Float>, float)
+        - float getBestLengthUnder(ArrayList<Float>, float)
+        + int frontPillarDistance
+        + int backPillarDistance
+        + int sidePillarDistance
+    }
+}
+
+Mappers --> Engine
+Controllers <-- Engine
+SVG -up-> Engine
+SVG <-- Shape
+Direction ---> Triangle
+Direction --> Measurement
+Direction --> Text
+Engine <-- Direction
+
+@enduml
