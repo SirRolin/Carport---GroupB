@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="../public/css/Header.css" th:href="@{/css/Header.css}" rel="stylesheet">
+
+
+</head>
+<body>
+
+
+  <div id="mainMenu" class="center">
+    <div id="mainForm">
+        <div id="textThingy"> <p class="fontTypeforText">Vælg en carports type i egne mål:</p> </div>
+
+      <!--th:action="@{/costumCarport}"-->
+      <div id = "formChoice" >
+          <div name="button1">
+              <form id="submitForFlat"  th:action="@{/costumCarport}" method="post"  >
+                  <button type="submit" name="inclined" th:value="carport_without_incline" class=" sizeIncrease buttons">tag uden hældning</button>
+              </form>
+          </div>
+          <div name="button2">
+              <form id ="submitForInclined"  th:action="@{/costumCarport}" method="post"  >
+                  <button type="submit" name="inclined" th:value="carport_with_incline" class=" sizeIncrease buttons"  >tag med hældning</button>
+              </form>
+          </div>
+
+
+          <!--færdiglavet carport link her-->
+      </div>
+
+    </div>
+  </div>
+
+
+</body>
+</html>

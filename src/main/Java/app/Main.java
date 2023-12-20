@@ -85,8 +85,7 @@ public class Main {
         } catch (InterruptedException ignored) {
         }
         ctx.attribute("people", people);
-        ctx.attribute("time", time);
-        ctx.render("testPage.html");
+        ctx.render("testpage.html");
         changePeople(-1);
     }
 
@@ -94,4 +93,5 @@ public class Main {
     private static synchronized void changePeople(int by) {
         people += by;
     }
+
 }

@@ -20,9 +20,24 @@ public class OrderDTO {
     private Date date;
     private String notice;
 
-    //FULL CONSTRUCTOR FOR FULL ORDER | ONLY NEEDED IN ORDERMAPPER WHEN WRITING TO OR GETTING FROM DATABASE.
+
+
+    //FULL CONSTRUCTOR FOR FULL ORDER | ONLY NEEDED IN ORDERMAPPER WHEN WRITING TO DATABASE.
+    public OrderDTO(int lengthCm,int widthCm,int shedLengthCm,int shedWidthCm,int slopeDegrees,boolean hasAssembler,int price, Status status,String svgText, String notice){
+        this.lengthCm = lengthCm;
+        this.widthCm = widthCm;
+        this.shedLengthCm = shedLengthCm;
+        this.shedWidthCm = shedWidthCm;
+        this.slopeDegrees = slopeDegrees;
+        this.hasAssembler = hasAssembler;
+        this.price = price;
+        this.status = status;
+        this.svg = svgText;
+        this.notice = notice;
+    }
+    ////ToDO Fill out parameter
     /**
-     *
+     * FULL CONSTRUCTOR FOR FULL ORDER | ONLY NEEDED IN ORDERMAPPER WHEN WRITING TO OR GETTING FROM DATABASE.
      * @param id
      * @param lengthCm
      * @param widthCm
@@ -138,6 +153,10 @@ public class OrderDTO {
         return date;
     }
 
+    public boolean getAssembler(){
+        return hasAssembler;
+    }
+
     public String getNotice() {
         return notice;
     }
@@ -145,7 +164,23 @@ public class OrderDTO {
     public void setId(int id) {
         this.id = id;
     }
-    public void setSvg(String svg){this.svg = svg;}
+    public void setName(String name){
+        this.name = name;
+    }
+    //changes the status of the assembler
+    public void setHasAssembler(boolean hasAssembler){
+        this.hasAssembler = hasAssembler;
+    }
+    //changes the users email
+    public void SetEmail(String email){
+        this.email = email;
+    }
+    //changes the svg thingy
+    public void setSvg(String svg){this.svg = svg;};
     public void setDate(Date date){this.date = date;}
+    //changes the email
+    public void setEmail(String email) {
+        this.email = email;
+    }
     public void setPrice(int price){this.price = price;}
 }
