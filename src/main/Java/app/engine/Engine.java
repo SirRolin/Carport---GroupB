@@ -208,14 +208,15 @@ public class Engine {
         System.out.println("No pillars in Database");
         throw new DatabaseException("No pillars in Database");
       }
-      SVG svg = drawCarportDraft1(partsList, Main.connectionPool, 780,600, pillarID, BeamID);
-      File appdata = File.createTempFile("carport", ".txt");
-      OutputStream os = new FileOutputStream(appdata);
-      ObjectOutputStream oos = new ObjectOutputStream(os);
-      oos.writeObject(svg);
-      InputStream is = new FileInputStream(appdata);
-      System.out.println("object length: " + is.readAllBytes().length + " - svg length: " + svg.toString().length());
 
+      //// Tegner carport
+      SVG svg = drawCarportDraft1(partsList, Main.connectionPool, 780,600, pillarID, BeamID);
+
+      //// serialiser den og ser forskellen på objected som bytes og som ren text
+      byte[] serialised = app.serialize.ourSerializer.serializeObject(svg);
+      System.out.println("object length: " + serialised.length + " - svg length: " + svg.toString().length());
+      
+      //// husker og give et output så det kan skrives længere nede
       output = svg.toString();
     } catch (Exception e) {
       output = "Error at draw Carport: " + e.getMessage();
