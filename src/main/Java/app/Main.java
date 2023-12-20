@@ -30,22 +30,23 @@ public class Main {
         }).start(7070);
 
         ConstructConnectionPool();
-        // render start:
-        // tests
+        //// render start:
+        //// Order edit site:
         try {
-            // Order edit site:
             OrderEditController.addRenders(app, connectionPool);
         } catch (Exception ignore) {
 
         }
+
+        //// Bill of Material edit site:
         try {
-            // Bill of Material edit site:
             BillOfMaterialEditController.addRenders(app, connectionPool);
         } catch (Exception ignore) {
 
         }
+        
+        //// Admin
         try{
-            //// Admin
             AdminController.AddRenders(app, connectionPool);
         } catch (Exception ignore) {
 
