@@ -210,12 +210,12 @@ public class Engine {
       }
 
       //// Tegner carport
-      SVG svg = drawCarportDraft1(partsList, Main.connectionPool, 780,600, pillarID, BeamID);
+      SVG svg = drawCarportDraft1(partsList, Main.getConnectionPool(), 780,600, pillarID, BeamID);
 
       //// serialiser den og ser forskellen på objected som bytes og som ren text
       byte[] serialised = app.serialize.ourSerializer.serializeObject(svg);
       System.out.println("object length: " + serialised.length + " - svg length: " + svg.toString().length());
-      
+
       //// husker og give et output så det kan skrives længere nede
       output = svg.toString();
     } catch (Exception e) {
