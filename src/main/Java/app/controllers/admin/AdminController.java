@@ -9,8 +9,6 @@ import app.persistence.VariantsMapper;
 import app.validators.Validator;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
-
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 

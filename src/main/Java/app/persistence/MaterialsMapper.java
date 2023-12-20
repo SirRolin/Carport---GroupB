@@ -3,8 +3,6 @@ package app.persistence;
 import app.entities.*;
 import app.exceptions.DatabaseException;
 import io.javalin.http.Context;
-import org.jetbrains.annotations.NotNull;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +50,61 @@ public class MaterialsMapper {
     public static List<MaterialDTO> getAllMaterialInfo(ConnectionPool connectionPool) throws DatabaseException {
         List<MaterialDTO> availableMaterials = new ArrayList<>();
         String sql = "SELECT * FROM material_variant JOIN material using(\"materialID\")";
+        try (Connection connection = connectionPool.getConnection()) {
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    int materialID = rs.getInt("materialID");
+                    String name = rs.getString("name");
+                    Object type = rs.getObject("type");
+                    int width_mm = rs.getInt("width_mm");
+                    int depth_mm = rs.getInt("depth_mm");
+                    int materialVariantID = rs.getInt("mvID");
+                    int length = rs.getInt("length_cm");
+                    int price = rs.getInt("price");
+                    switch (type.toString()) {
+                        case "pillar" -> {
+                            availableMaterials.add(new PillarDTO(materialID, name, Mtype.pillar, width_mm, depth_mm, materialVariantID, length, price));
+                        }
+                        case "beam" -> {
+                            availableMaterials.add(new BeamDTO(materialID, name, Mtype.beam, width_mm, depth_mm, materialVariantID, length, price));
+                        }
+                        case "cover_planks" -> {
+                            availableMaterials.add(new CrossbeamDTO(materialID, name, Mtype.cover_planks, width_mm, depth_mm, materialVariantID, length, price));
+                        }
+                        // Add more cases as more material is needed
+                        default -> {
+                        }
+                    }
+                }
+            } catch (SQLException e) {
+                throw new DatabaseException("unable to connect to get materials: " + e.getMessage());
+            }
+            return availableMaterials;
+        }catch(Exception e) {
+            throw new DatabaseException("Error while connecting to database: "+ e.getMessage());
+        }
+
+    }
+
+    public static void deleteOrderItemsByOrderID(int id, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "DELETE FROM order_item WHERE \"orderID\" = ?";
+        try (Connection connection = connectionPool.getConnection()) {
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                ps.setInt(1,id);
+                int rowsEffected = ps.executeUpdate();
+                if(rowsEffected < 1){
+                    // ignore this case
+                }
+            }
+        }catch (SQLException e) {
+            throw new DatabaseException("unable to connect to delete the materials: " + e.getMessage());
+        }
+    }
+
+    public static List<MaterialDTO> getALlMaterialInfo(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+        List<MaterialDTO> availableMaterials = new ArrayList<>();
+        String sql = "SELECT * FROM material_variant JOIN material";
         try (Connection connection = connectionPool.getConnection()) {
             try (PreparedStatement ps = connection.prepareStatement(sql)) {
                 ResultSet rs = ps.executeQuery();
@@ -243,20 +296,6 @@ public class MaterialsMapper {
 
 
         return material;
-    }
-    public static void deleteOrderItemsByOrderID(int id, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "DELETE FROM order_item WHERE \"orderID\" = ?";
-        try (Connection connection = connectionPool.getConnection()) {
-            try (PreparedStatement ps = connection.prepareStatement(sql)) {
-                ps.setInt(1,id);
-                int rowsEffected = ps.executeUpdate();
-                if(rowsEffected < 1){
-                    // ignore this case
-                }
-            }
-        }catch (SQLException e) {
-            throw new DatabaseException("unable to connect to delete the materials: " + e.getMessage());
-        }
     }
 
     public static boolean addMaterial(ConnectionPool connectionPool, MaterialDTO material) throws DatabaseException{

@@ -7,7 +7,7 @@ import app.persistence.OrderItemMapper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Pinter {
+public class Printer {
         public static void printBillOfMaterialsByOrder(OrderDTO order) {
             List<MaterialDTO> billOfMaterials = new ArrayList<>();
             billOfMaterials.add((MaterialDTO) OrderItemMapper.getMaterialsByOrder(order));
