@@ -66,6 +66,31 @@ public class VariantsMapper {
         }
     }
 
+    public static List<MaterialVariantDTO> getVariantsByMaterialId(ConnectionPool connectionPool, int id) throws DatabaseException{
+        ArrayList<MaterialVariantDTO> variant = new ArrayList<>();
+        String sql = "select * from material_variant where \"materialID\" = ?";
+
+        try(Connection connection = connectionPool.getConnection()){
+            try(PreparedStatement ps = connection.prepareStatement(sql)){
+                ps.setInt(1,id);
+
+                ResultSet rs = ps.executeQuery();
+                while(rs.next()){
+                    int variantId = rs.getInt("mvID");
+                    int materialID = rs.getInt("materialID");
+                    int length = rs.getInt("length_cm");
+                    double price = rs.getDouble("price");
+                    variant.add(new MaterialVariantDTO(variantId,materialID,length,price));
+                }
+                return variant;
+            }catch(Exception e){
+                throw new DatabaseException("There was no material matching the ID: "+id);
+            }
+        }catch(Exception e){
+            throw new DatabaseException("Failed to connect to database.");
+        }
+    }
+
     public static List<MaterialVariantDTO> getVariantByMaterialId(ConnectionPool connectionPool, int id) throws DatabaseException{
         List<MaterialVariantDTO> variants = new ArrayList<>();
         String sql = "select * from material_variant where \"materialID\" = ?";

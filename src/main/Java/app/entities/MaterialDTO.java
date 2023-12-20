@@ -65,6 +65,7 @@ public abstract class MaterialDTO implements Comparable<MaterialDTO> {
     public int getAmount(){
         return amount;
     };
+    public abstract int getPrice();
 
     public int getLength(){return length;}
     public boolean equals(MaterialDTO other){

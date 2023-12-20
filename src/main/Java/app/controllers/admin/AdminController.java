@@ -17,12 +17,12 @@ import java.util.List;
 public class AdminController {
 
     public static void AddRenders(Javalin app, ConnectionPool connectionPool){
-        app.get("/admin", ctx -> loadAdminSite(connectionPool, ctx));
-        app.post("/chooseAddVariantOrMaterial", ctx -> addVariantOrMaterial(connectionPool, ctx));
-        app.post("/chooseRemoveVariantOrMaterial", ctx -> removeVariantOrMaterial(connectionPool,ctx));
-        app.post("/editMaterial", ctx -> pickEditableMaterial(connectionPool, ctx));
-        app.post("/editVariant", ctx -> pickEditableVariant(connectionPool, ctx));
-        app.post("/filterMaterials", ctx -> filterMaterials(connectionPool, ctx));
+        app.get("/admin", ctx -> AdminController.loadAdminSite(connectionPool, ctx)); // ToDo remove test
+        app.post("/chooseAddVariantOrMaterial", ctx -> AdminController.addVariantOrMaterial(connectionPool, ctx));
+        app.post("/chooseRemoveVariantOrMaterial", ctx -> AdminController.removeVariantOrMaterial(connectionPool,ctx));
+        app.post("/editMaterial", ctx -> AdminController.pickEditableMaterial(connectionPool, ctx));
+        app.post("/editVariant", ctx -> AdminController.pickEditableVariant(connectionPool, ctx));
+        app.post("/filterMaterials", ctx -> AdminController.filterMaterials(connectionPool, ctx));
         app.post("/addNewMaterial", ctx-> addNewMaterial(connectionPool,ctx));
         app.post("/addNewVariant", ctx-> addNewVariant(connectionPool,ctx));
         app.post("removeMaterial",ctx->removeMaterial(connectionPool, ctx));
