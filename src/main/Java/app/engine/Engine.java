@@ -5,12 +5,9 @@ import app.entities.*;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.MaterialsMapper;
-import app.persistence.VariantsMapper;
 import app.svg.SVG;
 import app.svg.Direction;
 
-import java.io.*;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -36,7 +33,7 @@ public class Engine {
    * @param height height of the carport
    * @return the HTML for the SVG drawing.
    */
-  public static SVG drawCarportDraft1(ArrayList<MaterialDTO> items, ConnectionPool connectionPool, float width, float height, int pillarID, int beamID) throws DatabaseException {
+  public static SVG drawCarportDraft1(List<MaterialDTO> items, ConnectionPool connectionPool, float width, float height, int pillarID, int beamID) throws DatabaseException {
     //// Retrieval of information we need to build the carport.
     //// Getting Beams information.
     List<MaterialDTO> pillars = getPillars(connectionPool, pillarID);
@@ -192,22 +189,8 @@ public class Engine {
     ArrayList<MaterialDTO> partsList = new ArrayList<>();
     String output;
     try {
-      Optional<MaterialDTO> optPillar = MaterialsMapper.getMaterialInfoByType(Main.getConnectionPool(), Mtype.pillar).stream().sorted(Comparator.comparingInt(MaterialDTO::getMaterialId)).findFirst();
-      int pillarID = 0;
-      if(optPillar.isPresent()) {
-        pillarID = optPillar.get().getMaterialId();
-      } else {
-        System.out.println("No pillars in Database");
-        throw new DatabaseException("No pillars in Database");
-      }
-      Optional<MaterialDTO> optBeam = MaterialsMapper.getMaterialInfoByType(Main.getConnectionPool(), Mtype.beam).stream().sorted(Comparator.comparingInt(MaterialDTO::getMaterialId)).findFirst();
-      int BeamID = 0;
-      if(optBeam.isPresent()) {
-        BeamID = optBeam.get().getMaterialId();
-      } else {
-        System.out.println("No pillars in Database");
-        throw new DatabaseException("No pillars in Database");
-      }
+      int pillarID = getPillarID();
+      int BeamID = getBeamID();
 
       //// Tegner carport
       SVG svg = drawCarportDraft1(partsList, Main.getConnectionPool(), 780,600, pillarID, BeamID);
@@ -226,5 +209,25 @@ public class Engine {
     System.out.println("   -----");
     System.out.println("items in parts list:");
     partsList.forEach(s -> System.out.println(s.getAmount() + "x:" + s.getLength() + "cm - " + s.getName()));
+  }
+
+  public static int getBeamID() throws DatabaseException {
+    return getBestMaterialID(Mtype.beam);
+  }
+
+  public static int getPillarID() throws DatabaseException {
+    return getBestMaterialID(Mtype.pillar);
+  }
+
+  public static int getBestMaterialID(Mtype pillar) throws DatabaseException {
+    Optional<MaterialDTO> optPillar = MaterialsMapper.getMaterialInfoByType(Main.getConnectionPool(), pillar).stream().max(Comparator.comparingInt(m -> m.getName().length()));
+    int pillarID = 0;
+    if (optPillar.isPresent()) {
+      pillarID = optPillar.get().getMaterialId();
+    } else {
+      System.out.println("No pillars in Database");
+      throw new DatabaseException("No pillars in Database");
+    }
+    return pillarID;
   }
 }

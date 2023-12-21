@@ -15,7 +15,8 @@ import java.util.List;
 public class AdminController {
 
     public static void AddRenders(Javalin app, ConnectionPool connectionPool){
-        app.get("/admin", ctx -> AdminController.loadAdminSite(connectionPool, ctx)); // ToDo remove test
+        app.get("/admin", ctx -> ctx.render("admin_nav.html"));
+        app.get("/editMaterial", ctx -> AdminController.loadAdminSite(connectionPool, ctx));
         app.post("/chooseAddVariantOrMaterial", ctx -> AdminController.addVariantOrMaterial(connectionPool, ctx));
         app.post("/chooseRemoveVariantOrMaterial", ctx -> AdminController.removeVariantOrMaterial(connectionPool,ctx));
         app.post("/editMaterial", ctx -> AdminController.pickEditableMaterial(connectionPool, ctx));

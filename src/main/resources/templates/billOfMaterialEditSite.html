@@ -28,10 +28,10 @@
                     <td th:text="${material.getLength()}">No info</td>
                     <td>
                         <input type="number" id="newAmount" th:name="'newAmount_' + ${i.index}" th:value="${material.getAmount()}"/>
-                    </td>
+                    </td><!--
                     <td>
                         <input type="text" id="newNotice" th:name="'newNotice_' + ${i.index}" th:value="${material.getDescription()}"/>
-                    </td>
+                    </td>-->
                     <td>
                         <button type="submit" name="material_input" th:value="'save_'+${i.index}" th:id="'Material_'+ ${i.index}">Save Changes</button>
                     </td>
@@ -90,5 +90,6 @@
         <button type="submit" name="show_BillOfMaterial">Go Back</button>
     </form>
     </div>
+    <div th:if="${session.svg}" th:utext="${session.svg}"></div>
 </body>
 </html>
