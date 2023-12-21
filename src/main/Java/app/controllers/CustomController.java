@@ -10,7 +10,6 @@ import io.javalin.http.Context;
 public class CustomController {
   //renders the website itself for the user and "constructs" the orderDTO
   public static void addRender(Javalin app, ConnectionPool connectionPool) {
-    app.get("/submitCustomCarport", ctx -> ctx.render("submitCustomCarport.html")); //// TODO Christian er der ikke MERE logik der mangler her???
     app.post("/costumerDetail", ctx -> sendOrderDTO(ctx, connectionPool));
     app.post("/checkout", ctx -> sendOrderDtoToReceipt(ctx, connectionPool));
     app.post("/receipt", ctx -> sendOrderDtoToDatabase(ctx, connectionPool));
@@ -81,7 +80,7 @@ public class CustomController {
       }
 
     } catch (Exception e) {
-      System.out.println(e);
+      e.printStackTrace();
     }
   }
 
