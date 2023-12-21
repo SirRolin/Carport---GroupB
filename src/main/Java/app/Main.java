@@ -1,6 +1,7 @@
 package app;
 
 import app.config.ThymeleafConfig;
+import app.controllers.CustomController;
 import app.controllers.OrderEditController;
 import app.controllers.admin.AdminController;
 import app.controllers.admin.BillOfMaterialEditController;
@@ -31,6 +32,10 @@ public class Main {
 
         ConstructConnectionPool();
         //// render start:
+
+        //// Index / start side
+        app.get("/", ctx -> ctx.render("index.html"));
+
         //// Order edit site:
         try {
             OrderEditController.addRenders(app, connectionPool);
@@ -44,10 +49,16 @@ public class Main {
         } catch (Exception ignore) {
 
         }
-        
+
         //// Admin
         try{
             AdminController.AddRenders(app, connectionPool);
+        } catch (Exception ignore) {
+
+        }
+
+        try{
+            CustomController.addRender(app, connectionPool);
         } catch (Exception ignore) {
 
         }

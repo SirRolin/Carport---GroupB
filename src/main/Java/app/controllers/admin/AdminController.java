@@ -23,10 +23,10 @@ public class AdminController {
         app.post("/filterMaterials", ctx -> AdminController.filterMaterials(connectionPool, ctx));
         app.post("/addNewMaterial", ctx-> addNewMaterial(connectionPool,ctx));
         app.post("/addNewVariant", ctx-> addNewVariant(connectionPool,ctx));
-        app.post("removeMaterial",ctx->removeMaterial(connectionPool, ctx));
-        app.post("removeVariant",ctx->removeVariant(connectionPool,ctx));
+        app.post("/removeMaterial",ctx->removeMaterial(connectionPool, ctx));
+        app.post("/removeVariant",ctx->removeVariant(connectionPool,ctx));
+        app.get("/login", ctx -> ctx.render("login.html"));
         app.post("/login", ctx -> login(connectionPool,ctx));
-        app.get("/" , ctx -> ctx.render("login.html"));
     }
 
 
@@ -330,7 +330,8 @@ public class AdminController {
             Admin admin = AdminMapper.login(connectionPool,name,password);
             if(admin != null){
                 ctx.sessionAttribute("loggedIn",true);
-                loadAdminSite(connectionPool,ctx);
+                ctx.redirect("/admin");
+                //loadAdminSite(connectionPool,ctx); //// Vi redirecter for, at der ikke står "/login" i urlen...
                 return true;
             }else{
                 ctx.attribute("message", "Error while logging in, Try again later");

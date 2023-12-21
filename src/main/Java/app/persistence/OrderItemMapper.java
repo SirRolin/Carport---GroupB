@@ -42,13 +42,12 @@ public class OrderItemMapper {
     }
 
     public static void updateOrderItem(MaterialDTO orderLine, int orderID,ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "UPDATE order_item SET quantity = ?, description = ? WHERE \"orderID\" = ? and \"mvID\" = ?;";
+        String sql = "UPDATE order_item SET quantity = ? WHERE \"orderID\" = ? and \"mvID\" = ?;";
         try(Connection connection = connectionPool.getConnection()){
             try(PreparedStatement ps = connection.prepareStatement(sql)){
                 ps.setInt(1,orderLine.getAmount());
-                ps.setString(2, orderLine.getDescription());
-                ps.setInt(3,orderID);
-                ps.setInt(4,orderLine.getMaterialVariantID());
+                ps.setInt(2,orderID);
+                ps.setInt(3,orderLine.getMaterialVariantID());
                 int linesEffected = ps.executeUpdate();
                 if(linesEffected < 1){
                     throw new DatabaseException("The database could not save your info");

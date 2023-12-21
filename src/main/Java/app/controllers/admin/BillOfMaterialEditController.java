@@ -156,20 +156,14 @@ public class BillOfMaterialEditController {
                 ctx.render("billOfMaterialEditSite.html");
                 return;
             }
-            String newDesciption = ctx.formParam("newNotice_" + indexOfMaterial);
-            // incase newDescription is null, make sure it's not, to avoid issues later.
-            if (newDesciption == null) {
-                newDesciption = "No comment";
-            }
             OrderDTO chosenOrder = ctx.sessionAttribute("chosen_order");
-            if (currentBillOfMaterial.get(indexOfMaterial).getAmount() == newAmount && currentBillOfMaterial.get(indexOfMaterial).getDescription().equals(newDesciption)) {
+            if (currentBillOfMaterial.get(indexOfMaterial).getAmount() == newAmount) {
                 ctx.attribute("message", "You entered duplicate info, orderline not saved");
                 ctx.sessionAttribute("bill_of_materials", currentBillOfMaterial);
                 ctx.render("billOfMaterialEditSite.html");
                 return;
             } else {
                 currentBillOfMaterial.get(indexOfMaterial).setAmount(newAmount);
-                currentBillOfMaterial.get(indexOfMaterial).setDescription(newDesciption);
             }
         }
         if(options[0].equals("delete")){
