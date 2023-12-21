@@ -8,6 +8,7 @@
 
 <div id="Content">
     <p>Filter by materialtype:</p>
+    <div class="materialList">
     <form method="post" th:action="@{/filterMaterials}">
         <select name="filter" onchange="this.form.submit()">
             <option name="select" value="select" th:text="Select"></option>
@@ -18,7 +19,7 @@
             <option name="cover_planks" value="cover_planks" th:text="'cover planks'">Cover planks</option>
         </select>
     </form>
-    <div class="materialList" th:unless="${session.material_list == null || session.material_list.isEmpty()}">
+    <div th:unless="${session.material_list == null || session.material_list.isEmpty()}">
         <form method="post" th:action="@{/editMaterial}">
         <table id="material_table">
             <tr class="tableHeader">
@@ -82,10 +83,10 @@
         </table>
         </form>
     </div>
-
+    </div>
     <br>
 
-    <div class="variantList" th:unless="${session.variant_list == null || session.variant_list.isEmpty()}">
+    <div class="variantList" th:unless="${session.variant_list == null || session.variant_list.isEmpty() || session.showVariants == false}">
         <form method="post" th:action="@{/editVariant}">
         <table id="variant_table">
             <tr class="tableHeader">
@@ -140,7 +141,7 @@
                 <option name="roof">Roof</option>
                 <option name="pillar">Pillar</option>
                 <option name="beam">Beam</option>
-                <option name="cover_planks">Cover Planks</option>
+                <option name="cover_planks">Cover_Planks</option>
             </select>
             <input type="number" name="material_width" placeholder="Material width in mm">
             <input type="number" name="material_depth" placeholder="Material depth in mm">
@@ -151,7 +152,7 @@
     <br>
 
     <div th:unless="${session.add_material == true || session.add_material == null}" class="addProduct">
-        <form method="post" th:action="@{/addVariant}">
+        <form method="post" th:action="@{/addNewVariant}">
             <input type="number" name="variant_material_id" placeholder="Material Id">
             <input type="number" name="variant_length" placeholder="Material length in cm">
             <input type="number" name="variant_price" placeholder="Price">
@@ -173,10 +174,10 @@
         <form method="post" th:action="@{/removeMaterial}">
             <input type="text" name="material_name" placeholder="Material Name">
             <select id="typeSelectRemove" name="type_select">
-                <option name="roof">Roof</option>
-                <option name="pillar">Pillar</option>
-                <option name="beam">Beam</option>
-                <option name="cover_planks">Cover Planks</option>
+                <option name="roof">roof</option>
+                <option name="pillar">pillar</option>
+                <option name="beam">beam</option>
+                <option name="cover_planks">cover_planks</option>
             </select>
             <input type="number" name="material_width" placeholder="Material width in mm">
             <input type="number" name="material_depth" placeholder="Material depth in mm">
@@ -194,6 +195,9 @@
             <input type="submit" value="Remove">
         </form>
     </div>
+
+
+    <p th:unless="${#ctx.message == null}" id="ErrorMsg" th:text="${#ctx.message}"></p>
 
 </div>
 

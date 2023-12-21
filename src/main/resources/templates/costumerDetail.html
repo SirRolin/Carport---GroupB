@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Johannes Fog - Kunde data</title>
+    <link rel="stylesheet" href="../public/css/CostumerDetailCss.css" th:href="@{/css/CostumerDetailCss.css}">
+</head>
+<body>
+
+
+    <form method="post" id="costumerDetail" action="/checkout">
+        <div name="contact_form_thing" class="center">
+            <p> Kontaktoplysninger:</p>
+            <div name="nameBox">
+                <input type="text" placeholder="navn" name="costumer_name" required>
+            </div>
+            <div>
+                <input type="email" placeholder="email" name="user_email" required>
+                <div th:if="emailError != null">
+                    <p th:text="${emailError}"></p>
+                </div>
+
+
+            </div>
+            <input type="submit" value="næste" >
+        </div>
+    </form>
+
+</body>
+</html>

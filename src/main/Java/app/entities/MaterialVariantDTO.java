@@ -46,6 +46,6 @@ public class MaterialVariantDTO {
         } else if(this.materialId != other.getMaterialId()){
             return false;
         }
-        return true;
+        return super.equals(other);
     }
 }

@@ -1,7 +1,6 @@
 package app.controllers;
 
 import app.calculator.Calculator;
-import app.controllers.admin.BillOfMaterialEditController;
 import app.entities.MaterialDTO;
 import app.entities.OrderDTO;
 import app.entities.SearchDTO;
@@ -9,6 +8,7 @@ import app.entities.Status;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.MaterialsMapper;
+import app.persistence.OrderItemMapper;
 import app.persistence.OrderMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -23,8 +23,7 @@ public class OrderEditController {
         app.post("/submitCostumerName", ctx -> OrderEditController.getOrdersByNameOrEmail(ctx,connectionPool));
         app.post("/submitCostumerEmail", ctx -> OrderEditController.getOrdersByNameOrEmail(ctx,connectionPool));
         app.post("/updateOrder",ctx -> OrderEditController.UpdateOrder(ctx,connectionPool));
-        app.post("/generateBillOfMaterial",ctx -> OrderEditController.generateBillOfMaterial(ctx,connectionPool));
-        app.get("/", ctx -> OrderEditController.loadOrderEditSite(ctx,connectionPool)); // TODO REMEMBER TO CHANGE THIS PATH ON THE GO BACK BUTTOM IN BILLOFMATERIALSITE!
+        //app.post("/generateBillOfMaterial",ctx -> OrderEditController.generateBillOfMaterial(ctx,connectionPool));
     }
     public static void loadOrderEditSite(Context ctx, ConnectionPool connectionPool){
         //ctx.sessionAttribute("chosen_order",null);
@@ -94,6 +93,7 @@ public class OrderEditController {
     public static void UpdateOrder(Context ctx, ConnectionPool connectionPool) {
         // takes all the potentially changed info about the current order and makes a new orderDTO objects and sets it as the new session attribute:
         OrderDTO currentOrder = ctx.sessionAttribute("chosen_order");
+        List<MaterialDTO> billOfMaterials = ctx.sessionAttribute("bill_of_materials");
         int newLength = Integer.parseInt(ctx.formParam("new_length_input"));
         int newWidth = Integer.parseInt(ctx.formParam("new_width_input"));
         int newShedLength = Integer.parseInt(ctx.formParam("new_shed_length_input"));
@@ -101,23 +101,31 @@ public class OrderEditController {
         int newSlopedegrees = Integer.parseInt(ctx.formParam("new_slopedegrees_input"));
         String hasAssemblerTmp = ctx.formParam("new_has_assembler_input");
         boolean newHasAssembler = currentOrder.isHasAssembler();
-        if(hasAssemblerTmp.equals("true")) {
+        if(hasAssemblerTmp != null && hasAssemblerTmp.equals("on")) {
             newHasAssembler = true;
+        }else{
+            newHasAssembler = false;
         }
         Double newPrice = Double.parseDouble(ctx.formParam("new_price_input"));
         String editedStatus = ctx.formParam("edited_order_status");
         Status currentStatus = Status.valueOf(editedStatus);
-        /*switch (editedStatus){
+        /*
+            switch (editedStatus){
             case "initialised" -> currentStatus = Status.initialised;
             case "processing" -> currentStatus = Status.processing;
             case "accepted" -> currentStatus = Status.accepted;
             case "waiting_for_customer" -> currentStatus = Status.waiting_for_customer;
             case "paid" -> currentStatus = Status.paid;
-        }*/
+            }
+        */
         String newNotice = ctx.formParam("new_notice_input");
         OrderDTO currentOrderEdited = new OrderDTO(currentOrder.getId(),newLength,newWidth,newShedLength,newShedWidth,newSlopedegrees,newHasAssembler,newPrice,currentStatus,currentOrder.getSvg(),currentOrder.getName(),currentOrder.getEmail(),currentOrder.getDate(),newNotice);
         try {
             OrderMapper.updateOrder(connectionPool, currentOrderEdited);
+            /*if(billOfMaterials != null) {
+                MaterialsMapper.deleteOrderItemsByOrderID(currentOrder.getId(), connectionPool);
+                OrderItemMapper.saveBillOfMaterials(billOfMaterials, currentOrder.getId(), connectionPool);
+            }*/
             ctx.sessionAttribute("chosen_order",currentOrderEdited);
             ctx.attribute("saved_message", "Order got updated");
             ctx.render("orderEditSite.html");  // TODO make sure to change path when this code is part of the entire program. IT SHOULD NOT BE ROOT.
@@ -127,13 +135,20 @@ public class OrderEditController {
         }
     }
 
-    public static void generateBillOfMaterial(Context ctx, ConnectionPool connectionPool){
+
+    // TODO remove the bolow code when done.
+    public static void updateOrderWithBillOfMaterial(Context ctx, ConnectionPool connectionPool){
         OrderDTO currentOrder = ctx.sessionAttribute("chosen_order");
-        List<MaterialDTO> billOfMaterials = null;
+
+        List<MaterialDTO> billOfMaterials = ctx.sessionAttribute("bill_of_materials");
         // calculates a bill of materials based on the specs of the current order, deletes existing ones first.
         try {
-            MaterialsMapper.deleteOrderItemsByOrderID(currentOrder.getId(),connectionPool);
+            if(billOfMaterials != null) {
+                MaterialsMapper.deleteOrderItemsByOrderID(currentOrder.getId(), connectionPool);
+            }
             billOfMaterials = Calculator.generateBillOfMaterials(currentOrder, connectionPool);
+            OrderItemMapper.saveBillOfMaterials(billOfMaterials,currentOrder.getId(),connectionPool);
+            ctx.attribute("message", "Bill of material got updated");
             ctx.sessionAttribute("bill_of_materials",billOfMaterials);
         }catch (DatabaseException e){
             ctx.attribute("message", "Something went wrong when editing the order: "+e.getMessage());
@@ -142,7 +157,7 @@ public class OrderEditController {
         }
         // checks if the bill of material is empty or still null and handles the 2 situations.
         // if there's something in the bill of materials it will calculate the total price of everyting inside and set the total price on the order
-        // incase nothing is in the bill of material it will send out a messafe to the user, saying so.
+        // incase nothing is in the bill of material it will send out a message to the user, saying so.
         if(billOfMaterials != null && !billOfMaterials.isEmpty()) {
             int totalPrice = 0;
             for (MaterialDTO m : billOfMaterials) {

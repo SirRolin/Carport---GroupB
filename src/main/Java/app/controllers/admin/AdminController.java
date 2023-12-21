@@ -2,22 +2,21 @@ package app.controllers.admin;
 
 import app.entities.*;
 import app.exceptions.DatabaseException;
+import app.persistence.AdminMapper;
 import app.persistence.ConnectionPool;
 import app.persistence.MaterialsMapper;
 import app.persistence.VariantsMapper;
 import app.validators.Validator;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
-
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AdminController {
 
-    //ADD, EDIT, REMOVE ORDERS VIA ADMIN.
     public static void AddRenders(Javalin app, ConnectionPool connectionPool){
-        app.get("/admin", ctx -> AdminController.loadAdminSite(connectionPool, ctx)); // ToDo remove test
+        app.get("/admin", ctx -> ctx.render("admin_nav.html"));
+        app.get("/editMaterial", ctx -> AdminController.loadAdminSite(connectionPool, ctx));
         app.post("/chooseAddVariantOrMaterial", ctx -> AdminController.addVariantOrMaterial(connectionPool, ctx));
         app.post("/chooseRemoveVariantOrMaterial", ctx -> AdminController.removeVariantOrMaterial(connectionPool,ctx));
         app.post("/editMaterial", ctx -> AdminController.pickEditableMaterial(connectionPool, ctx));
@@ -25,19 +24,12 @@ public class AdminController {
         app.post("/filterMaterials", ctx -> AdminController.filterMaterials(connectionPool, ctx));
         app.post("/addNewMaterial", ctx-> addNewMaterial(connectionPool,ctx));
         app.post("/addNewVariant", ctx-> addNewVariant(connectionPool,ctx));
-        app.post("removeMaterial",ctx->removeMaterial(connectionPool, ctx));
-        app.post("removeVariant",ctx->removeVariant(connectionPool,ctx));
-        app.get("/" , ctx -> ctx.redirect("/admin")); //ToDO change
+        app.post("/removeMaterial",ctx->removeMaterial(connectionPool, ctx));
+        app.post("/removeVariant",ctx->removeVariant(connectionPool,ctx));
+        app.get("/login", ctx -> ctx.render("login.html"));
+        app.post("/login", ctx -> login(connectionPool,ctx));
     }
 
-
-    public static void addOrder(ConnectionPool connectionPool, Context ctx){
-
-    }
-
-    public static void removeOrder(ConnectionPool connectionPool, Context ctx){
-
-    }
 
     public static void loadAdminSite(ConnectionPool connectionPool, Context ctx){
         List<MaterialDTO> materials = new ArrayList<>();
@@ -51,7 +43,14 @@ public class AdminController {
             }else {
                 ctx.sessionAttribute("material_list",ctx.sessionAttribute("modified_list"));
             }
-            ctx.sessionAttribute("variant_list",variants);
+
+            if(ctx.sessionAttribute("modified_variant_list")==null){
+                ctx.sessionAttribute("variant_list",variants);
+                ctx.sessionAttribute("showVariants",false);
+            }else{
+                ctx.sessionAttribute("variant_list",ctx.sessionAttribute("modified_variant_list"));
+            }
+
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -90,6 +89,7 @@ public class AdminController {
         try{
             String pickedEdit = ctx.formParam("edit_material");
             if(pickedEdit.contains("done")){
+                ctx.sessionAttribute("showVariants",false);
                 String[] editString = pickedEdit.split(" ");
                 int id = Integer.parseInt(editString[1]);
                 List<MaterialDTO> materials = ctx.sessionAttribute("material_list");
@@ -115,17 +115,23 @@ public class AdminController {
                         break;
                 }
                 if(newMaterial != null){
-                    if(!pickedMaterial.equals(newMaterial)){
+                    if(!pickedMaterial.equals(newMaterial)){ //TODO VIRKER IKKE
                         MaterialsMapper.updateMaterial(connectionPool, newMaterial);
                     }
                 }
+                ctx.sessionAttribute("modified_variant_list", null);
                 ctx.sessionAttribute("edit_material",-1);
             }else{
                int pickedEditInt =  Integer.parseInt(pickedEdit);
-                ctx.sessionAttribute("edit_material",pickedEditInt);
+               ctx.sessionAttribute("showVariants",true);
+               List<MaterialDTO> materials = ctx.sessionAttribute("material_list");
+               ctx.sessionAttribute("modified_variant_list", filterVariants(connectionPool,materials.get(pickedEditInt).getMaterialId()));
+               ctx.sessionAttribute("edit_material",pickedEditInt);
             }
         }catch(Exception e){
-            System.out.println(e.getMessage());
+            ctx.sessionAttribute("message","Error while editing material: "+e);
+            ctx.sessionAttribute("modified_variant_list", null);
+            ctx.sessionAttribute("edit_material",-1);
         }
         loadAdminSite(connectionPool,ctx);
     }
@@ -148,19 +154,24 @@ public class AdminController {
                     }
                 }
                 ctx.sessionAttribute("edit_variant",-1);
+                ctx.sessionAttribute("edit_material",-1);
+                ctx.sessionAttribute("showVariants",false);
             }else {
                 int pickedEditInt = Integer.parseInt(pickedEdit);
                 ctx.sessionAttribute("edit_variant",pickedEditInt);
             }
         }catch(Exception e){
-            e.printStackTrace();
+            ctx.sessionAttribute("message","Error while fetching variant: "+e);
+            ctx.sessionAttribute("edit_variant",-1);
+            ctx.sessionAttribute("edit_material",-1);
+            ctx.sessionAttribute("showVariants",false);
         }
         loadAdminSite(connectionPool,ctx);
     }
 
 
 
-    public static void filterMaterials(ConnectionPool connectionPool, Context ctx) throws DatabaseException{
+    public static void filterMaterials(ConnectionPool connectionPool, Context ctx){
         String filter = ctx.formParam("filter");
         String alreadySelected = ctx.sessionAttribute("already_selected");
         if(alreadySelected != null && alreadySelected.isEmpty() == false){
@@ -172,27 +183,39 @@ public class AdminController {
 
         if(filter != null && filter.isEmpty() == false){
             if(filter.equalsIgnoreCase("all")){
-                List<MaterialDTO> materials = MaterialsMapper.getAllMaterials(connectionPool);
-                ctx.sessionAttribute("modified_list",materials);
-                ctx.sessionAttribute("already_selected",filter);
+                try{
+                    List<MaterialDTO> materials = MaterialsMapper.getAllMaterials(connectionPool);
+                    ctx.sessionAttribute("modified_list",materials);
+                    ctx.sessionAttribute("already_selected",filter);
+                }catch(DatabaseException e){
+                    ctx.sessionAttribute("message","Error while fetching materials: "+e);
+                }
             }else{
-                List<MaterialDTO> materials = MaterialsMapper.getAllMaterialsByType(connectionPool, Mtype.valueOf(filter));
-                ctx.sessionAttribute("modified_list",materials);
-                ctx.sessionAttribute("already_selected",filter);
+                try{
+                    List<MaterialDTO> materials = MaterialsMapper.getAllMaterialsByType(connectionPool, Mtype.valueOf(filter));
+                    ctx.sessionAttribute("modified_list",materials);
+                    ctx.sessionAttribute("already_selected",filter);
+                }catch(DatabaseException e){
+                    ctx.sessionAttribute("message","Error while fetching materials: "+e);
+                }
             }
         }
         loadAdminSite(connectionPool, ctx);
     }
 
 
-    public static boolean addNewMaterial(ConnectionPool connectionPool, Context ctx) throws Exception{
+    public static boolean addNewMaterial(ConnectionPool connectionPool, Context ctx){
         String name = (Validator.validateString(ctx.formParam("material_name")) ? ctx.formParam("material_name") : null);
-        Mtype type = Mtype.valueOf(ctx.formParam("type_select").toLowerCase());
+        if(name == null){
+            loadAdminSite(connectionPool, ctx);
+            return false;
+        }
+        Mtype type = Mtype.valueOf(ctx.formParam("type_select").toLowerCase().toString());
         int width = Validator.userInput(ctx.formParam("material_width"),10);
         int length = Validator.userInput(ctx.formParam("material_depth"),10);
         MaterialDTO material = null;
         try{
-            switch(type.getName()){
+            switch(type.toString()){
                 case "beam":
                     material = new BeamDTO(name,type,width,length);
                     break;
@@ -208,23 +231,121 @@ public class AdminController {
             }
             MaterialsMapper.addMaterial(connectionPool,material);
         }catch(Exception e){
-            throw new Exception("Error while adding material:"+e);
+            ctx.sessionAttribute("message","Error while adding material: "+e);
+            ctx.sessionAttribute("add_material",null);
+            loadAdminSite(connectionPool,ctx);
+            return false;
         }
+        ctx.sessionAttribute("add_material",null);
         loadAdminSite(connectionPool,ctx);
         return true;
     }
 
     public static boolean addNewVariant(ConnectionPool connectionPool, Context ctx){
+        int materialId = Validator.userInput(ctx.formParam("variant_material_id"),Integer.parseInt(ctx.formParam("variant_material_id")));
+        int length = Validator.userInput(ctx.formParam("variant_length"),Integer.parseInt(ctx.formParam("variant_length")));
+        double price = Validator.userInput(ctx.formParam("variant_price"),Double.parseDouble(ctx.formParam("variant_price")));
+        if(materialId <= 0){
+            loadAdminSite(connectionPool, ctx);
+        }
+        try{
+            VariantsMapper.addVariant(connectionPool, new MaterialVariantDTO(materialId,length,price));
+        }catch(Exception e){
+            ctx.sessionAttribute("message","Error while adding material: "+e);
+            loadAdminSite(connectionPool,ctx);
+            return false;
+        }
+        ctx.sessionAttribute("add_material",null);
+        loadAdminSite(connectionPool, ctx);
         return true;
     }
 
     public static boolean removeMaterial(ConnectionPool connectionPool, Context ctx){
+        String name = (Validator.validateString(ctx.formParam("material_name")) ? ctx.formParam("material_name") : null);
+        if(name == null){
+            ctx.sessionAttribute("message","Error! Can't remove a material without its name");
+            loadAdminSite(connectionPool, ctx);
+            return false;
+        }
+        Mtype type = Mtype.valueOf(ctx.formParam("type_select").toLowerCase());
+        int width = Validator.userInput(ctx.formParam("material_width"),10);
+        int length = Validator.userInput(ctx.formParam("material_depth"),10);
+        MaterialDTO material = null;
+        try{
+            switch(type.toString()){
+                case "beam":
+                    material = new BeamDTO(name,type,width,length);
+                    break;
+                case "cover_planks":
+                    material = new CrossbeamDTO(name,type,width,length);
+                    break;
+                case "pillar":
+                    material = new PillarDTO(name,type,width,length);
+                    break;
+                case "roof":
+                    material = new RoofDTO(name,type,width,length);
+                    break;
+            }
+            MaterialsMapper.removeMaterial(connectionPool,material);
+        }catch(Exception e){
+            ctx.sessionAttribute("message","Error! Can't remove a material without its name: "+e);
+            loadAdminSite(connectionPool, ctx);
+            return false;
+        }
+        ctx.sessionAttribute("remove_material",null);
+        loadAdminSite(connectionPool,ctx);
         return true;
     }
 
-    public static boolean removeVariant(ConnectionPool connectionPool, Context ctx){
+    public static boolean removeVariant(ConnectionPool connectionPool, Context ctx) throws Exception{
+        int materialId = Validator.userInput(ctx.formParam("variant_material_id"),Integer.parseInt(ctx.formParam("variant_material_id")));
+        int length = Validator.userInput(ctx.formParam("variant_length"),Integer.parseInt(ctx.formParam("variant_length")));
+        double price = Validator.userInput(ctx.formParam("variant_price"),Double.parseDouble(ctx.formParam("variant_price")));
+        if(materialId <= 0){
+            ctx.sessionAttribute("message","Cannot remove variant with an empty ID");
+            loadAdminSite(connectionPool, ctx);
+            return false;
+        }
+        try{
+            VariantsMapper.removeVariant(connectionPool, new MaterialVariantDTO(materialId,length,price));
+        }catch(Exception e){
+            ctx.sessionAttribute("message","Failed to remove variant: "+e);
+            ctx.sessionAttribute("remove_material",null);
+            loadAdminSite(connectionPool, ctx);
+            return false;
+        }
+        ctx.sessionAttribute("remove_material",null);
+        loadAdminSite(connectionPool, ctx);
         return true;
     }
 
-    //TODO: MAYBE ADD FILTER VARIANTS?
+    public static List<MaterialVariantDTO> filterVariants(ConnectionPool connectionPool, int id) throws DatabaseException{
+        List<MaterialVariantDTO> variants = VariantsMapper.getVariantByMaterialId(connectionPool, id);
+        return variants;
+    }
+
+    public static boolean login(ConnectionPool connectionPool, Context ctx){
+        String name = ctx.formParam("username");
+        String password = ctx.formParam("password");
+        try{
+            Admin admin = AdminMapper.login(connectionPool,name,password);
+            if(admin != null){
+                ctx.sessionAttribute("loggedIn",true);
+                ctx.redirect("/admin");
+                //loadAdminSite(connectionPool,ctx); //// Vi redirecter for, at der ikke står "/login" i urlen...
+                return true;
+            }else{
+                ctx.attribute("message", "Error while logging in, Try again later");
+                ctx.sessionAttribute("loggedIn",false);
+                ctx.render("login.html");
+            }
+        }catch(Exception e){
+            ctx.attribute("message", "Error while logging in, Try again later");
+            ctx.render("login.html");
+            System.out.println(e);
+
+        }
+        return false;
+    }
+
 }

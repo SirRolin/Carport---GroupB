@@ -21,8 +21,7 @@ public class Calculator {
         try {
             billOfMaterials.addAll(getPillers(order.getLengthCm(), order.getWidthCm(), MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.pillar)));
             billOfMaterials.addAll(getBeams(order.getLengthCm(), order.getWidthCm(), MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.beam)));
-            billOfMaterials.addAll(getCrossbeams(order.getLengthCm(), order.getWidthCm(), MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.cover_planks)));
-            OrderItemMapper.saveBillOfMaterials(billOfMaterials, order.getId(), connectionPool);
+            billOfMaterials.addAll(getCrossbeams(order.getLengthCm(), order.getWidthCm(), MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.beam))); // what I used before Mtype.cover_planks
         } catch (DatabaseException e) {
             // TODO add logic incase of database exception
         }
@@ -40,6 +39,9 @@ public class Calculator {
         int totalPillars = 0; // starting amount
         while(totalPillars*maxDistanceBetweenPillars < carportLength*2){ // carportLength times two because there is two sides.
             totalPillars++;
+        }
+        if(totalPillars <= 4){
+            totalPillars = 4;
         }
         choosenPillar.setAmount(totalPillars);
         neededPillers.add(choosenPillar);
@@ -60,7 +62,6 @@ public class Calculator {
             if(!beamOptions.isEmpty()) {
                 int totalBeams = 0;
                 MaterialDTO currentBeam = beamOptions.get(i);
-                System.out.println(currentBeam.getLength());
                 // counts the amount if we need the currently choosen beam.
                 while (currentBeam.getLength() <= remainingLength && remainingLength > 0) {
                     remainingLength -= currentBeam.getLength();
@@ -79,6 +80,7 @@ public class Calculator {
                 }
             }
         }
+        //neededBeams = getCrossbeams(carportLength,carportWidth,beamOptions);
         return neededBeams;
     }
 

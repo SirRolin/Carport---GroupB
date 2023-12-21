@@ -1,0 +1,26 @@
+/*center the stuff*/
+.center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+}
+/*makes the border on the table prettier*/
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+}
+/*th td border*/
+th,td{
+    border: 1px solid#ddd;
+    padding: 8px;
+    text-align: left;
+}
+/*background color for th*/
+th {
+    background-color: #f2f2f2;
+}
+

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link href="../public/css/Header.css" th:href="@{/css/Header.css}" rel="stylesheet">
+
+
+</head>
+<body>
+
+
+<div id="mainMenu" class="center">
+  <p>
+    Sorry but an error has occurred at "<span th:text="${error_path}"></span>"<br/>
+    The function that caused the error was "<span th:text="${error_function}"></span>"<br/>
+    We'll do our best to fix the problem.
+
+    <span th:if="${error_message}">Error message:<span th:text="${error_message}"></span></span>
+  </p>
+</div>
+
+
+</body>
+</html>

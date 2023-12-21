@@ -89,7 +89,6 @@ public class OrderMapper {
 
         return true;
     }
-
     public static List<OrderDTO> getOrdersBySearchDTO(SearchDTO searchDTO, ConnectionPool connectionPool) throws DatabaseException {
         List<OrderDTO> orderList = new ArrayList<>();
         String sql = null;

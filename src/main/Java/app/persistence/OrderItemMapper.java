@@ -1,12 +1,10 @@
 package app.persistence;
 
-import app.entities.MaterialDTO;
-import app.entities.OrderDTO;
+import app.entities.*;
 import app.exceptions.DatabaseException;
+import io.javalin.http.Context;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,5 +39,52 @@ public class OrderItemMapper {
     public static List<MaterialDTO> getMaterialsByOrderID(int orderID) {
         List<MaterialDTO> billOfMaterialsByOrderID = new ArrayList<>();
         return  billOfMaterialsByOrderID;
+    }
+
+    public static void updateOrderItem(OrderItemDTO orderLine, int orderID, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "UPDATE order_item SET quantity = ?, notice = ? WHERE \"orderID\" = ? and \"mvID\" = ?;";
+        try(Connection connection = connectionPool.getConnection()){
+            try(PreparedStatement ps = connection.prepareStatement(sql)){
+                ps.setInt(1,orderLine.getAmount());
+                ps.setString(2, orderLine.getDescription());
+                ps.setInt(3,orderID);
+                ps.setInt(4,orderLine.getMaterialVariantID());
+                int linesEffected = ps.executeUpdate();
+                if(linesEffected < 1){
+                    throw new DatabaseException("The database could not save your info");
+                }
+            }
+        }catch (DatabaseException | SQLException e){
+            throw new DatabaseException("Error while connecting to database"+e.getMessage());
+        }
+    }
+
+    public static List<MaterialDTO> getOrderItemsByOrderID(int orderID, ConnectionPool connectionPool) throws DatabaseException {
+        List<MaterialDTO> billOfMaterial = new ArrayList<>();
+        String sql = "SELECT \"materialID\",name,type,\"mvID\",length_cm,price,\"mvID\",quantity,order_item.description\n" +
+                "FROM public.order_item\n" +
+                "JOIN material_variant using (\"mvID\")\n" +
+                "JOIN material using(\"materialID\") \n" +
+                "where \"orderID\" = ?;";
+        try (Connection connection = connectionPool.getConnection()) {
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                ps.setInt(1, orderID);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                        int materialID = rs.getInt("materialID");
+                        String name = rs.getString("name");
+                        Object type = rs.getObject("type");
+                        int materialVariantID = rs.getInt("mvID");
+                        int length = rs.getInt("length_cm");
+                        int price = rs.getInt("price");
+                        int quantity = rs.getInt("quantity");
+                        String description = rs.getString("description");
+                        billOfMaterial.add(new OrderItemDTO(materialID,name,Mtype.valueOf(type.toString()),quantity,description,orderID,materialVariantID,length,price));
+                    }
+                }
+        }catch (Exception e) {
+            throw new DatabaseException("Error while connecting to database: " + e.getMessage());
+        }
+        return billOfMaterial;
     }
 }

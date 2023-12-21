@@ -64,7 +64,7 @@ public class CrossbeamDTO extends MaterialDTO implements Comparable<MaterialDTO>
         }else {
             return false;
         }
-        return true;
+        return super.equals(other);
     }
 
 

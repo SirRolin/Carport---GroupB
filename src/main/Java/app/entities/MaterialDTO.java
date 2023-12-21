@@ -9,6 +9,7 @@ public abstract class MaterialDTO implements Comparable<MaterialDTO> {
     private int depthMm;
     private int amount;
     private int length;
+    private String description;
 
 
     public MaterialDTO(int materialId, String name, Mtype type, int widthMm, int depthMm){
@@ -34,6 +35,12 @@ public abstract class MaterialDTO implements Comparable<MaterialDTO> {
         this.widthMm = width_mm;
         this.depthMm = depth_mm;
     }
+    public MaterialDTO(int materialID, String name, Mtype type, int amount, String description){
+        this.materialId = materialID;
+        this.name = name;
+        this.type = type;
+        this.amount = amount;
+    }
 
     public int getMaterialId() {
         return materialId;
@@ -55,7 +62,6 @@ public abstract class MaterialDTO implements Comparable<MaterialDTO> {
         return depthMm;
     }
 
-
     public abstract String getUnitType();
 
     public abstract int getMaterialVariantID();
@@ -66,6 +72,14 @@ public abstract class MaterialDTO implements Comparable<MaterialDTO> {
         return amount;
     };
     public abstract int getPrice();
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public int getLength(){return length;}
     public boolean equals(MaterialDTO other){

@@ -1,6 +1,7 @@
 package app;
 
 import app.config.ThymeleafConfig;
+import app.controllers.CustomController;
 import app.controllers.OrderEditController;
 import app.controllers.admin.AdminController;
 import app.controllers.admin.BillOfMaterialEditController;
@@ -30,23 +31,34 @@ public class Main {
         }).start(7070);
 
         ConstructConnectionPool();
-        // render start:
-        // tests
+        //// render start:
+
+        //// Index / start side
+        app.get("/", ctx -> ctx.render("index.html"));
+
+        //// Order edit site:
         try {
-            // Order edit site:
             OrderEditController.addRenders(app, connectionPool);
         } catch (Exception ignore) {
 
         }
+
+        //// Bill of Material edit site:
         try {
-            // Bill of Material edit site:
             BillOfMaterialEditController.addRenders(app, connectionPool);
         } catch (Exception ignore) {
 
         }
+
+        //// Admin
         try{
-            //// Admin
             AdminController.AddRenders(app, connectionPool);
+        } catch (Exception ignore) {
+
+        }
+
+        try{
+            CustomController.addRender(app, connectionPool);
         } catch (Exception ignore) {
 
         }
@@ -85,8 +97,7 @@ public class Main {
         } catch (InterruptedException ignored) {
         }
         ctx.attribute("people", people);
-        ctx.attribute("time", time);
-        ctx.render("testPage.html");
+        ctx.render("testpage.html");
         changePeople(-1);
     }
 
@@ -94,4 +105,5 @@ public class Main {
     private static synchronized void changePeople(int by) {
         people += by;
     }
+
 }

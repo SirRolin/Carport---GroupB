@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Johannes Fog - Checkout</title>
+  <link rel="stylesheet" href="../public/css/checkOutCss.css" th:href="@{/css/checkOutCss.css}">
+</head>
+<body>
+<div name="detailThing" class="center">
+  <table>
+    <tr>
+      <th>
+      <td th:text="${session.current_order.getName()}"></td>
+      <td th:text="${session.current_order.getEmail()}"></td>
+      </th>
+    </tr>
+    <tr>
+
+      <td th:text="${session.current_order.getLengthCm()}"></td>
+      <td th:text="${session.current_order.getWidthCm()}"></td>
+      <td th:text="${session.current_order.getShedLengthCm()}"></td>
+      <td th:text="${session.current_order.getShedWidthCm()}"></td>
+      <td th:text="${session.current_order.getSlopeDegrees()}"></td>
+    </tr>
+  </table>
+</div>
+  <form name="finalGokuForm" method="post" action="/receipt">
+    <div id="checkOutFormula" class="center">
+      <div id="theWhiteBox">
+        <div id="textHolderDiv">
+          <p>Tak for at bestille din carport hos os!</p><br>
+          <p>Vores sælgere vil tage kontakt til dem, når en pris er blevet beregnet </p>
+        </div>
+
+        <div id="checkboxForAssemblerText">
+          <p>tryk her for at sige ja til at vi samler carporten for dig </p>
+        </div>
+
+        <div id="checkBoxForAssmbler">
+          <input type="checkbox" name="assembleCarport" value="true">
+        </div>
+        <div id="buttonHolder">
+          <!--sends the data to the db itself-->
+          <input type="submit" value="næste" >
+        </div>
+      </div>
+    </div>
+  </form>
+
+
+
+</body>
+</html>
