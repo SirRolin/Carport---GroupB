@@ -101,8 +101,10 @@ public class OrderEditController {
         int newSlopedegrees = Integer.parseInt(ctx.formParam("new_slopedegrees_input"));
         String hasAssemblerTmp = ctx.formParam("new_has_assembler_input");
         boolean newHasAssembler = currentOrder.isHasAssembler();
-        if(hasAssemblerTmp.equals("true")) {
+        if(hasAssemblerTmp != null && hasAssemblerTmp.equals("on")) {
             newHasAssembler = true;
+        }else{
+            newHasAssembler = false;
         }
         Double newPrice = Double.parseDouble(ctx.formParam("new_price_input"));
         String editedStatus = ctx.formParam("edited_order_status");
