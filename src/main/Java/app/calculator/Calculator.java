@@ -62,7 +62,6 @@ public class Calculator {
             if(!beamOptions.isEmpty()) {
                 int totalBeams = 0;
                 MaterialDTO currentBeam = beamOptions.get(i);
-                System.out.println(currentBeam.getLength());
                 // counts the amount if we need the currently choosen beam.
                 while (currentBeam.getLength() <= remainingLength && remainingLength > 0) {
                     remainingLength -= currentBeam.getLength();
