@@ -40,13 +40,13 @@ public class OrderEditController {
                 customerOrder = customerOrders.get(0);
             }else{
                 ctx.attribute("message","To many orders found, contact admin. there is an issue with duplicate order id's in the database");
-                loadOrderEditSite(ctx,connectionPool);
+                backToOrderSite(ctx);
             }
             ctx.sessionAttribute("chosen_order", customerOrder);
             ctx.render("orderEditSite.html");
         } catch (DatabaseException e) {
             ctx.attribute("message", "No Orders matched what you entered");
-            loadOrderEditSite(ctx, connectionPool);
+            backToOrderSite(ctx);
         }
     }
 
@@ -58,7 +58,7 @@ public class OrderEditController {
             ctx.render("orderEditSite.html");
         }catch (DatabaseException e) {
             ctx.attribute("message", "No Orders matched what you entered");
-            loadOrderEditSite(ctx, connectionPool);
+            backToOrderSite(ctx);
         }
     }
 
@@ -79,10 +79,10 @@ public class OrderEditController {
             }
         } catch (NumberFormatException e){
             ctx.attribute("message","You did not enter a number");
-            loadOrderEditSite(ctx,connectionPool);
+            backToOrderSite(ctx);
         } catch (NullPointerException e){
             ctx.attribute("message","something blew up, contact admin");
-            loadOrderEditSite(ctx,connectionPool);
+            backToOrderSite(ctx);
         }
         searchInfo.setName(name);
         searchInfo.setEmail(email);
@@ -176,7 +176,7 @@ public class OrderEditController {
 
     }
 
-    public static void backToOrderSite(Context ctx, ConnectionPool connectionPool) {
+    public static void backToOrderSite(Context ctx) {
         ctx.render("orderEditSite.html");
     }
 }
