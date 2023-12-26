@@ -19,6 +19,14 @@
     display: flex;
 }
 
+.itemTable table, tr{
+    border: 1px solid black;
+}
+
+.itemTable th{
+    border-bottom: black 0.1em solid;
+}
+
 .itemTable tr:nth-child(even) {
     background-color: #f2f2f2;
 }
@@ -33,6 +41,14 @@
     justify-items: center;
     justify-self: center;
     display: flex;
+}
+
+.variantList table, tr{
+    border: 1px solid black;
+}
+
+.variantList th{
+    border-bottom: black 0.1em solid;
 }
 
 .variantList tr:nth-child(even){

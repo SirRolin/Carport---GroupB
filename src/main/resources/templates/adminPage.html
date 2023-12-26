@@ -20,6 +20,7 @@
             <option name="cover_planks" value="cover_planks" th:text="'cover planks'">Cover planks</option>
         </select>
     </form>
+        <br>
     <div class="itemTable" th:unless="${session.material_list == null || session.material_list.isEmpty()}">
         <form method="post" th:action="@{/editMaterial}">
         <table id="material_table">
