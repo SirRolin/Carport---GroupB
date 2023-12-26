@@ -1,0 +1,40 @@
+#Content{
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.materialList {
+
+}
+
+.itemTable{
+    overflow-y: auto;
+    overflow-x: auto;
+    align-items: center;
+    align-self: center;
+    justify-content: center;
+    justify-items: center;
+    justify-self: center;
+    display: flex;
+}
+
+.itemTable tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+
+.variantList{
+    overflow-y: auto;
+    overflow-x: auto;
+    align-items: center;
+    align-self: center;
+    justify-content: center;
+    justify-items: center;
+    justify-self: center;
+    display: flex;
+}
+
+.variantList tr:nth-child(even){
+    background-color: #f2f2f2;
+}

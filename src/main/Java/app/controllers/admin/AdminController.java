@@ -330,13 +330,13 @@ public class AdminController {
         try{
             Admin admin = AdminMapper.login(connectionPool,name,password);
             if(admin != null){
-                ctx.sessionAttribute("loggedIn",true);
+                ctx.sessionAttribute("logged_in",true);
                 ctx.redirect("/admin");
                 //loadAdminSite(connectionPool,ctx); //// Vi redirecter for, at der ikke står "/login" i urlen...
                 return true;
             }else{
                 ctx.attribute("message", "Error while logging in, Try again later");
-                ctx.sessionAttribute("loggedIn",false);
+                ctx.sessionAttribute("logged_in",false);
                 ctx.render("login.html");
             }
         }catch(Exception e){
