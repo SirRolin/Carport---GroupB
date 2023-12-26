@@ -21,7 +21,7 @@ public class BillOfMaterialEditController {
 
   public static void addRenders(Javalin app, ConnectionPool connectionPool) {
     app.post("/showBillOfMaterial", ctx -> BillOfMaterialEditController.showBillOfMaterial(ctx, connectionPool));
-    app.post("/back_to_order", ctx -> OrderEditController.loadOrderEditSite(ctx, connectionPool));
+    app.post("/back_to_order", ctx -> OrderEditController.backToOrderSite(ctx, connectionPool));
     app.post("/submitEditedBillOfMaterial", ctx -> editBillOfMaterial(ctx, connectionPool));
     app.post("/generateBillOfMaterial", ctx -> generateNewBilOfMaterial(ctx, connectionPool));
     //app.post("/getBillOfMaterialByOrderID", ctx -> getBillOfMaterial(ctx,connectionPool));
