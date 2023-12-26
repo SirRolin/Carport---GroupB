@@ -91,10 +91,12 @@ public class CustomController {
             OrderDTO orderDTO = ctx.sessionAttribute("current_order");
             String name = ctx.formParam("costumer_name");
 
-            String email = ctx.formParam("user_email");
-            orderDTO.setName(name);
 
-            orderDTO.setEmail(email);
+            String email = ctx.formParam("user_email");
+
+            orderDTO.setName(name.toLowerCase());
+
+            orderDTO.setEmail(email.toLowerCase());
             ctx.sessionAttribute("current_order",orderDTO);
 
 

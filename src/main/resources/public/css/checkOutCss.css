@@ -14,10 +14,13 @@ table {
     margin-top: 20px;
 }
 /*th td border*/
-th,td{
-    border: 1px solid#ddd;
+th, td {
+    border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
 }
 /*background color for th*/
 th {

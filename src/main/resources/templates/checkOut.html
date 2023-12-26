@@ -1,53 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+  <meta charset="UTF-8">
+  <title>Title</title>
   <link rel="stylesheet" href="../public/css/checkOutCss.css" th:href="@{/css/checkOutCss.css}">
 </head>
 <body>
 <div name="detailThing" class="center">
   <table>
     <tr>
-      <th>
-      <td th:text="${session.current_order.getName()}"></td>
-      <td th:text="${session.current_order.getEmail()}"></td>
-      </th>
+      <th>Carport Detail:</th>
+      <th></th> <!-- Empty cell for spacing -->
+      <th>User:</th>
     </tr>
     <tr>
-
+      <td>Length</td>
+      <td></td>
       <td th:text="${session.current_order.getLengthCm()}"></td>
+    </tr>
+    <tr>
+      <td>Width</td>
+      <td></td>
       <td th:text="${session.current_order.getWidthCm()}"></td>
+    </tr>
+    <tr>
+      <td>Shed Length</td>
+      <td></td>
       <td th:text="${session.current_order.getShedLengthCm()}"></td>
+    </tr>
+    <tr>
+      <td>Shed Width</td>
+      <td></td>
       <td th:text="${session.current_order.getShedWidthCm()}"></td>
+    </tr>
+    <tr>
+      <td>Slope Degrees</td>
+      <td></td>
       <td th:text="${session.current_order.getSlopeDegrees()}"></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td>Name: <span th:text="${session.current_order.getName()}"></span></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td>Email: <span th:text="${session.current_order.getEmail()}"></span></td>
     </tr>
   </table>
 </div>
-  <form name="finalGokuForm" method="post" action="/congratsYouDidIt">
-    <div id="checkOutFormula" class="center">
-      <div id="theWhiteBox">
-        <div id="textHolderDiv">
-          <p>Tak for at bestille din carport hos os!</p><br>
-          <p>Vores sælgere vil tage kontakt til dem, når en pris er blevet beregnet </p>
-        </div>
 
-        <div id="checkboxForAssemblerText">
-          <p>tryk her for at sige ja til at vi samler carporten for dig </p>
-        </div>
+<form name="finalGokuForm" method="post" action="/congratsYouDidIt">
+  <div id="checkOutFormula" class="center">
+    <div id="theWhiteBox">
+      <div id="textHolderDiv">
+        <p>Tak for at bestille din carport hos os!</p><br>
+        <p>Vores sælgere vil tage kontakt til dem, når en pris er blevet beregnet </p>
+      </div>
 
-        <div id="checkBoxForAssmbler">
-          <input type="checkbox" name="assembleCarport" value="true">
-        </div>
-        <div id="buttonHolder">
-          <!--sends the data to the db itself-->
-          <input type="submit" value="næste" >
-        </div>
+      <div id="checkboxForAssemblerText">
+        <p>tryk her for at sige ja til at vi samler carporten for dig </p>
+      </div>
+
+      <div id="checkBoxForAssmbler">
+        <input type="checkbox" name="assembleCarport" value="true">
+      </div>
+      <div id="buttonHolder">
+        <!--sends the data to the db itself-->
+        <input type="submit" value="næste" >
       </div>
     </div>
-  </form>
-
-
+  </div>
+</form>
 
 </body>
 </html>
