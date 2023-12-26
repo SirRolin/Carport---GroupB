@@ -7,11 +7,35 @@
 </head>
 
 <body>
+<div id="Content">
+  <div class="order_chosen" th:unless="${session.customer_order == null}">
+    <table id="material_table2">
+      <tr class="tableHeader">
+        <th>Order ID</th>
+        <th>Customer Name:</th>
+        <th>Customer Email:</th>
+        <th>Status on Order:</th>
+        <th>Order info:</th>
+      </tr>
+      <tr th:each="order, i :  ${session.customer_order}">
+        <td th:text="${order.getId()}">No info</td>
+        <td th:text="${order.getName()}">No info</td>
+        <td th:text="${order.getEmail()}">No info</td>
+        <td th:text="${order.getStatus()}">No info</td>
+        <td th:text="${order.getNotice()}">No info</td>
+      </tr>
+    </table>
+    <br>
+    <div>
+      <p th:if="${notPaidMessage != null}" th:text="${notPaidMessage}"></p>
+    <form action="/getBillOfMaterialIfPaid" method="post">
+      <button type="submit" name="ShowBillOfMaterialIfPaid" >See your Bill Of Material</button>
+    </form>
+    </div>
+  </div>
+
 
 <div class="no_order_chosen" th:if="${session.customer_order == null}">
-  <div>
-    <p> <h1>Enter ID for the order you want to edit. Alternately enter name or email to see if there is any orders associated with them</h1></p>
-  </div>
   <p th:if="${message != null}" th:text="${message}"></p>
     <h1> Please enter you order ID or email: </h1>
     <form th:action="@{/findCustomerOrderByID}" method="post">
@@ -20,7 +44,7 @@
     <button type="submit">Submit</button>
     </form>
     <br><br/>
-    <form th:action="@{findCostumerOrderByEmail}" method="post">
+    <form th:action="@{/findCostumerOrderByEmail}" method="post">
       <label for="email_input">Enter Your Email:</label>
       <input type="email" id="email_input" name="email_input" value="email"/>
       <button type="submit">Submit</button>
@@ -28,7 +52,7 @@
   <div class="show_orders" th:unless="${session.the_costumers_orders == null || session.the_costumers_orders.isEmpty() == true}">
     <p th:if="${message != null}" th:text="${message}"></p>
     <h1> which order would you like view?:</h1>
-    <form action="/findOrderByID" method="post">
+    <form action="/findCustomerOrderByID" method="post">
       <table id="material_table">
         <tr class="tableHeader">
           <th>Order ID</th>
