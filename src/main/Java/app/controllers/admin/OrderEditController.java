@@ -1,4 +1,4 @@
-package app.controllers;
+package app.controllers.admin;
 
 import app.calculator.Calculator;
 import app.entities.MaterialDTO;
@@ -26,8 +26,8 @@ public class OrderEditController {
         //app.post("/generateBillOfMaterial",ctx -> OrderEditController.generateBillOfMaterial(ctx,connectionPool));
     }
     public static void loadOrderEditSite(Context ctx, ConnectionPool connectionPool){
-        ctx.sessionAttribute("chosen_order",null);
-        ctx.sessionAttribute("costumer_orders",null);
+        //ctx.sessionAttribute("chosen_order",null);
+        //ctx.sessionAttribute("costumer_orders",null);
         ctx.render("orderEditSite.html");
     }
 

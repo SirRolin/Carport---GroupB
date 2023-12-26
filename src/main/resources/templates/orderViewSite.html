@@ -14,21 +14,21 @@
   </div>
   <p th:if="${message != null}" th:text="${message}"></p>
     <h1> Please enter you order ID or email: </h1>
-    <form th:action="@{/submitCustomerOrderID}" method="post">
-    <label for="orderID_input">Enter Order ID:</label>
+    <form th:action="@{/findCustomerOrderByID}" method="post">
+    <label for="orderID_input">Enter Your Order ID:</label>
     <input type="number" id="orderID_input" name="orderID_input"/>
     <button type="submit">Submit</button>
     </form>
     <br><br/>
-    <form th:action="@{/submitCostumerEmail}" method="post">
-      <label for="email_input">Enter Costumer Email:</label>
+    <form th:action="@{findCostumerOrderByEmail}" method="post">
+      <label for="email_input">Enter Your Email:</label>
       <input type="email" id="email_input" name="email_input" value="email"/>
       <button type="submit">Submit</button>
     </form>
-  <div class="show_orders" th:unless="${session.costumer_orders == null || session.costumer_orders.isEmpty() == true}">
+  <div class="show_orders" th:unless="${session.the_costumers_orders == null || session.the_costumers_orders.isEmpty() == true}">
     <p th:if="${message != null}" th:text="${message}"></p>
-    <h1> Her vises Kundens ordre info:</h1>
-    <form action="/submitOrderID" method="post">
+    <h1> which order would you like view?:</h1>
+    <form action="/findOrderByID" method="post">
       <table id="material_table">
         <tr class="tableHeader">
           <th>Order ID</th>
@@ -38,7 +38,7 @@
           <th>Order info:</th>
           <th>Action</th>
         </tr>
-        <tr th:each="order, i :  ${session.costumer_orders}">
+        <tr th:each="order, i :  ${session.the_costumers_orders}">
           <td th:text="${order.getId()}">No info</td>
           <td th:text="${order.getName()}">No info</td>
           <td th:text="${order.getEmail()}">No info</td>

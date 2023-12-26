@@ -2,7 +2,8 @@ package app;
 
 import app.config.ThymeleafConfig;
 import app.controllers.CustomController;
-import app.controllers.OrderEditController;
+import app.controllers.ViewCustomerOrdersController;
+import app.controllers.admin.OrderEditController;
 import app.controllers.admin.AdminController;
 import app.controllers.admin.BillOfMaterialEditController;
 import app.persistence.ConnectionPool;
@@ -46,6 +47,12 @@ public class Main {
         //// Bill of Material edit site:
         try {
             BillOfMaterialEditController.addRenders(app, connectionPool);
+        } catch (Exception ignore) {
+
+        }
+        //// Order View Site:
+        try {
+            ViewCustomerOrdersController.addRenders(app, connectionPool);
         } catch (Exception ignore) {
 
         }
