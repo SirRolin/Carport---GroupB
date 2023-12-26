@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="da">
+<head>
+  <title>Testpage</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+<div class="no_order_chosen" th:if="${session.customer_order == null}">
+  <div>
+    <p> <h1>Enter ID for the order you want to edit. Alternately enter name or email to see if there is any orders associated with them</h1></p>
+  </div>
+  <p th:if="${message != null}" th:text="${message}"></p>
+    <h1> Please enter you order ID or email: </h1>
+    <form th:action="@{/submitCustomerOrderID}" method="post">
+    <label for="orderID_input">Enter Order ID:</label>
+    <input type="number" id="orderID_input" name="orderID_input"/>
+    <button type="submit">Submit</button>
+    </form>
+    <br><br/>
+    <form th:action="@{/submitCostumerEmail}" method="post">
+      <label for="email_input">Enter Costumer Email:</label>
+      <input type="email" id="email_input" name="email_input" value="email"/>
+      <button type="submit">Submit</button>
+    </form>
+  <div class="show_orders" th:unless="${session.costumer_orders == null || session.costumer_orders.isEmpty() == true}">
+    <p th:if="${message != null}" th:text="${message}"></p>
+    <h1> Her vises Kundens ordre info:</h1>
+    <form action="/submitOrderID" method="post">
+      <table id="material_table">
+        <tr class="tableHeader">
+          <th>Order ID</th>
+          <th>Customer Name:</th>
+          <th>Customer Email:</th>
+          <th>Status on Order:</th>
+          <th>Order info:</th>
+          <th>Action</th>
+        </tr>
+        <tr th:each="order, i :  ${session.costumer_orders}">
+          <td th:text="${order.getId()}">No info</td>
+          <td th:text="${order.getName()}">No info</td>
+          <td th:text="${order.getEmail()}">No info</td>
+          <td th:text="${order.getStatus()}">No info</td>
+          <td th:text="${order.getNotice()}">No info</td>
+          <td>
+            <button type="submit" name="orderID_input" th:value="${order.getId}" th:id="'order_'+ ${i.index}">Choose Order</button>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

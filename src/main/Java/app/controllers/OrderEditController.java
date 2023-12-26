@@ -20,14 +20,14 @@ public class OrderEditController {
     public static void addRenders(Javalin app, ConnectionPool connectionPool){
         app.post("/submitOrderID", ctx -> OrderEditController.showChosenOrderByID(ctx,connectionPool));
         app.get("/submitOrderID", ctx -> OrderEditController.loadOrderEditSite(ctx,connectionPool));
-        app.post("/submitCostumerName", ctx -> OrderEditController.getOrdersByNameOrEmail(ctx,connectionPool));
+        app.post("/submitCostumerName", ctx -> getOrdersByNameOrEmail(ctx,connectionPool));
         app.post("/submitCostumerEmail", ctx -> OrderEditController.getOrdersByNameOrEmail(ctx,connectionPool));
         app.post("/updateOrder",ctx -> OrderEditController.UpdateOrder(ctx,connectionPool));
         //app.post("/generateBillOfMaterial",ctx -> OrderEditController.generateBillOfMaterial(ctx,connectionPool));
     }
     public static void loadOrderEditSite(Context ctx, ConnectionPool connectionPool){
-        //ctx.sessionAttribute("chosen_order",null);
-        //ctx.sessionAttribute("costumer_orders",null);
+        ctx.sessionAttribute("chosen_order",null);
+        ctx.sessionAttribute("costumer_orders",null);
         ctx.render("orderEditSite.html");
     }
 
