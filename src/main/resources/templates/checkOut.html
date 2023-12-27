@@ -10,57 +10,50 @@
   <table>
     <tr>
       <th>Carport Detail:</th>
-      <th></th> <!-- Empty cell for spacing -->
+    </tr>
+    <tr>
+      <td>Længde: <span th:text="${session.current_order.getLengthCm()}"></span></td>
+    </tr>
+    <tr>
+      <td>Bredde: <span th:text="${session.current_order.getWidthCm()}"> </span></td>
+    </tr>
+    <tr>
+      <td>Skur længde: <span th:text="${session.current_order.getShedLengthCm()}"></span></td>
+    </tr>
+    <tr>
+      <td>Skur bredde: <span th:text="${session.current_order.getShedWidthCm()}"></span></td>
+    </tr>
+    <tr>
+      <td>Tag hældning i grader (hvis valgt ellers automatisk 0): <span th:text="${session.current_order.getSlopeDegrees()}"></span> </td>
+    </tr>
+  </table>
+  <table>
+    <tr>
       <th>User:</th>
+      </th>
     </tr>
     <tr>
-      <td>Length</td>
-      <td></td>
-      <td th:text="${session.current_order.getLengthCm()}"></td>
+      <td>Navn: <span th:text="${session.current_order.getName()}"></span></td>
     </tr>
     <tr>
-      <td>Width</td>
-      <td></td>
-      <td th:text="${session.current_order.getWidthCm()}"></td>
-    </tr>
-    <tr>
-      <td>Shed Length</td>
-      <td></td>
-      <td th:text="${session.current_order.getShedLengthCm()}"></td>
-    </tr>
-    <tr>
-      <td>Shed Width</td>
-      <td></td>
-      <td th:text="${session.current_order.getShedWidthCm()}"></td>
-    </tr>
-    <tr>
-      <td>Slope Degrees</td>
-      <td></td>
-      <td th:text="${session.current_order.getSlopeDegrees()}"></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td>Name: <span th:text="${session.current_order.getName()}"></span></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td>Email: <span th:text="${session.current_order.getEmail()}"></span></td>
+      <td>
+        Email: <span th:text="${session.current_order.getEmail()}"></span>
+      </td>
     </tr>
   </table>
 </div>
 
 <form name="finalGokuForm" method="post" action="/congratsYouDidIt">
-  <div id="checkOutFormula" class="center">
+  <div id="checkOutFormula" class="center moveCheckOutFormula">
     <div id="theWhiteBox">
-      <div id="textHolderDiv">
-        <p>Tak for at bestille din carport hos os!</p><br>
+      <div id="textHolderDiv" class="addBorder">
+        <p>Tak for at bestille din carport hos os!</p>
         <p>Vores sælgere vil tage kontakt til dem, når en pris er blevet beregnet </p>
+        <p>Tryk her for at sige ja til at vi samler carporten for dig </p>
       </div>
 
       <div id="checkboxForAssemblerText">
-        <p>tryk her for at sige ja til at vi samler carporten for dig </p>
+
       </div>
 
       <div id="checkBoxForAssmbler">
