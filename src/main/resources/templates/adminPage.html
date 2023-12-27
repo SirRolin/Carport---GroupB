@@ -4,8 +4,18 @@
     <meta charset="UTF-8">
     <title>Admin site</title>
     <link rel="stylesheet" href="../public/css/adminSite.css" th:href="@{/css/adminSite.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
 </head>
 <body>
+
+<div class="topnav">
+    <img id="logo" src="../public/image/foglogo.png" th:src="@{/image/foglogo.png}">
+    <a>Home</a>
+    <a>Build a Carport</a>
+    <a class="active">Admin</a>
+</div>
+
+<br>
 
 <div id="Content" th:unless="${session.logged_in == false || session.logged_in == null}">
     <p>Filter by material type:</p>
