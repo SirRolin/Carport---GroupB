@@ -10,6 +10,8 @@ import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 import io.javalin.http.Context;
+import jakarta.servlet.http.HttpSession;
+import org.eclipse.jetty.server.Request;
 
 import java.util.Random;
 
@@ -36,7 +38,7 @@ public class Main {
 
         //// Index / start side
         app.get("/", ctx -> ctx.render("index.html"));
-
+        app.post("/backToIndex", ctx -> backToIndex(ctx));
         //// Order edit site:
         try {
             OrderEditController.addRenders(app, connectionPool);
@@ -113,4 +115,9 @@ public class Main {
         people += by;
     }
 
+    // used to clear the cache and go back to index.
+    public static void backToIndex(Context ctx){
+        ctx.req().getSession().invalidate();
+        ctx.render("index.html");
+    }
 }

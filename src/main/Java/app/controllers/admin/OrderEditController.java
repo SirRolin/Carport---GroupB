@@ -18,13 +18,22 @@ import java.util.List;
 public class OrderEditController {
 
     public static void addRenders(Javalin app, ConnectionPool connectionPool){
-        app.post("/submitOrderID", ctx -> OrderEditController.showChosenOrderByID(ctx,connectionPool));
-        app.get("/submitOrderID", ctx -> OrderEditController.loadOrderEditSite(ctx,connectionPool));
+        app.post("/submitOrderID", ctx -> showChosenOrderByID(ctx,connectionPool));
+        app.get("/submitOrderID", ctx -> loadOrderEditSite(ctx,connectionPool));
         app.post("/submitCostumerName", ctx -> getOrdersByNameOrEmail(ctx,connectionPool));
-        app.post("/submitCostumerEmail", ctx -> OrderEditController.getOrdersByNameOrEmail(ctx,connectionPool));
-        app.post("/updateOrder",ctx -> OrderEditController.UpdateOrder(ctx,connectionPool));
+        app.post("/submitCostumerEmail", ctx -> getOrdersByNameOrEmail(ctx,connectionPool));
+        app.post("/updateOrder",ctx -> saveOrder(ctx,connectionPool));
+        //app.post("/backToIndexFromOrderEditSite", ctx -> backToIndexFromOrderEditSite(ctx));
         //app.post("/generateBillOfMaterial",ctx -> OrderEditController.generateBillOfMaterial(ctx,connectionPool));
     }
+    // found a smarter way
+/*
+    private static void backToIndexFromOrderEditSite(Context ctx) {
+        ctx.sessionAttribute("chosen_order",null);
+        ctx.sessionAttribute("costumer_orders",null);
+        ctx.render("index.html");
+    }
+*/
     public static void loadOrderEditSite(Context ctx, ConnectionPool connectionPool){
         ctx.sessionAttribute("chosen_order",null);
         ctx.sessionAttribute("costumer_orders",null);
@@ -90,7 +99,7 @@ public class OrderEditController {
         return searchInfo;
     }
 
-    public static void UpdateOrder(Context ctx, ConnectionPool connectionPool) {
+    public static void saveOrder(Context ctx, ConnectionPool connectionPool) {
         // takes all the potentially changed info about the current order and makes a new orderDTO objects and sets it as the new session attribute:
         OrderDTO currentOrder = ctx.sessionAttribute("chosen_order");
         List<MaterialDTO> billOfMaterials = ctx.sessionAttribute("bill_of_materials");

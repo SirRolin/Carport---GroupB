@@ -19,7 +19,7 @@ import java.util.List;
 public class BillOfMaterialEditController {
 
   public static void addRenders(Javalin app, ConnectionPool connectionPool) {
-    app.post("/showBillOfMaterial", ctx -> BillOfMaterialEditController.showBillOfMaterial(ctx, connectionPool));
+    app.post("/showBillOfMaterial", ctx -> showBillOfMaterial(ctx, connectionPool));
     app.post("/back_to_order", ctx -> OrderEditController.backToOrderSite(ctx));
     app.post("/submitEditedBillOfMaterial", ctx -> editBillOfMaterial(ctx, connectionPool));
     app.post("/generateBillOfMaterial", ctx -> generateNewBilOfMaterial(ctx, connectionPool));
@@ -27,7 +27,16 @@ public class BillOfMaterialEditController {
     app.post("/saveBillOfMaterial", ctx -> saveBilOfMaterialToOrder(ctx, connectionPool));
     app.post("/addMaterialToBilOfMaterial", ctx -> addMaterialToBillOfMaterial(ctx));
   }
+/*
+  private static void backToIndexFromBillOfMaterialEditSite(Context ctx) {
 
+    ctx.sessionAttribute("material_list",null);
+    ctx.sessionAttribute("bill_of_materials",null);
+    ctx.sessionAttribute("chosen_order",null);
+    ctx.sessionAttribute("costumer_orders",null);
+    ctx.render("index.html");
+  }
+*/
   private static void addMaterialToBillOfMaterial(Context ctx) {
     int index = Integer.parseInt(ctx.formParam("selected_material_input"));
     List<MaterialDTO> billOfMaterials = ctx.sessionAttribute("bill_of_materials");
@@ -51,8 +60,6 @@ public class BillOfMaterialEditController {
 
   private static void generateNewBilOfMaterial(Context ctx, ConnectionPool connectionPool) {
     OrderDTO currentOrder = ctx.sessionAttribute("chosen_order");
-
-
     //// Generating SVG via our Engine.
     List<MaterialDTO> billOfMaterialListFromDBViaEngine = new ArrayList<>();
     SVG svg;
@@ -61,6 +68,7 @@ public class BillOfMaterialEditController {
       ////TODO erstat getPillarID og getBeamID med IDer fra ordren som skal defineres fra bestillingssiden.
       svg = Engine.drawCarportDraft1(billOfMaterialListFromDBViaEngine, connectionPool, currentOrder.getLengthCm(), currentOrder.getWidthCm(), Engine.getPillarID(), Engine.getBeamID());
       ctx.sessionAttribute("svg", svg.toString());
+      currentOrder.setSvg(svg.toString());
     } catch (DatabaseException e) {
       ctx.attribute("error_function", "Engine.drawCarportDraft1 via showBillOfMaterial(Context ctx, ConnectionPool connectionPool)");
       ctx.attribute("error_path", ctx.path());
@@ -79,13 +87,13 @@ public class BillOfMaterialEditController {
     // calculates a bill of materials based on the specs of the current order, deletes existing ones first.
     try {
       MaterialsMapper.deleteOrderItemsByOrderID(currentOrder.getId(), connectionPool);
-      if(svg == null) {
+      if(svg != null) {
         billOfMaterials = Calculator.generateBillOfMaterials(currentOrder, connectionPool);
       } else {
         billOfMaterials = billOfMaterialListFromDBViaEngine;
       }
       OrderItemMapper.saveBillOfMaterials(billOfMaterials, currentOrder.getId(), connectionPool);
-      ctx.attribute("message", "Generated a new bill of materials based on the spec of the order.");
+      ctx.attribute("message", "Generated a new bill of materials based on the spec of the order. Plan drawing also added to the order(remember to save the order when you are done).");
       ctx.sessionAttribute("bill_of_materials", billOfMaterials);
       //ctx.redirect("/showBillOfMaterial");
       ctx.render("billOfMaterialEditSite.html");
@@ -135,8 +143,6 @@ public class BillOfMaterialEditController {
     List<MaterialDTO> billOfMaterials = ctx.sessionAttribute("bill_of_materials");
     OrderDTO currentOrder = ctx.sessionAttribute("chosen_order");
     List<MaterialDTO> billOfMaterialListFromDB = null;
-
-
     List<MaterialDTO> listOfMaterials = null;
     // if there is no material list, we try and get one.
     if (billOfMaterials == null) {

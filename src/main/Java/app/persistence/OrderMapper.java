@@ -85,8 +85,6 @@ public class OrderMapper {
         }catch(Exception e){
             throw new DatabaseException("Error while connecting to database! "+e);
         }
-
-
         return true;
     }
     public static List<OrderDTO> getOrdersBySearchDTO(SearchDTO searchDTO, ConnectionPool connectionPool) throws DatabaseException {

@@ -26,18 +26,54 @@
       </tr>
     </table>
     <br>
+    <div th:if="${session.customer_svg == null}">
+        <h4>No drawing has been made yet.</h4>
+    </div>
+    <div th:if="${session.customer_svg != null}">
+            <h3>The blueprint of your new carport:</h3>
+           <p th:utext="${session.customer_svg}"></p>
+    </div>
+      <br>
     <div>
       <p th:if="${notPaidMessage != null}" th:text="${notPaidMessage}"></p>
+    <!--
     <form action="/getBillOfMaterialIfPaid" method="post">
       <button type="submit" name="ShowBillOfMaterialIfPaid" >See your Bill Of Material</button>
     </form>
+    -->
+      <br>
+      <div class="order_chosen" th:unless="${session.customerBillOfMaterial == null}">
+        <h3>Your bill of material:</h3>
+        <table id="bill_of_material_table">
+          <tr class="tableHeader">
+            <th>Material ID</th>
+            <th>Material Variant ID</th>
+            <th>Material Name:</th>
+            <th>Material Type:</th>
+            <th>Material Length:</th>
+            <th>Material Quantity:</th>
+            <th>Material Notice</th>
+          </tr>
+          <tr th:each="material, i :  ${session.customerBillOfMaterial}">
+            <td th:text="${material.getMaterialId()}">No info</td>
+            <td th:text="${material.getMaterialVariantID()}">No info</td>
+            <td th:text="${material.getName()}">No info</td>
+            <td th:text="${material.getType()}">No info</td>
+            <td th:text="${material.getLength()}">No info</td>
+            <td th:text="${material.getAmount()}">No info</td>
+            <td th:text="${material.getDescription()}">No info</td>
+          </tr>
+        </table>
+        <h3>It has been a pleasure, thanks for choosing us for you business</h3>
+      </div>
+    </div>
     </div>
   </div>
 
 
 <div class="no_order_chosen" th:if="${session.customer_order == null}">
   <p th:if="${message != null}" th:text="${message}"></p>
-    <h1> Please enter you order ID or email: </h1>
+    <h1> Please enter your order ID or email: </h1>
     <form th:action="@{/findCustomerOrderByID}" method="post">
     <label for="orderID_input">Enter Your Order ID:</label>
     <input type="number" id="orderID_input" name="orderID_input"/>
@@ -76,6 +112,10 @@
     </form>
   </div>
 </div>
-
+<br>
+<br>
+<form th:action="@{/backToIndex}" method="post">
+  <button type="submit" name="backToIndex">back to start.</button>
+</form>
 </body>
 </html>

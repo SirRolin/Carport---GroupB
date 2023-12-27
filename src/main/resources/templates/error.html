@@ -19,7 +19,11 @@
     <span th:if="${error_message}">Error message:<span th:text="${error_message}"></span></span>
   </p>
 </div>
-
+<br>
+<br>
+<form th:action="@{/backToIndex}" method="post">
+  <button type="submit" name="backToIndex">back to start.</button>
+</form>
 
 </body>
 </html>

@@ -67,7 +67,7 @@
             </select>
             <h5>Edit the Order Notice:</h5>
             <input type="text" id="newNotice" name="new_notice_input" th:value="${session.chosen_order.getNotice()}"/>
-            <button type="submit" name="edit_order">Edit Order</button>
+            <button type="submit" name="edit_order">Save Order</button>
             <div>
             <p th:if="${saved_message != null}" th:text="${saved_message}"></p>
             </div>
@@ -110,7 +110,7 @@
         </div>
         <div class="show_orders" th:unless="${session.costumer_orders == null || session.costumer_orders.isEmpty() == true}">
             <p th:if="${message != null}" th:text="${message}"></p>
-            <h1> Her vises Kundens ordre info:</h1>
+            <h1> Costumer info:</h1>
             <form action="/submitOrderID" method="post">
             <table id="material_table">
                 <tr class="tableHeader">
@@ -136,5 +136,10 @@
         </div>
     </div>
     </div>
+<br>
+<br>
+<form th:action="@{/backToIndex}" method="post">
+    <button type="submit" name="backToIndex">back to start.</button>
+</form>
 </body>
 </html>
