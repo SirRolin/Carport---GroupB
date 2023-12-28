@@ -85,9 +85,9 @@ public class Main {
     }
 
     public static void ConstructConnectionPool(){
-        if(connectionPool== null) {
+        if(connectionPool == null) {
             try {
-                connectionPool = connectionPool.getInstance(DEFAULT_USER, DEFAULT_PASSWORD, DEFAULT_URL, DEFAULT_DB);
+                connectionPool = ConnectionPool.getInstance(DEFAULT_USER, DEFAULT_PASSWORD, DEFAULT_URL, DEFAULT_DB);
             } catch (Exception ignored) {
 
             }
