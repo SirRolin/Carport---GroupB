@@ -115,12 +115,13 @@ public class AdminController {
                         break;
                 }
                 if(newMaterial != null){
-                    if(!pickedMaterial.equals(newMaterial)){ //TODO VIRKER IKKE
+                    if(!pickedMaterial.equals(newMaterial)){
                         MaterialsMapper.updateMaterial(connectionPool, newMaterial);
                     }
                 }
                 ctx.sessionAttribute("modified_variant_list", null);
-                ctx.sessionAttribute("edit_material",-1);
+                ctx.sessionAttribute("edit_material",null);
+                ctx.sessionAttribute("edit_variant",null);
             }else{
                int pickedEditInt =  Integer.parseInt(pickedEdit);
                ctx.sessionAttribute("showVariants",true);
@@ -131,7 +132,8 @@ public class AdminController {
         }catch(Exception e){
             ctx.sessionAttribute("message","Error while editing material: "+e);
             ctx.sessionAttribute("modified_variant_list", null);
-            ctx.sessionAttribute("edit_material",-1);
+            ctx.sessionAttribute("edit_variant",null);
+            ctx.sessionAttribute("edit_material",null);
         }
         loadAdminSite(connectionPool,ctx);
     }
@@ -153,8 +155,8 @@ public class AdminController {
                         VariantsMapper.updateVariant(connectionPool,newVariant,finalId);
                     }
                 }
-                ctx.sessionAttribute("edit_variant",-1);
-                ctx.sessionAttribute("edit_material",-1);
+                ctx.sessionAttribute("edit_variant",null);
+                ctx.sessionAttribute("edit_material",null);
                 ctx.sessionAttribute("showVariants",false);
             }else {
                 int pickedEditInt = Integer.parseInt(pickedEdit);
@@ -162,8 +164,8 @@ public class AdminController {
             }
         }catch(Exception e){
             ctx.sessionAttribute("message","Error while fetching variant: "+e);
-            ctx.sessionAttribute("edit_variant",-1);
-            ctx.sessionAttribute("edit_material",-1);
+            ctx.sessionAttribute("edit_variant",null);
+            ctx.sessionAttribute("edit_material",null);
             ctx.sessionAttribute("showVariants",false);
         }
         loadAdminSite(connectionPool,ctx);
