@@ -82,7 +82,7 @@ ul {
     background-color: white;
 }
 
-.topnav a{
+.topnav .navLink{
     float:left;
     display: block;
     color: black;
@@ -117,23 +117,30 @@ ul {
     font-size: 17px;
 }
 
-.topnav a:hover {
+.topnav .navLink:hover {
     background-color: #154985;
     color: white;
 }
 
-.topnav a.active {
+
+.topnav .navLink.active {
     background-color: #154985;
     color: white;
 }
 
-#logo {
+.smallMargin{
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.headline {
+    font-size: 1.1rem;
 }
 
 
 
 @media only screen and (max-width: 600px) {
-    .topnav a, .topnav input[type=text]{
+    .topnav .navLink, .topnav input[type=text]{
         float:none;
         display:block;
         text-align: left;
@@ -148,6 +155,7 @@ ul {
 
     .topnav img {
         visibility: collapse;
+        display: none;
     }
 
     #Content{
@@ -182,4 +190,19 @@ ul {
         width: 100%;
     }
 
+
+    .variantList table{
+        border-collapse: collapse;
+    }
+
+    .variantList tr{
+        display:block;
+        float:left;
+        width: calc(50% - 2px);
+    }
+
+    .variantList th, .variantList td{
+        display:block;
+        width: 100%;
+    }
 }

@@ -5,23 +5,26 @@
     <title>Admin site</title>
     <link rel="stylesheet" href="../public/css/adminSite.css" th:href="@{/css/adminSite.css}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
 </head>
 <body>
 
 <div class="topnav">
-    <img id="logo" src="../public/image/foglogo.png" th:src="@{/image/foglogo.png}">
-    <a>Home</a>
-    <a>Build a Carport</a>
-    <a class="active">Admin</a>
+    <a href="/">
+        <img id="logo" src="../public/image/foglogo.png" th:src="@{/image/foglogo.png}">
+    </a>
+    <a class="navLink" href="/">Home</a>
+    <a class="navLink" href="/customCarport/1">Build a Carport</a>
+    <a class="navLink active">Admin</a>
 </div>
 
 <br>
 
 <div id="Content" th:unless="${session.logged_in == false || session.logged_in == null}">
-    <p>Filter by material type:</p>
     <div class="materialList">
         <form method="post" th:action="@{/filterMaterials}">
+            <div class="smallMargin">
+                <span class="headline">Filter by material type:</span>
+            </div>
             <select name="filter" onchange="this.form.submit()">
                 <option name="select" value="select" th:text="Select"></option>
                 <option name="all" value="all" th:text="all"></option>
@@ -133,9 +136,9 @@
         </form>
     </div>
 
-    <br>
 
-    <div class="changeAddType">
+
+    <div class="changeAddType smallMargin">
         <form method="post" th:action="@{/chooseAddVariantOrMaterial}">
             <select id="addSelect" name="add_select" onchange="this.form.submit()">
                 <option>Add</option>
@@ -145,9 +148,9 @@
         </form>
     </div>
 
-    <br>
 
-    <div th:unless="${session.add_material == false || session.add_material == null}" class="addProduct">
+
+    <div th:unless="${session.add_material == false || session.add_material == null}" class="addProduct smallMargin">
         <form method="post" th:action="@{/addNewMaterial}">
             <input type="text" name="material_name" placeholder="Material Name">
             <select id="typeSelect" name="type_select">
@@ -162,9 +165,8 @@
         </form>
     </div>
 
-    <br>
 
-    <div th:unless="${session.add_material == true || session.add_material == null}" class="addProduct">
+    <div th:unless="${session.add_material == true || session.add_material == null}" class="addProduct smallMargin">
         <form method="post" th:action="@{/addNewVariant}">
             <input type="number" name="variant_material_id" placeholder="Material Id">
             <input type="number" name="variant_length" placeholder="Material length in cm">
@@ -173,7 +175,7 @@
         </form>
     </div>
 
-    <div class="changeRemoveType">
+    <div class="changeRemoveType smallMargin">
         <form method="post" th:action="@{/chooseRemoveVariantOrMaterial}">
             <select id="removeSelect" name="remove_select" onchange="this.form.submit()">
                 <option>Remove</option>
@@ -183,7 +185,7 @@
         </form>
     </div>
 
-    <div th:unless="${session.remove_material == false || session.remove_material == null}" class="removeProduct">
+    <div th:unless="${session.remove_material == false || session.remove_material == null}" class="removeProduct smallMargin">
         <form method="post" th:action="@{/removeMaterial}">
             <input type="text" name="material_name" placeholder="Material Name">
             <select id="typeSelectRemove" name="type_select">
@@ -198,9 +200,8 @@
         </form>
     </div>
 
-    <br>
 
-    <div th:unless="${session.remove_material == true || session.remove_material == null}" class="removeProduct">
+    <div th:unless="${session.remove_material == true || session.remove_material == null}" class="removeProduct smallMargin">
         <form method="post" th:action="@{/removeVariant}">
             <input type="number" name="variant_material_id" placeholder="Material Id">
             <input type="number" name="variant_length" placeholder="Material length in cm">
