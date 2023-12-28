@@ -12,8 +12,8 @@
 
 <div id="mainMenu" class="center">
   <p>
-    Sorry but an error has occurred at "<span th:text="${error_path}"></span>"<br/>
-    The function that caused the error was "<span th:text="${error_function}"></span>"<br/>
+    <span th:unless="${error_path == null}">Sorry but an error has occurred at "<span th:text="${error_path}"></span>"<br/></span>
+    <span th:unless="${error_function == null}">The function that caused the error was "<span th:text="${error_function}"></span>"<br/></span>
     We'll do our best to fix the problem.
 
     <span th:if="${error_message}">Error message:<span th:text="${error_message}"></span></span>
