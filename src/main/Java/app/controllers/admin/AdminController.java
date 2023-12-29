@@ -30,8 +30,12 @@ public class AdminController {
         app.post("/login", ctx -> login(connectionPool,ctx));
     }
 
-
-    //Loads the adminsite by fetching all the materials and variants needed.
+    /**
+     *
+     * Loads the admin site & fetching all the materials and variants needed from the database. Saves the data in session attributes.
+     * @param connectionPool
+     * @param ctx
+     */
     public static void loadAdminSite(ConnectionPool connectionPool, Context ctx){
         List<MaterialDTO> materials = new ArrayList<>();
         List<MaterialVariantDTO> variants = new ArrayList<>();
