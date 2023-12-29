@@ -16,28 +16,28 @@ public class MaterialsMapper {
              try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setObject(1, type, Types.OTHER);
             ResultSet rs = ps.executeQuery();
-                while (rs.next()){
-                    int materialID = rs.getInt("materialID");
-                    String name = rs.getString("name");
-                    int width_mm = rs.getInt("width_mm");
-                    int depth_mm = rs.getInt("depth_mm");
-                    int materialVariantID = rs.getInt("mvID");
-                    int length = rs.getInt("length_cm");
-                    int price = rs.getInt("price");
-                    switch (type) {
-                        case pillar -> {
-                            availableMaterials.add(new PillarDTO(materialID, name, type, width_mm, depth_mm, materialVariantID, length, price));
-                        }
-                        case beam -> {
-                            availableMaterials.add(new BeamDTO(materialID, name, type, width_mm, depth_mm, materialVariantID, length, price));
-                        }
-                        case cover_planks -> {
-                            availableMaterials.add(new CrossbeamDTO(materialID, name, type, width_mm, depth_mm, materialVariantID, length, price));
-                        }
-                        // Add more cases as more material is needed
-                        default -> {
-                        }
+            while (rs.next()){
+                int materialID = rs.getInt("materialID");
+                String name = rs.getString("name");
+                int width_mm = rs.getInt("width_mm");
+                int depth_mm = rs.getInt("depth_mm");
+                int materialVariantID = rs.getInt("mvID");
+                int length = rs.getInt("length_cm");
+                int price = rs.getInt("price");
+                switch (type) {
+                    case pillar -> {
+                        availableMaterials.add(new PillarDTO(materialID, name, type, width_mm, depth_mm, materialVariantID, length, price));
                     }
+                    case beam -> {
+                        availableMaterials.add(new BeamDTO(materialID, name, type, width_mm, depth_mm, materialVariantID, length, price));
+                    }
+                    case cover_planks -> {
+                        availableMaterials.add(new CrossbeamDTO(materialID, name, type, width_mm, depth_mm, materialVariantID, length, price));
+                    }
+                    // Add more cases as more material is needed
+                    default -> {
+                    }
+                }
             }
         }catch (SQLException e){
             throw new DatabaseException("unable to connect to database: "+e.getMessage());

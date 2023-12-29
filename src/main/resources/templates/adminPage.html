@@ -9,7 +9,7 @@
 <div id="Content">
     <p>Filter by materialtype:</p>
     <div class="materialList">
-    <form method="post" th:action="@{/filterMaterials}">
+    <form method="post" action="/filterMaterials">
         <select name="filter" onchange="this.form.submit()">
             <option name="select" value="select" th:text="Select"></option>
             <option name="all" value="all" th:text="all"></option>
@@ -20,7 +20,7 @@
         </select>
     </form>
     <div th:unless="${session.material_list == null || session.material_list.isEmpty()}">
-        <form method="post" th:action="@{/editMaterial}">
+        <form method="post" action="/editMaterial">
         <table id="material_table">
             <tr class="tableHeader">
                 <th>Material ID</th>

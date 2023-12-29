@@ -87,7 +87,7 @@ public class BillOfMaterialEditController {
     // calculates a bill of materials based on the specs of the current order, deletes existing ones first.
     try {
       MaterialsMapper.deleteOrderItemsByOrderID(currentOrder.getId(), connectionPool);
-      if(svg != null) {
+      if(billOfMaterialListFromDBViaEngine.isEmpty()) {
         billOfMaterials = Calculator.generateBillOfMaterials(currentOrder, connectionPool);
       } else {
         billOfMaterials = billOfMaterialListFromDBViaEngine;
@@ -98,8 +98,11 @@ public class BillOfMaterialEditController {
       //ctx.redirect("/showBillOfMaterial");
       ctx.render("billOfMaterialEditSite.html");
     } catch (DatabaseException e) {
-      ctx.attribute("message", "Something went wrong when creating the new bill of material: " + e.getMessage());
-      ctx.render("orderEditSite.html");
+      //ctx.attribute("message", "Something went wrong when creating the new bill of material: " + e.getMessage());
+      ctx.attribute("error_function", "showBillOfMaterial(Context ctx, ConnectionPool connectionPool)");
+      ctx.attribute("error_path", ctx.path());
+      ctx.attribute("error_message", e.getMessage());
+      ctx.render("error.html");
       return;
     }
   }
