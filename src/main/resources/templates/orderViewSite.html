@@ -9,11 +9,14 @@
           // Get the value of the input field
           var dynamicValue = document.getElementById(dynamic).value;
 
-          // Construct the dynamic URL
-          var dynamicURL = baseUrl.replace('{%1}', dynamicValue);
+          if(dynamicValue !== ""){
 
-          // Redirect to the dynamic URL
-          window.location.href = dynamicURL;
+              // Construct the dynamic URL
+              var dynamicURL = baseUrl.replace('{%1}', dynamicValue);
+
+              // Redirect to the dynamic URL
+              window.location.href = dynamicURL;
+          }
       }
   </script>
 </head>
@@ -38,12 +41,12 @@
       </tr>
     </table>
     <br>
-    <div th:if="${session.customer_svg == null}">
+    <div th:if="${customer_svg == null}">
       <h4>No drawing has been made yet.</h4>
     </div>
-    <div th:if="${session.customer_svg != null}">
+    <div th:if="${customer_svg != null}">
       <h3>The blueprint of your new carport:</h3>
-      <p th:utext="${session.customer_svg}"></p>
+      <p th:utext="${customer_svg}"></p>
     </div>
     <br>
     <div>
@@ -54,7 +57,7 @@
       </form>
       -->
       <br>
-      <div class="order_chosen" th:unless="${session.customerBillOfMaterial == null}">
+      <div class="order_chosen" th:unless="${customerBillOfMaterial == null}">
         <h3>Your bill of material:</h3>
         <table id="bill_of_material_table">
           <tr class="tableHeader">
@@ -66,7 +69,7 @@
             <th>Material Quantity:</th>
             <th>Material Notice</th>
           </tr>
-          <tr th:each="material, i :  ${session.customerBillOfMaterial}">
+          <tr th:each="material, i :  ${customerBillOfMaterial}">
             <td th:text="${material.getMaterialId()}">No info</td>
             <td th:text="${material.getMaterialVariantID()}">No info</td>
             <td th:text="${material.getName()}">No info</td>

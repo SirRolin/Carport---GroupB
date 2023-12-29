@@ -98,4 +98,12 @@ public abstract class MaterialDTO implements Comparable<MaterialDTO> {
       }
       return true;
     };
+
+    public void setID(int ID) {
+        this.materialId = ID;
+    }
+
+  public void setWidth(int number) {
+        widthMm = number;
+  }
 }

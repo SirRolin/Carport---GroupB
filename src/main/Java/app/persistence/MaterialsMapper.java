@@ -102,7 +102,7 @@ public class MaterialsMapper {
         }
     }
 
-    public static List<MaterialDTO> getALlMaterialInfo(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+    public static List<MaterialDTO> getAllMaterialInfo(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         List<MaterialDTO> availableMaterials = new ArrayList<>();
         String sql = "SELECT * FROM material_variant JOIN material";
         try (Connection connection = connectionPool.getConnection()) {
@@ -302,7 +302,7 @@ public class MaterialsMapper {
         if(material != null){
             String sql = "insert into material (name, type, width_mm, depth_mm) values (?,?,?,?)";
             try(Connection connection = connectionPool.getConnection()){
-                try(PreparedStatement ps = connection.prepareStatement(sql)){
+                try(PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
                     ps.setString(1,material.getName());
                     ps.setObject(2, material.getType(), Types.OTHER);
                     ps.setInt(3,material.getWidthMm());
@@ -311,6 +311,11 @@ public class MaterialsMapper {
                     int rowsAffected = ps.executeUpdate();
                     if(rowsAffected < 1 ){
                         throw new DatabaseException("Failed to add material");
+                    }
+                    try(ResultSet rs = ps.getGeneratedKeys()){
+                        while(rs.next()){
+                            material.setID(rs.getInt("materialID"));
+                        }
                     }
                 }catch(Exception e){
                     throw new DatabaseException("Error while adding material: "+e);

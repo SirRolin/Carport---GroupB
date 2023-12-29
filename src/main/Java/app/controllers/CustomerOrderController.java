@@ -62,8 +62,8 @@ public abstract class CustomerOrderController {
 
         //// if it's paid the customer should be able to see the drawing and the bill.
         if (customerOrder.getStatus().equals(Status.paid)) {
-          ctx.sessionAttribute("customer_svg", customerOrder.getSvg());
-          ctx.sessionAttribute("customerBillOfMaterial", billOfMaterialListFromDB);
+          ctx.attribute("customer_svg", customerOrder.getSvg());
+          ctx.attribute("customerBillOfMaterial", billOfMaterialListFromDB);
 
           //// if it's not and the bill has been generated it gives them a hint that they wouldn't see it until they pay.
         } else if (!billOfMaterialListFromDB.isEmpty()) {
