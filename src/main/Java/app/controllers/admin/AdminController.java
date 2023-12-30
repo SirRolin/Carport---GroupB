@@ -33,8 +33,8 @@ public class AdminController {
     /**
      *
      * Loads the admin site & fetching all the materials and variants needed from the database. Saves the data in session attributes.
-     * @param connectionPool
-     * @param ctx
+     * @param connectionPool ConnectionPool
+     * @param ctx Context
      */
     public static void loadAdminSite(ConnectionPool connectionPool, Context ctx){
         List<MaterialDTO> materials = new ArrayList<>();
@@ -66,7 +66,11 @@ public class AdminController {
         ctx.render("adminPage.html");
     }
 
-    //Chooses between if you want to add a material or variant, then loads the admin site.
+    /**
+     * Chooses between if you want to add a material or variant, then loads the admin site.
+     * @param connectionPool ConnectionPool
+     * @param ctx Context
+     */
     public static void addVariantOrMaterial(ConnectionPool connectionPool, Context ctx){
         //Fetches the formparameter.
         String picked = ctx.formParam("add_select");
@@ -85,7 +89,11 @@ public class AdminController {
         }
     }
 
-    //Chooses between if you want to remove a material or variant, then loads the admin site.
+    /**
+     * Chooses between if you want to remove a material or variant, then loads the admin site.
+     * @param connectionPool ConnectionPool
+     * @param ctx Context
+     */
     public static void removeVariantOrMaterial(ConnectionPool connectionPool, Context ctx){
         //Fetches the formparameter.
         String picked = ctx.formParam("remove_select");
@@ -199,6 +207,11 @@ public class AdminController {
         loadAdminSite(connectionPool,ctx);
     }
 
+    /**
+     *A method which picks the variant that we want to edit, from user input. Makes it modifiable, and then saves it when the user is done.
+     * @param connectionPool ConnectionPool
+     * @param ctx Context
+     */
     public static void pickEditableVariant(ConnectionPool connectionPool, Context ctx){
         try{
             String pickedEdit = ctx.formParam("edit_variant");
