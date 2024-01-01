@@ -328,7 +328,7 @@ public class MaterialsMapper {
             return false;
         }
     }
-    public static boolean removeMaterial(ConnectionPool connectionPool, MaterialDTO material)throws DatabaseException{
+    public static boolean removeMaterial(ConnectionPool connectionPool, MaterialDTO material) throws DatabaseException{
         if(material != null){
             String sql = "delete from material where name = ? and type = ? and width_mm = ? and depth_mm = ?";
             try(Connection connection = connectionPool.getConnection()){
@@ -341,6 +341,8 @@ public class MaterialsMapper {
                     int rowsAffected = ps.executeUpdate();
                     if(rowsAffected < 1){
                         throw new DatabaseException("Failed to remove material");
+                    } else {
+                        material.setID(0);
                     }
                 }catch(Exception e){
                     throw new DatabaseException("Error while deleting material: "+e);

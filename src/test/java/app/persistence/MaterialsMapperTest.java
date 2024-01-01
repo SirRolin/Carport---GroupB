@@ -39,7 +39,7 @@ class MaterialsMapperTest {
     if(testMaterialFromDB.isPresent()){
       mat = testMaterialFromDB.get();
     } else {
-      mat = new PillarDTO("MapperTestPillar", Mtype.pillar, 99, 99);
+      mat = new app.entities.PillarDTO("MapperTestPillar", Mtype.pillar, 99, 99);
       try {
         MaterialsMapper.addMaterial(connectionPool, mat);
       } catch (DatabaseException e) {
@@ -51,7 +51,12 @@ class MaterialsMapperTest {
   @Test
   void getMaterialInfoByType() {
     try {
-      assertNotNull(MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.pillar));
+      List<MaterialDTO> list = MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.pillar);
+      assertNotNull(list);
+      assertTrue(list.stream().allMatch(mat -> mat instanceof app.entities.PillarDTO));
+      list = MaterialsMapper.getMaterialInfoByType(connectionPool, Mtype.beam);
+      assertNotNull(list);
+      assertTrue(list.stream().allMatch(mat -> mat instanceof app.entities.BeamDTO));
     } catch (DatabaseException e) {
       throw new RuntimeException(e);
     }
@@ -60,15 +65,11 @@ class MaterialsMapperTest {
   @Test
   void getAllMaterialInfo() {
     try {
-      assertNotNull(MaterialsMapper.getAllMaterialInfo(connectionPool));
+      List<MaterialDTO> list = MaterialsMapper.getAllMaterialInfo(connectionPool);
+      assertNotNull(list);
     } catch (DatabaseException e) {
       throw new RuntimeException(e);
     }
-  }
-
-  @Test
-  void deleteOrderItemsByOrderID() {
-    // ToDo needs to be looked at.
   }
 
   @Test
@@ -113,7 +114,9 @@ class MaterialsMapperTest {
   @Test
   void getMaterialById() {
     try {
-      assertNotNull(MaterialsMapper.getMaterialById(connectionPool, mat.getMaterialId()));
+      MaterialDTO retrievedMat = MaterialsMapper.getMaterialById(connectionPool, mat.getMaterialId());
+      assertNotNull(retrievedMat);
+      assertTrue(retrievedMat.equals(mat));
     } catch (DatabaseException e) {
       throw new RuntimeException(e);
     }
@@ -122,7 +125,10 @@ class MaterialsMapperTest {
   @Test
   void addMaterial() {
     try {
-      assertTrue(MaterialsMapper.addMaterial(connectionPool, mat));
+      MaterialDTO newMat = new PillarDTO("2",Mtype.pillar,2,2);
+      assertTrue(MaterialsMapper.addMaterial(connectionPool, newMat));
+      assertTrue(newMat.getMaterialId()>0);
+      MaterialsMapper.removeMaterial(connectionPool, newMat);
     } catch (DatabaseException e) {
       throw new RuntimeException(e);
     }
@@ -132,6 +138,7 @@ class MaterialsMapperTest {
   void removeMaterial() {
     try {
       assertTrue(MaterialsMapper.removeMaterial(connectionPool, mat));
+      assertEquals(0, mat.getMaterialId());
     } catch (DatabaseException e) {
       throw new RuntimeException(e);
     }

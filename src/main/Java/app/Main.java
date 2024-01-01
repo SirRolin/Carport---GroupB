@@ -34,7 +34,10 @@ public class Main {
             JavalinThymeleaf.init(ThymeleafConfig.templateEngine());
         }).start(7070);
 
-        ConstructConnectionPool();
+        if(getConnectionPool()==null){
+            throw new RuntimeException("Can't connect to server, make sure it's running.");
+        }
+
         //// render start:
 
         //// Index / start side

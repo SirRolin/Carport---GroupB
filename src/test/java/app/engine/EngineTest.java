@@ -20,7 +20,7 @@ class EngineTest {
   private static ConnectionPool connectionPool;
   @BeforeAll
   static void setup(){
-    connectionPool = ConnectionPool.getInstance("postgres", "postgres", "jdbc:postgresql://localhost:5432/%s?currentSchema=public", "carport_dev");
+    connectionPool = commonTestFunctions.testConnection.getTestConnection();
   }
 
   @Test
