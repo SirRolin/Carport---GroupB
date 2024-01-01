@@ -1,0 +1,37 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+package "Userstory 1, 7 & 18" #FFB{
+switch (metode)
+    case (link)
+        :link/
+    case (manuelt)
+        :gå ind på hjemmesiden;
+        :View Orders/
+        if(metode) then (id)
+            :indtast id;
+            :søg/
+            if(findes) then (nej)
+                :get error;
+                end
+            else (ja)
+            endif
+        else (email)
+            :indtast email;
+            :søg/
+            if(findes) then (nej)
+                :get error;
+                end
+            elseif (mere end 1?) then (ja)
+                :hvis valgmuligheder;
+                :vælg order;
+            else (nej)
+            endif
+        endif
+endswitch
+:ordre vises;
+}
+stop
+
+@enduml

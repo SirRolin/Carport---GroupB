@@ -1,0 +1,55 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+|Sælger|
+start
+:Gå til hjemmeside;
+:Gå til login;
+|Shop|
+repeat
+    :enter credentials;
+repeat while (Credentials) is (Forkert)
+->(Korrekt);
+|Sælger|
+:Gå til Materialer;
+|Shop|
+:Hent og vis data;
+|Sælger|
+package "User story 9" #ABF {
+repeat
+switch(handling)
+    case(redigere)
+        |Sælger|
+        :"Edit"/
+        :Ændre værdier;
+        :"Save"/
+        if(er ny data?) is (ja) then
+            :Gem Data;
+        else (nej)
+        endif
+    case(tilføj)
+        |Sælger|
+        :"Add"/
+        :tilføj data;
+        :"Save"/
+        if(data udfyldt?) is (ja) then
+            :Gem data;
+        else (nej)
+        endif
+    case(fjern)
+        |Sælger|
+        :"Remove"/
+        :indtast data;
+        :"Remove"/
+        if(data udfyldt?) is (ja) then
+            :slet data;
+        else (nej)
+        endif
+        |Sælger|
+endswitch
+repeat while (færdig) is (nej)
+->ja;
+}
+stop
+
+@enduml

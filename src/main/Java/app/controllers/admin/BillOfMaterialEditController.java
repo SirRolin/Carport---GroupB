@@ -113,6 +113,11 @@ public class BillOfMaterialEditController {
     // saves the bill of materials, deletes existing ones first.
     try {
       MaterialsMapper.deleteOrderItemsByOrderID(currentOrder.getId(), connectionPool);
+      for (MaterialDTO m: billOfMaterials) {
+        if(m.getDescription() == null || m.getDescription().equals("")){
+          m.setDescription("No Comment");
+        }
+      }
       OrderItemMapper.saveBillOfMaterials(billOfMaterials, currentOrder.getId(), connectionPool);
       ctx.attribute("message", "Bill of material got updated");
       ctx.sessionAttribute("bill_of_materials", billOfMaterials);
@@ -191,7 +196,7 @@ public class BillOfMaterialEditController {
     List<MaterialDTO> currentBillOfMaterial = ctx.sessionAttribute("bill_of_materials");
     int newAmount;
     String[] options;
-    options = ctx.formParam("material_input").split("_");
+    options = ctx.formParam("material_input").trim().split("_");
     int indexOfMaterial = Integer.parseInt(options[1]);
     if (options[0].equals("save")) {
       try {

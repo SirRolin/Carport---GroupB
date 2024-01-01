@@ -48,7 +48,7 @@ public class ViewCustomerOrdersController {
                 billOfMaterials = billOfMaterialListFromDB;
             } catch (DatabaseException e) {
                 ctx.attribute("message", "was unable get to find order items" + e.getMessage());
-                ctx.render("billOfMaterialEditSite.html");
+                backToOrderViewSite(ctx);
                 return;
             }
 
@@ -98,7 +98,7 @@ public class ViewCustomerOrdersController {
                 billOfMaterialListFromDB = OrderItemMapper.getOrderItemsByOrderID(customerOrder.getId(), connectionPool);
             } catch (DatabaseException e) {
                 ctx.attribute("message", "was unable get to find order items" + e.getMessage());
-                ctx.render("billOfMaterialEditSite.html");
+               backToOrderViewSite(ctx);
                 return;
             }
             if(!billOfMaterialListFromDB.isEmpty() && customerOrder.getStatus().equals(Status.paid)){

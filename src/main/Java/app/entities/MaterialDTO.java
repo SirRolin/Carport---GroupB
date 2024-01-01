@@ -40,6 +40,7 @@ public abstract class MaterialDTO implements Comparable<MaterialDTO> {
         this.name = name;
         this.type = type;
         this.amount = amount;
+        this.description = description;
     }
 
     public int getMaterialId() {
