@@ -84,19 +84,18 @@ public class CustomController {
     }
   }
 
+
   //adds the final piece to the dto where the costumer chooses if they want to have fog assemble it or not
-  public void sendOrderDtoToReceipt(Context ctx, ConnectionPool connectionPool) {
+  public static void sendOrderDtoToReceipt(Context ctx, ConnectionPool connectionPool) {
 
     try {
       OrderDTO orderDTO = ctx.sessionAttribute("current_order");
       String name = ctx.formParam("costumer_name");
 
-
       String email = ctx.formParam("user_email");
+      orderDTO.setName(name);
 
-      orderDTO.setName(name.toLowerCase());
-
-      orderDTO.setEmail(email.toLowerCase());
+      orderDTO.setEmail(email);
       ctx.sessionAttribute("current_order", orderDTO);
 
 
@@ -107,7 +106,13 @@ public class CustomController {
     ctx.render("checkOut.html");
   }
 
-  //checks what sort of roof the user wants inclined or non-inclined
+  //checks what sort of roof the user wants inclined or non inclined
+  public static void renderCustomCarportFile(Context ctx, ConnectionPool connectionPool, boolean rooftype) {
+    ctx.sessionAttribute("roof_type", rooftype);
+    ctx.render("customCarport2.html");
+  }
+
+  //checks what sort of roof the user wants inclined or non inclined
   public void renderCostumCarportFile(Context ctx, ConnectionPool connectionPool) {
     try {
       String choice = ctx.formParam("inclined");
@@ -118,8 +123,6 @@ public class CustomController {
         ctx.sessionAttribute("roof_type", false);
         ctx.render("costumCarport.html");
       }
-
-
     } catch (Exception e) {
       System.out.println(e);
     }
