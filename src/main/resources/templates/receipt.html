@@ -2,15 +2,32 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Johannes Fog - Receipt</title>
+    <title>Receipt - Johannes Fog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../public/css/adminSite.css" th:href="@{/css/adminSite.css}">
+    <link rel="icon" type="image/x-icon" href="../public/image/foglogo.png" th:href="@{/image/foglogo.png}">
 </head>
 <body>
-    <div id="someText">
-        <p>her er dine ordre so far</p>
-    </div>
 
-    <div id="simpleText">
-        <p>Du kan nu forlade hjemmesiden. En sælger vil kigge på den bestilling senest muligt.</p>
-    </div>
+<div class="topnav">
+    <a href="/backToIndex">
+        <img id="logo" src="../public/image/foglogo.png" th:src="@{/image/foglogo.png}">
+    </a>
+    <a class="navLink" href="/backToIndex">Home</a>
+    <a class="navLink active" href="/customCarport/1">Build a Carport</a>
+    <a class="navLink" href="/login">Admin</a>
+</div>
+
+<div id="someText">
+    <p>Din ordre er nu blevet sendt videre til Johannes Fog;</p>
+</div>
+
+<div id="simpleText">
+    <p>Du vil blive kontaktet af en sælger hurtigst muligt. Du kan nu sikkert forlade hjemmesiden. </p>
+</div>
+
+<form th:action="@{/backToIndex}" method="post">
+    <button type="submit" name="backToIndex">Tilbage til start.</button>
+</form>
 </body>
 </html>
