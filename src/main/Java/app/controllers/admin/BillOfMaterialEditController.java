@@ -147,7 +147,7 @@ public class BillOfMaterialEditController {
     OrderDTO currentOrder = ctx.sessionAttribute("chosen_order");
     List<MaterialDTO> billOfMaterialListFromDB = null;
     List<MaterialDTO> listOfMaterials = null;
-    // if there is no material list, we try and get one.
+    // if there is no bill of material list, we try and get one.
     if (billOfMaterials == null) {
       try {
         billOfMaterialListFromDB = OrderItemMapper.getOrderItemsByOrderID(currentOrder.getId(), connectionPool);
@@ -158,7 +158,7 @@ public class BillOfMaterialEditController {
         return;
       }
     }
-    // if there is no material list and there is nothing in the db, we generate one and save it.
+    // if there is no bill of material list and nothing was found in the db, we generate one and save it.
     if ((billOfMaterials == null || billOfMaterials.isEmpty()) && (billOfMaterialListFromDB == null || billOfMaterialListFromDB.isEmpty())) {
       try {
         billOfMaterials = Calculator.generateBillOfMaterials(currentOrder, connectionPool);
