@@ -2,11 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Johannes Fog - Kunde data</title>
+    <title>Custom Carport - Johannes Fog</title>
     <link rel="stylesheet" href="../public/css/CostumerDetailCss.css" th:href="@{/css/CostumerDetailCss.css}">
+    <link rel="stylesheet" href="../public/css/adminSite.css" th:href="@{/css/adminSite.css}">
+    <link rel="icon" type="image/x-icon" href="../public/image/foglogo.png" th:href="@{/image/foglogo.png}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
+<div class="topnav">
+    <a href="/backToIndex">
+        <img id="logo" src="../public/image/foglogo.png" th:src="@{/image/foglogo.png}">
+    </a>
+    <a class="navLink" href="/backToIndex">Home</a>
+    <a class="navLink active" href="/customCarport/1">Build a Carport</a>
+    <a class="navLink" href="/login">Admin</a>
+</div>
 
     <form method="post" id="costumerDetail" action="/checkout">
         <div name="contact_form_thing" class="center">

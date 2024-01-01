@@ -2,10 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Johannes Fog - Prototype startside</title>
+    <title>Prototype startside - Johannes Fog</title>
     <link href="../public/css/Header.css" th:href="@{/css/Header.css}" rel="stylesheet">
+    <link rel="stylesheet" href="../public/css/adminSite.css" th:href="@{/css/adminSite.css}">
+    <link rel="icon" type="image/x-icon" href="../public/image/foglogo.png" th:href="@{/image/foglogo.png}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+
+<div class="topnav">
+    <a href="/backToIndex">
+        <img id="logo" src="../public/image/foglogo.png" th:src="@{/image/foglogo.png}">
+    </a>
+    <a class="navLink active" href="/backToIndex">Home</a>
+    <a class="navLink" href="/customCarport/1">Build a Carport</a>
+    <a class="navLink" href="/login">Admin</a>
+</div>
+
   <div id="mainMenu" class="center">
     <a href="/login"><button>admin login</button></a>
     <a href="/customCarport/1"><button>OrderCarport</button></a>
