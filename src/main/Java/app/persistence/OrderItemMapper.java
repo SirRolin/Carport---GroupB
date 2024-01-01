@@ -11,7 +11,7 @@ import java.util.List;
 public class OrderItemMapper {
     // saves bill of materials to the order id.
     public static int saveBillOfMaterials(List<MaterialDTO> billOfMaterials,int orderID,ConnectionPool connectionPool) throws DatabaseException {
-            String sql = "insert into order_item(\"orderID\",\"mvID\",\"quantity\") values (?,?,?)";
+            String sql = "insert into order_item(\"orderID\",\"mvID\",\"quantity\",\"description\") values (?,?,?,?)";
             int totalRowsAffected = 0; // this is used for test purposes only.
             try(Connection connection = connectionPool.getConnection()){
                 try(PreparedStatement ps = connection.prepareStatement(sql)){
@@ -19,6 +19,7 @@ public class OrderItemMapper {
                         ps.setInt(1,orderID);
                         ps.setInt(2,billOfMaterials.get(i).getMaterialVariantID());
                         ps.setInt(3,billOfMaterials.get(i).getAmount());
+                        ps.setString(4,billOfMaterials.get(i).getDescription());
                         int rowsAffected = ps.executeUpdate();
                         if(rowsAffected < 1){
                             throw new DatabaseException("Error while creating order");

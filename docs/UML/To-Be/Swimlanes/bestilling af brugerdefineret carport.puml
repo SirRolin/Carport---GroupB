@@ -2,11 +2,11 @@
 'https://plantuml.com/activity-diagram-beta
 
 |Kunde|
+package "Userstory 6 & 17" #FFB{
 start
 :Gå til hjemmeside;
 |Shop|
 :Tilpas forespørgsel til carport<
-note right:Se: Underdiagram - Tilpasning af carport
 |Kunde|
 :Send forespørgsel;
 |Shop|
@@ -14,13 +14,11 @@ note right:Se: Underdiagram - Tilpasning af carport
 :Generér hyperlink;
 |E-mail|
 :Hyperlink med data fra forespørgsel]
+}
+package "Userstory 8 & 13" #FBA{
 |Sælger|
 :Modtag hyperlink;
 :Klik hyperlink til hjemmesiden med forespørgselsdata;
-|Shop|
-:Beregn mål og rendér plantegning;
-:Beregn pris;
-:Udskriv stykliste;
 |Sælger|
 :Vurdér mål;
 if(Realistiske mål?) is (Nej) then
@@ -39,8 +37,10 @@ end if
 |Sælger|
 :Modtag løsning;
 :Vurdér løsning;
+}
 |Shop|
-:Udregn tilbud;
+:Beregn mål, rendér plantegning og stykliste;
+:Beregn pris;
 |Sælger|
 :Send tilbud til kunde;
 |E-mail|
