@@ -119,13 +119,12 @@
             <h1> Input Costumer info: </h1>
             <form th:action="@{/submitCostumerName}" method="post">
                 <label for="name_input">Enter Costumer Name:</label>
-                <input type="text" id="name_input" name="name_input"/>
+                <input type="text" id="name_input" name="name_input" required/>
                 <button type="submit">Submit</button>
             </form>
-            <br><br/>
             <form th:action="@{/submitCostumerEmail}" method="post">
                 <label for="email_input">Enter Costumer Email:</label>
-                <input type="email" id="email_input" name="email_input" value="email"/>
+                <input type="email" id="email_input" name="email_input" placeholder="email" required/>
                 <button type="submit">Submit</button>
             </form>
         </div>
