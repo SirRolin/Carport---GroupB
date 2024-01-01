@@ -214,7 +214,10 @@ public class AdminController {
      */
     public static void pickEditableVariant(ConnectionPool connectionPool, Context ctx){
         try{
+            //Fetched the string from the formparameter "edit_variant"
             String pickedEdit = ctx.formParam("edit_variant");
+
+            //If it contains the 
             if(pickedEdit.contains("done")){
                 String[] editString = pickedEdit.split(" ");
                 int id = Integer.parseInt(editString[1]);
