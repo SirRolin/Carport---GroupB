@@ -183,4 +183,10 @@ public class OrderDTO {
         this.email = email;
     }
     public void setPrice(int price){this.price = price;}
+    public void setID(int ID){
+        this.id = ID;
+    }
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 }

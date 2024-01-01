@@ -93,18 +93,18 @@ public class ViewCustomerOrdersController {
             }
             ctx.sessionAttribute("customer_order", customerOrder);
             ctx.sessionAttribute("customer_svg",customerOrder.getSvg());
-                try {
-                    assert customerOrder != null;
-                    billOfMaterialListFromDB = OrderItemMapper.getOrderItemsByOrderID(customerOrder.getId(), connectionPool);
-                } catch (DatabaseException e) {
-                    ctx.attribute("message", "was unable get to find order items" + e.getMessage());
-                    ctx.render("billOfMaterialEditSite.html");
-                    return;
-                }
+            try {
+                assert customerOrder != null;
+                billOfMaterialListFromDB = OrderItemMapper.getOrderItemsByOrderID(customerOrder.getId(), connectionPool);
+            } catch (DatabaseException e) {
+                ctx.attribute("message", "was unable get to find order items" + e.getMessage());
+                ctx.render("billOfMaterialEditSite.html");
+                return;
+            }
             if(!billOfMaterialListFromDB.isEmpty() && customerOrder.getStatus().equals(Status.paid)){
                 ctx.sessionAttribute("customerBillOfMaterial",billOfMaterialListFromDB);
             }else {
-                ctx.attribute("notPaidMessage","Your bill of material is ready to be delivered. But to get acces, you will need to pay for your order. please follow the instructions from the email");
+                ctx.attribute("notPaidMessage","Your bill of material is ready to be delivered. But to get access, you will need to pay for your order. please follow the instructions from the email");
             }
             if(billOfMaterialListFromDB.isEmpty()){
                 ctx.attribute("notPaidMessage","Your bill of material has not been generated yet. please contact customer service if you think think is a mistake");

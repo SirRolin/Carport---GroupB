@@ -2,6 +2,7 @@ package app;
 
 import app.config.ThymeleafConfig;
 import app.controllers.CustomController;
+import app.controllers.CustomerOrderController;
 import app.controllers.ViewCustomerOrdersController;
 import app.controllers.admin.OrderEditController;
 import app.controllers.admin.AdminController;
@@ -33,12 +34,17 @@ public class Main {
             JavalinThymeleaf.init(ThymeleafConfig.templateEngine());
         }).start(7070);
 
-        ConstructConnectionPool();
+        if(getConnectionPool()==null){
+            throw new RuntimeException("Can't connect to server, make sure it's running.");
+        }
+
         //// render start:
 
         //// Index / start side
         app.get("/", ctx -> ctx.render("index.html"));
+        app.get("/backToIndex", ctx -> backToIndex(ctx));
         app.post("/backToIndex", ctx -> backToIndex(ctx));
+
         //// Order edit site:
         try {
             OrderEditController.addRenders(app, connectionPool);
@@ -71,14 +77,20 @@ public class Main {
         } catch (Exception ignore) {
 
         }
+
+        try{
+            CustomerOrderController.addRender(app, connectionPool);
+        } catch (Exception ignore) {
+            System.out.println(ignore);
+        }
         // tests
         app.get("/SynchronousVisitsTestPage", Main::testLoading);
     }
 
     public static void ConstructConnectionPool(){
-        if(connectionPool== null) {
+        if(connectionPool == null) {
             try {
-                connectionPool = connectionPool.getInstance(DEFAULT_USER, DEFAULT_PASSWORD, DEFAULT_URL, DEFAULT_DB);
+                connectionPool = ConnectionPool.getInstance(DEFAULT_USER, DEFAULT_PASSWORD, DEFAULT_URL, DEFAULT_DB);
             } catch (Exception ignored) {
 
             }
@@ -118,6 +130,6 @@ public class Main {
     // used to clear the cache and go back to index.
     public static void backToIndex(Context ctx){
         ctx.req().getSession().invalidate();
-        ctx.render("index.html");
+        ctx.redirect("/");
     }
 }
