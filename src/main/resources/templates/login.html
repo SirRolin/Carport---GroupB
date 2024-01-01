@@ -18,7 +18,11 @@
     <p th:unless="${#ctx.message == null}" id="ErrorMsg" th:text="${#ctx.message}"></p>
   </div>
 </div>
-
+<br>
+<br>
+<form th:action="@{/backToIndex}" method="post">
+  <button type="submit" name="backToIndex">back to start.</button>
+</form>
 
 </body>
 </html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="da">
+<head>
+  <title>Testpage</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+      function redirectToDynamicURL(dynamic, baseUrl) {
+          // Get the value of the input field
+          var dynamicValue = document.getElementById(dynamic).value;
+
+          if(dynamicValue !== ""){
+
+              // Construct the dynamic URL
+              var dynamicURL = baseUrl.replace('{%1}', dynamicValue);
+
+              // Redirect to the dynamic URL
+              window.location.href = dynamicURL;
+          }
+      }
+  </script>
+</head>
+
+<body>
+<div id="Content">
+  <div class="order_chosen" th:unless="${session.customer_order == null}">
+    <table id="material_table2">
+      <tr class="tableHeader">
+        <th>Order ID</th>
+        <th>Customer Name:</th>
+        <th>Customer Email:</th>
+        <th>Status on Order:</th>
+        <th>Order info:</th>
+      </tr>
+      <tr th:each="order, i :  ${session.customer_order}">
+        <td th:text="${order.getId()}">No info</td>
+        <td th:text="${order.getName()}">No info</td>
+        <td th:text="${order.getEmail()}">No info</td>
+        <td th:text="${order.getStatus()}">No info</td>
+        <td th:text="${order.getNotice()}">No info</td>
+      </tr>
+    </table>
+    <br>
+    <div th:if="${customer_svg == null}">
+      <h4>No drawing has been made yet.</h4>
+    </div>
+    <div th:if="${customer_svg != null}">
+      <h3>The blueprint of your new carport:</h3>
+      <p th:utext="${customer_svg}"></p>
+    </div>
+    <br>
+    <div>
+      <p th:if="${notPaidMessage != null}" th:text="${notPaidMessage}"></p>
+      <!--
+      <form action="/getBillOfMaterialIfPaid" method="post">
+        <button type="submit" name="ShowBillOfMaterialIfPaid" >See your Bill Of Material</button>
+      </form>
+      -->
+      <br>
+      <div class="order_chosen" th:unless="${customerBillOfMaterial == null}">
+        <h3>Your bill of material:</h3>
+        <table id="bill_of_material_table">
+          <tr class="tableHeader">
+            <th>Material ID</th>
+            <th>Material Variant ID</th>
+            <th>Material Name:</th>
+            <th>Material Type:</th>
+            <th>Material Length:</th>
+            <th>Material Quantity:</th>
+            <th>Material Notice</th>
+          </tr>
+          <tr th:each="material, i :  ${customerBillOfMaterial}">
+            <td th:text="${material.getMaterialId()}">No info</td>
+            <td th:text="${material.getMaterialVariantID()}">No info</td>
+            <td th:text="${material.getName()}">No info</td>
+            <td th:text="${material.getType()}">No info</td>
+            <td th:text="${material.getLength()}">No info</td>
+            <td th:text="${material.getAmount()}">No info</td>
+            <td th:text="${material.getDescription()}">No info</td>
+          </tr>
+        </table>
+        <h3>It has been a pleasure, thanks for choosing us for you business</h3>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="no_order_chosen" th:if="${session.customer_order == null}">
+  <p th:if="${message != null}" th:text="${message}"></p>
+  <h1> Please enter your order ID or email: </h1>
+  <div class=""> <!-- needs a class for styling, should be the same as the one underneath. -->
+  <form action="/findCustomerOrderByID" method="post">
+    <label for="orderID_input">Enter Your Order ID:</label>
+    <input type="number" id="orderID_input" name="orderID_input"/>
+  </form>
+  <!-- I found out it's important that the button does NOT belong to a form, as that makes it unable to use javascript. -->
+  <button type="submit" onclick="redirectToDynamicURL('orderID_input', '/Order/id/{%1}/');">Submit</button>
+  </div>
+  <br/>
+  <div class=""> <!-- needs a class for styling, should be the same as the one above. -->
+  <form method="post">
+    <label for="email_input">Enter Your Email:</label>
+    <input type="email" id="email_input" name="email_input" placeholder="email"/>
+  </form>
+  <!-- I found out it's important that the button does NOT belong to a form, as that makes it unable to use javascript. -->
+  <button type="submit" onclick="redirectToDynamicURL('email_input', '/Order/email/{%1}/');">Submit</button>
+  </div>
+  <div class="show_orders"
+       th:unless="${session.the_costumers_orders == null || session.the_costumers_orders.isEmpty() == true}">
+    <p th:if="${message != null}" th:text="${message}"></p>
+    <h1> which order would you like view?:</h1>
+    <form action="/findCustomerOrderByID" method="post">
+      <table id="material_table">
+        <tr class="tableHeader">
+          <th>Order ID</th>
+          <th>Customer Name:</th>
+          <th>Customer Email:</th>
+          <th>Status on Order:</th>
+          <th>Order info:</th>
+          <th>Action</th>
+        </tr>
+        <tr th:each="order, i :  ${session.the_costumers_orders}">
+          <td th:text="${order.getId()}">No info</td>
+          <td th:text="${order.getName()}">No info</td>
+          <td th:text="${order.getEmail()}">No info</td>
+          <td th:text="${order.getStatus()}">No info</td>
+          <td th:text="${order.getNotice()}">No info</td>
+          <td>
+            <button type="submit" name="orderID_input" th:value="${order.getId}" th:id="'order_'+ ${i.index}">Choose
+              Order
+            </button>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
+</div>
+<br>
+<br>
+<!--Did this REALLY have to be a form?? it also used to be post for no reason. -->
+<form action="/backToIndex" method="get">
+  <button type="submit" name="backToIndex">back to start.</button>
+</form>
+</body>
+</html>

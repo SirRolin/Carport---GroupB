@@ -42,12 +42,12 @@
             </table>
         </form>
         <br>
-        <form th:action="@{/saveBillOfMaterial}" method="post">
-            <button type="submit" name="save_BillOfMaterial">save bill of material to Order</button>
+        <form th:action="@{/generateBillOfMaterial}" method="post">
+            <button type="submit" name="generate_BillOfMaterial">Generate new bill of material</button>
         </form>
         <br>
-        <form th:action="@{/generateBillOfMaterial}" method="post">
-            <button type="submit" name="generate_BillOfMaterial">Generate bill of material</button>
+        <form th:action="@{/saveBillOfMaterial}" method="post">
+            <button type="submit" name="save_BillOfMaterial">save bill of material to Order</button>
         </form>
         <br>
         <form th:action="@{/back_to_order}" method="post">
@@ -90,6 +90,12 @@
         <button type="submit" name="show_BillOfMaterial">Go Back</button>
     </form>
     </div>
+    <h3>Blueprint:</h3>
     <div th:if="${session.svg}" th:utext="${session.svg}"></div>
+    <br>
+    <br>
+    <form th:action="@{/backToIndex}" method="post">
+        <button type="submit" name="backToIndex">back to start.</button>
+    </form>
 </body>
 </html>
