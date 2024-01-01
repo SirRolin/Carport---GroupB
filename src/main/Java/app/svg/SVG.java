@@ -32,7 +32,7 @@ public class SVG implements Serializable {
   static public float extraTextRoomY = 25;
 
   //// Text formatting
-  public static String textFormat = "%.2f";
+  public static String textFormat = "%.2fm";
 
   /**
    * The SVG class can be used to draw with shapes and measurement which automatically expands as needed.

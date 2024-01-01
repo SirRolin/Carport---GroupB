@@ -2,23 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Admin login - Johannes Fog</title>
+    <link rel="stylesheet" href="../public/css/adminSite.css" th:href="@{/css/adminSite.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../public/image/foglogo.png" th:href="@{/image/foglogo.png}">
 </head>
 <body>
 
-<div id="Content">
-  <div id="loginBox">
-    <form id="loginForm" method="post" action="/login">
-      <label for="username">Username:</label>
-      <input type="text" id="username" name="username">
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password">
-      <input type="submit" id="loginBtn" value="Login">
-    </form>
-    <p th:unless="${#ctx.message == null}" id="ErrorMsg" th:text="${#ctx.message}"></p>
-  </div>
+<div class="topnav">
+    <a href="/backToIndex">
+        <img id="logo" src="../public/image/foglogo.png" th:src="@{/image/foglogo.png}">
+    </a>
+    <a class="navLink" href="/backToIndex">Home</a>
+    <a class="navLink" href="/customCarport/1">Build a Carport</a>
+    <a class="navLink active" href="/login">Admin</a>
 </div>
 
+<div id="Content">
+    <div id="loginBox">
+        <form id="loginForm" method="post" action="/login">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password">
+            <input type="submit" id="loginBtn" value="Login">
+        </form>
+        <p th:unless="${#ctx.message == null}" id="ErrorMsg" th:text="${#ctx.message}"></p>
+    </div>
+</div>
 
 </body>
 </html>

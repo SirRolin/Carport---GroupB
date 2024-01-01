@@ -2,13 +2,17 @@ package app;
 
 import app.config.ThymeleafConfig;
 import app.controllers.CustomController;
-import app.controllers.OrderEditController;
+import app.controllers.CustomerOrderController;
+import app.controllers.ViewCustomerOrdersController;
+import app.controllers.admin.OrderEditController;
 import app.controllers.admin.AdminController;
 import app.controllers.admin.BillOfMaterialEditController;
 import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 import io.javalin.http.Context;
+import jakarta.servlet.http.HttpSession;
+import org.eclipse.jetty.server.Request;
 
 import java.util.Random;
 
@@ -30,11 +34,16 @@ public class Main {
             JavalinThymeleaf.init(ThymeleafConfig.templateEngine());
         }).start(7070);
 
-        ConstructConnectionPool();
+        if(getConnectionPool()==null){
+            throw new RuntimeException("Can't connect to server, make sure it's running.");
+        }
+
         //// render start:
 
         //// Index / start side
         app.get("/", ctx -> ctx.render("index.html"));
+        app.get("/backToIndex", ctx -> backToIndex(ctx));
+        app.post("/backToIndex", ctx -> backToIndex(ctx));
 
         //// Order edit site:
         try {
@@ -46,6 +55,12 @@ public class Main {
         //// Bill of Material edit site:
         try {
             BillOfMaterialEditController.addRenders(app, connectionPool);
+        } catch (Exception ignore) {
+
+        }
+        //// Order View Site:
+        try {
+            ViewCustomerOrdersController.addRenders(app, connectionPool);
         } catch (Exception ignore) {
 
         }
@@ -62,14 +77,20 @@ public class Main {
         } catch (Exception ignore) {
 
         }
+
+        try{
+            CustomerOrderController.addRender(app, connectionPool);
+        } catch (Exception ignore) {
+            System.out.println(ignore);
+        }
         // tests
         app.get("/SynchronousVisitsTestPage", Main::testLoading);
     }
 
     public static void ConstructConnectionPool(){
-        if(connectionPool== null) {
+        if(connectionPool == null) {
             try {
-                connectionPool = connectionPool.getInstance(DEFAULT_USER, DEFAULT_PASSWORD, DEFAULT_URL, DEFAULT_DB);
+                connectionPool = ConnectionPool.getInstance(DEFAULT_USER, DEFAULT_PASSWORD, DEFAULT_URL, DEFAULT_DB);
             } catch (Exception ignored) {
 
             }
@@ -106,4 +127,9 @@ public class Main {
         people += by;
     }
 
+    // used to clear the cache and go back to index.
+    public static void backToIndex(Context ctx){
+        ctx.req().getSession().invalidate();
+        ctx.redirect("/");
+    }
 }

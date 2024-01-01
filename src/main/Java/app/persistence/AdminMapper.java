@@ -9,6 +9,14 @@ import java.sql.ResultSet;
 
 public class AdminMapper {
 
+    /**
+     * A method that attempts to log in the admin via a username and a password.
+     * @param connectionPool ConnectionPool.
+     * @param username String with the username.
+     * @param password String with the password.
+     * @return Admin Object with the username and password as attributes.
+     * @throws DatabaseException
+     */
     public static Admin login(ConnectionPool connectionPool, String username, String password) throws DatabaseException{
         Admin admin = null;
         String sql = "select * from Admin where username = ? and password = ?";

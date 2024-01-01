@@ -16,28 +16,28 @@ public class MaterialsMapper {
              try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setObject(1, type, Types.OTHER);
             ResultSet rs = ps.executeQuery();
-                while (rs.next()){
-                    int materialID = rs.getInt("materialID");
-                    String name = rs.getString("name");
-                    int width_mm = rs.getInt("width_mm");
-                    int depth_mm = rs.getInt("depth_mm");
-                    int materialVariantID = rs.getInt("mvID");
-                    int length = rs.getInt("length_cm");
-                    int price = rs.getInt("price");
-                    switch (type) {
-                        case pillar -> {
-                            availableMaterials.add(new PillarDTO(materialID, name, type, width_mm, depth_mm, materialVariantID, length, price));
-                        }
-                        case beam -> {
-                            availableMaterials.add(new BeamDTO(materialID, name, type, width_mm, depth_mm, materialVariantID, length, price));
-                        }
-                        case cover_planks -> {
-                            availableMaterials.add(new CrossbeamDTO(materialID, name, type, width_mm, depth_mm, materialVariantID, length, price));
-                        }
-                        // Add more cases as more material is needed
-                        default -> {
-                        }
+            while (rs.next()){
+                int materialID = rs.getInt("materialID");
+                String name = rs.getString("name");
+                int width_mm = rs.getInt("width_mm");
+                int depth_mm = rs.getInt("depth_mm");
+                int materialVariantID = rs.getInt("mvID");
+                int length = rs.getInt("length_cm");
+                int price = rs.getInt("price");
+                switch (type) {
+                    case pillar -> {
+                        availableMaterials.add(new PillarDTO(materialID, name, type, width_mm, depth_mm, materialVariantID, length, price));
                     }
+                    case beam -> {
+                        availableMaterials.add(new BeamDTO(materialID, name, type, width_mm, depth_mm, materialVariantID, length, price));
+                    }
+                    case cover_planks -> {
+                        availableMaterials.add(new CrossbeamDTO(materialID, name, type, width_mm, depth_mm, materialVariantID, length, price));
+                    }
+                    // Add more cases as more material is needed
+                    default -> {
+                    }
+                }
             }
         }catch (SQLException e){
             throw new DatabaseException("unable to connect to database: "+e.getMessage());
@@ -102,7 +102,7 @@ public class MaterialsMapper {
         }
     }
 
-    public static List<MaterialDTO> getALlMaterialInfo(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+    public static List<MaterialDTO> getAllMaterialInfo(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         List<MaterialDTO> availableMaterials = new ArrayList<>();
         String sql = "SELECT * FROM material_variant JOIN material";
         try (Connection connection = connectionPool.getConnection()) {
@@ -302,7 +302,7 @@ public class MaterialsMapper {
         if(material != null){
             String sql = "insert into material (name, type, width_mm, depth_mm) values (?,?,?,?)";
             try(Connection connection = connectionPool.getConnection()){
-                try(PreparedStatement ps = connection.prepareStatement(sql)){
+                try(PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
                     ps.setString(1,material.getName());
                     ps.setObject(2, material.getType(), Types.OTHER);
                     ps.setInt(3,material.getWidthMm());
@@ -311,6 +311,11 @@ public class MaterialsMapper {
                     int rowsAffected = ps.executeUpdate();
                     if(rowsAffected < 1 ){
                         throw new DatabaseException("Failed to add material");
+                    }
+                    try(ResultSet rs = ps.getGeneratedKeys()){
+                        while(rs.next()){
+                            material.setID(rs.getInt("materialID"));
+                        }
                     }
                 }catch(Exception e){
                     throw new DatabaseException("Error while adding material: "+e);
@@ -323,7 +328,7 @@ public class MaterialsMapper {
             return false;
         }
     }
-    public static boolean removeMaterial(ConnectionPool connectionPool, MaterialDTO material)throws DatabaseException{
+    public static boolean removeMaterial(ConnectionPool connectionPool, MaterialDTO material) throws DatabaseException{
         if(material != null){
             String sql = "delete from material where name = ? and type = ? and width_mm = ? and depth_mm = ?";
             try(Connection connection = connectionPool.getConnection()){
@@ -336,6 +341,8 @@ public class MaterialsMapper {
                     int rowsAffected = ps.executeUpdate();
                     if(rowsAffected < 1){
                         throw new DatabaseException("Failed to remove material");
+                    } else {
+                        material.setID(0);
                     }
                 }catch(Exception e){
                     throw new DatabaseException("Error while deleting material: "+e);

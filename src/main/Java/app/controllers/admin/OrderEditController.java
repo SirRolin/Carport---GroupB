@@ -1,4 +1,4 @@
-package app.controllers;
+package app.controllers.admin;
 
 import app.calculator.Calculator;
 import app.entities.MaterialDTO;
@@ -18,16 +18,25 @@ import java.util.List;
 public class OrderEditController {
 
     public static void addRenders(Javalin app, ConnectionPool connectionPool){
-        app.post("/submitOrderID", ctx -> OrderEditController.showChosenOrderByID(ctx,connectionPool));
-        app.get("/submitOrderID", ctx -> OrderEditController.loadOrderEditSite(ctx,connectionPool));
-        app.post("/submitCostumerName", ctx -> OrderEditController.getOrdersByNameOrEmail(ctx,connectionPool));
-        app.post("/submitCostumerEmail", ctx -> OrderEditController.getOrdersByNameOrEmail(ctx,connectionPool));
-        app.post("/updateOrder",ctx -> OrderEditController.UpdateOrder(ctx,connectionPool));
+        app.post("/submitOrderID", ctx -> showChosenOrderByID(ctx,connectionPool));
+        app.get("/submitOrderID", ctx -> loadOrderEditSite(ctx,connectionPool));
+        app.post("/submitCostumerName", ctx -> getOrdersByNameOrEmail(ctx,connectionPool));
+        app.post("/submitCostumerEmail", ctx -> getOrdersByNameOrEmail(ctx,connectionPool));
+        app.post("/updateOrder",ctx -> saveOrder(ctx,connectionPool));
+        //app.post("/backToIndexFromOrderEditSite", ctx -> backToIndexFromOrderEditSite(ctx));
         //app.post("/generateBillOfMaterial",ctx -> OrderEditController.generateBillOfMaterial(ctx,connectionPool));
     }
+    // found a smarter way
+/*
+    private static void backToIndexFromOrderEditSite(Context ctx) {
+        ctx.sessionAttribute("chosen_order",null);
+        ctx.sessionAttribute("costumer_orders",null);
+        ctx.render("index.html");
+    }
+*/
     public static void loadOrderEditSite(Context ctx, ConnectionPool connectionPool){
-        //ctx.sessionAttribute("chosen_order",null);
-        //ctx.sessionAttribute("costumer_orders",null);
+        ctx.sessionAttribute("chosen_order",null);
+        ctx.sessionAttribute("costumer_orders",null);
         ctx.render("orderEditSite.html");
     }
 
@@ -40,13 +49,13 @@ public class OrderEditController {
                 customerOrder = customerOrders.get(0);
             }else{
                 ctx.attribute("message","To many orders found, contact admin. there is an issue with duplicate order id's in the database");
-                loadOrderEditSite(ctx,connectionPool);
+                backToOrderSite(ctx);
             }
             ctx.sessionAttribute("chosen_order", customerOrder);
             ctx.render("orderEditSite.html");
         } catch (DatabaseException e) {
             ctx.attribute("message", "No Orders matched what you entered");
-            loadOrderEditSite(ctx, connectionPool);
+            backToOrderSite(ctx);
         }
     }
 
@@ -58,7 +67,7 @@ public class OrderEditController {
             ctx.render("orderEditSite.html");
         }catch (DatabaseException e) {
             ctx.attribute("message", "No Orders matched what you entered");
-            loadOrderEditSite(ctx, connectionPool);
+            backToOrderSite(ctx);
         }
     }
 
@@ -79,10 +88,10 @@ public class OrderEditController {
             }
         } catch (NumberFormatException e){
             ctx.attribute("message","You did not enter a number");
-            loadOrderEditSite(ctx,connectionPool);
+            backToOrderSite(ctx);
         } catch (NullPointerException e){
             ctx.attribute("message","something blew up, contact admin");
-            loadOrderEditSite(ctx,connectionPool);
+            backToOrderSite(ctx);
         }
         searchInfo.setName(name);
         searchInfo.setEmail(email);
@@ -90,7 +99,7 @@ public class OrderEditController {
         return searchInfo;
     }
 
-    public static void UpdateOrder(Context ctx, ConnectionPool connectionPool) {
+    public static void saveOrder(Context ctx, ConnectionPool connectionPool) {
         // takes all the potentially changed info about the current order and makes a new orderDTO objects and sets it as the new session attribute:
         OrderDTO currentOrder = ctx.sessionAttribute("chosen_order");
         List<MaterialDTO> billOfMaterials = ctx.sessionAttribute("bill_of_materials");
@@ -174,5 +183,9 @@ public class OrderEditController {
     }
     public static void printSVGtext(){
 
+    }
+
+    public static void backToOrderSite(Context ctx) {
+        ctx.render("orderEditSite.html");
     }
 }

@@ -53,7 +53,7 @@ public class OrderMapper {
         OrderDTO resultDTO = new OrderDTO(orderId,order.getLengthCm(),order.getWidthCm(),order.getShedLengthCm(),order.getShedWidthCm(),order.getSlopeDegrees(),order.isHasAssembler(),order.getPrice(),order.getStatus(),order.getSvg(),order.getName(),order.getEmail(),order.getDate(),order.getNotice());
         return resultDTO;
     }
-
+    //had to create this constructor without an order id because that's done automatically in the db.
     public static boolean updateOrder(ConnectionPool connectionPool, OrderDTO newOrder) throws DatabaseException{
         String sql = "update orders set length_cm = ?, width_cm = ?, shed_length_cm = ?, shed_width_cm = ?, slope_degrees = ?, hire_assembler = ?, price = ?, status = ?, svg_text = ?, name = ?, email = ?, date = ?, notice = ? where \"orderID\" = ?";
         try(Connection connection = connectionPool.getConnection()){
@@ -85,8 +85,6 @@ public class OrderMapper {
         }catch(Exception e){
             throw new DatabaseException("Error while connecting to database! "+e);
         }
-
-
         return true;
     }
     public static List<OrderDTO> getOrdersBySearchDTO(SearchDTO searchDTO, ConnectionPool connectionPool) throws DatabaseException {

@@ -2,24 +2,38 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>Error - Johannes Fog</title>
   <link href="../public/css/Header.css" th:href="@{/css/Header.css}" rel="stylesheet">
-
+  <link rel="stylesheet" href="../public/css/adminSite.css" th:href="@{/css/adminSite.css}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="../public/image/foglogo.png" th:href="@{/image/foglogo.png}">
 
 </head>
 <body>
 
+<div class="topnav">
+  <a href="/backToIndex">
+    <img id="logo" src="../public/image/foglogo.png" th:src="@{/image/foglogo.png}">
+  </a>
+  <a class="navLink" href="/backToIndex">Home</a>
+  <a class="navLink" href="/customCarport/1">Build a Carport</a>
+  <a class="navLink" href="/login">Admin</a>
+</div>
 
 <div id="mainMenu" class="center">
   <p>
-    Sorry but an error has occurred at "<span th:text="${error_path}"></span>"<br/>
-    The function that caused the error was "<span th:text="${error_function}"></span>"<br/>
+    <span th:unless="${error_path == null}">Sorry but an error has occurred at "<span th:text="${error_path}"></span>"<br/></span>
+    <span th:unless="${error_function == null}">The function that caused the error was "<span th:text="${error_function}"></span>"<br/></span>
     We'll do our best to fix the problem.
 
     <span th:if="${error_message}">Error message:<span th:text="${error_message}"></span></span>
   </p>
 </div>
-
+<br>
+<br>
+<form th:action="@{/backToIndex}" method="post">
+  <button type="submit" name="backToIndex">Tilbage til start.</button>
+</form>
 
 </body>
 </html>
