@@ -101,19 +101,15 @@
         <p th:if="${message != null}" th:text="${message}"></p>
         <h1> Please enter your order ID or email: </h1>
         <div class=""> <!-- needs a class for styling, should be the same as the one underneath. -->
-            <form action="/findCustomerOrderByID" method="post">
-                <label for="orderID_input">Enter Your Order ID:</label>
-                <input type="number" id="orderID_input" name="orderID_input"/>
-            </form>
+            <label for="orderID_input">Enter Your Order ID:</label>
+            <input type="number" id="orderID_input" name="orderID_input"/>
             <!-- I found out it's important that the button does NOT belong to a form, as that makes it unable to use javascript. -->
             <button type="submit" onclick="redirectToDynamicURL('orderID_input', '/Order/id/{%1}/');">Submit</button>
         </div>
         <br/>
         <div class=""> <!-- needs a class for styling, should be the same as the one above. -->
-            <form method="post">
-                <label for="email_input">Enter Your Email:</label>
-                <input type="email" id="email_input" name="email_input" placeholder="email"/>
-            </form>
+            <label for="email_input">Enter Your Email:</label>
+            <input type="email" id="email_input" name="email_input" placeholder="email"/>
             <!-- I found out it's important that the button does NOT belong to a form, as that makes it unable to use javascript. -->
             <button type="submit" onclick="redirectToDynamicURL('email_input', '/Order/email/{%1}/');">Submit</button>
         </div>
