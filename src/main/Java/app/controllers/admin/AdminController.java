@@ -217,7 +217,7 @@ public class AdminController {
             //Fetched the string from the formparameter "edit_variant"
             String pickedEdit = ctx.formParam("edit_variant");
 
-            //If it contains the 
+            //If it contains the
             if(pickedEdit.contains("done")){
                 String[] editString = pickedEdit.split(" ");
                 int id = Integer.parseInt(editString[1]);
