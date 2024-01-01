@@ -92,7 +92,7 @@ public class ViewCustomerOrdersController {
                 backToOrderViewSite(ctx);
             }
             ctx.sessionAttribute("customer_order", customerOrder);
-            ctx.sessionAttribute("customer_svg",customerOrder.getSvg());
+            ctx.attribute("customer_svg",customerOrder.getSvg());
             try {
                 assert customerOrder != null;
                 billOfMaterialListFromDB = OrderItemMapper.getOrderItemsByOrderID(customerOrder.getId(), connectionPool);
@@ -102,7 +102,7 @@ public class ViewCustomerOrdersController {
                 return;
             }
             if(!billOfMaterialListFromDB.isEmpty() && customerOrder.getStatus().equals(Status.paid)){
-                ctx.sessionAttribute("customerBillOfMaterial",billOfMaterialListFromDB);
+                ctx.attribute("customerBillOfMaterial",billOfMaterialListFromDB);
             }else {
                 ctx.attribute("notPaidMessage","Your bill of material is ready to be delivered. But to get access, you will need to pay for your order. please follow the instructions from the email");
             }
