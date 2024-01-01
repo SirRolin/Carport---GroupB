@@ -9,45 +9,63 @@
 <div name="detailThing" class="center">
   <table>
     <tr>
-      <th>
-      <td th:text="${session.current_order.getName()}"></td>
-      <td th:text="${session.current_order.getEmail()}"></td>
+      <th>Carport Detail:</th>
+    </tr>
+    <tr>
+      <td>Længde: <span th:text="${session.current_order.getLengthCm()}"></span></td>
+    </tr>
+    <tr>
+      <td>Bredde: <span th:text="${session.current_order.getWidthCm()}"> </span></td>
+    </tr>
+    <tr>
+      <td>Skur længde: <span th:text="${session.current_order.getShedLengthCm()}"></span></td>
+    </tr>
+    <tr>
+      <td>Skur bredde: <span th:text="${session.current_order.getShedWidthCm()}"></span></td>
+    </tr>
+    <tr>
+      <td>Tag hældning i grader (hvis valgt ellers automatisk 0): <span th:text="${session.current_order.getSlopeDegrees()}"></span> </td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <th>User:</th>
       </th>
     </tr>
     <tr>
-
-      <td th:text="${session.current_order.getLengthCm()}"></td>
-      <td th:text="${session.current_order.getWidthCm()}"></td>
-      <td th:text="${session.current_order.getShedLengthCm()}"></td>
-      <td th:text="${session.current_order.getShedWidthCm()}"></td>
-      <td th:text="${session.current_order.getSlopeDegrees()}"></td>
+      <td>Navn: <span th:text="${session.current_order.getName()}"></span></td>
+    </tr>
+    <tr>
+      <td>
+        Email: <span th:text="${session.current_order.getEmail()}"></span>
+      </td>
     </tr>
   </table>
 </div>
-  <form name="finalGokuForm" method="post" action="/receipt">
-    <div id="checkOutFormula" class="center">
-      <div id="theWhiteBox">
-        <div id="textHolderDiv">
-          <p>Tak for at bestille din carport hos os!</p><br>
-          <p>Vores sælgere vil tage kontakt til dem, når en pris er blevet beregnet </p>
-        </div>
 
-        <div id="checkboxForAssemblerText">
-          <p>tryk her for at sige ja til at vi samler carporten for dig </p>
-        </div>
+<form name="finalGokuForm" method="post" action="/congratsYouDidIt">
+  <div id="checkOutFormula" class="center moveCheckOutFormula">
+    <div id="theWhiteBox">
+      <div id="textHolderDiv" class="addBorder">
+        <p>Tak for at bestille din carport hos os!</p>
+        <p>Vores sælgere vil tage kontakt til dem, når en pris er blevet beregnet </p>
+        <p>Tryk her for at sige ja til at vi samler carporten for dig </p>
+      </div>
 
-        <div id="checkBoxForAssmbler">
-          <input type="checkbox" name="assembleCarport" value="true">
-        </div>
-        <div id="buttonHolder">
-          <!--sends the data to the db itself-->
-          <input type="submit" value="næste" >
-        </div>
+      <div id="checkboxForAssemblerText">
+
+      </div>
+
+      <div id="checkBoxForAssmbler">
+        <input type="checkbox" name="assembleCarport" value="true">
+      </div>
+      <div id="buttonHolder">
+        <!--sends the data to the db itself-->
+        <input type="submit" value="næste" >
       </div>
     </div>
-  </form>
-
-
+  </div>
+</form>
 
 </body>
 </html>

@@ -84,18 +84,19 @@ public class CustomController {
     }
   }
 
-
   //adds the final piece to the dto where the costumer chooses if they want to have fog assemble it or not
-  public static void sendOrderDtoToReceipt(Context ctx, ConnectionPool connectionPool) {
+  public void sendOrderDtoToReceipt(Context ctx, ConnectionPool connectionPool) {
 
     try {
       OrderDTO orderDTO = ctx.sessionAttribute("current_order");
       String name = ctx.formParam("costumer_name");
 
-      String email = ctx.formParam("user_email");
-      orderDTO.setName(name);
 
-      orderDTO.setEmail(email);
+      String email = ctx.formParam("user_email");
+
+      orderDTO.setName(name.toLowerCase());
+
+      orderDTO.setEmail(email.toLowerCase());
       ctx.sessionAttribute("current_order", orderDTO);
 
 
@@ -106,10 +107,22 @@ public class CustomController {
     ctx.render("checkOut.html");
   }
 
-  //checks what sort of roof the user wants inclined or non inclined
-  public static void renderCustomCarportFile(Context ctx, ConnectionPool connectionPool, boolean rooftype) {
-    ctx.sessionAttribute("roof_type", rooftype);
-    ctx.render("customCarport2.html");
+  //checks what sort of roof the user wants inclined or non-inclined
+  public void renderCostumCarportFile(Context ctx, ConnectionPool connectionPool) {
+    try {
+      String choice = ctx.formParam("inclined");
+      if (choice.equals("carport_with_incline")) {
+        ctx.sessionAttribute("roof_type", true);
+        ctx.render("costumCarport.html");
+      } else if (choice.equals("carport_without_incline")) {
+        ctx.sessionAttribute("roof_type", false);
+        ctx.render("costumCarport.html");
+      }
+
+
+    } catch (Exception e) {
+      System.out.println(e);
+    }
   }
 
 }

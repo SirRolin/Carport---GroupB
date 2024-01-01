@@ -1,26 +1,38 @@
-/*center the stuff*/
+
 .center {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    align-items: flex-start;
     justify-content: center;
     min-height: 100vh;
     margin: 0;
 }
-/*makes the border on the table prettier*/
+
+.addBorder {
+    border: 1px solid #000;
+    padding: 10px;
+}
+
 table {
     border-collapse: collapse;
-    width: 100%;
-    margin-top: 20px;
+    flex: 1;
+    margin: 10px;
 }
-/*th td border*/
-th,td{
-    border: 1px solid#ddd;
+
+th, td {
+    border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
 }
-/*background color for th*/
+
+
 th {
     background-color: #f2f2f2;
 }
 
+.moveCheckOutFormula {
+    margin-top: -20%;
+}
