@@ -111,7 +111,7 @@
         <p th:if="${message != null}" th:text="${message}"></p>
         <form th:action="@{/submitOrderID}" method="post">
             <label for="orderID_input">Enter Order ID:</label>
-            <input type="number" id="orderID_input" name="orderID_input"/>
+            <input type="number" id="orderID_input" name="orderID_input" required/>
             <button type="submit">Submit</button>
         </form>
         <div class="costumer_order"
