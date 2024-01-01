@@ -90,15 +90,14 @@ public class CustomController {
 
     try {
       OrderDTO orderDTO = ctx.sessionAttribute("current_order");
-      String name = ctx.formParam("costumer_name");
+      String name = ctx.formParam("costumer_name").trim().toLowerCase();
 
-      String email = ctx.formParam("user_email");
+      String email = ctx.formParam("user_email").trim().toLowerCase();
       orderDTO.setName(name);
 
       orderDTO.setEmail(email);
       ctx.sessionAttribute("current_order", orderDTO);
-
-
+      
     } catch (Exception e) {
       System.out.println(e);
     }
