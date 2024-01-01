@@ -176,6 +176,7 @@ public class BillOfMaterialEditController {
       }
     }
     ctx.sessionAttribute("bill_of_materials", billOfMaterials);
+    ctx.sessionAttribute("svg", currentOrder.getSvg().toString());
     try {
       listOfMaterials = MaterialsMapper.getAllMaterialInfo(connectionPool);
     } catch (
