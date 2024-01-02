@@ -25,6 +25,20 @@ public class Validator {
         return alt;
     }
 
+
+    public static boolean containsOnlyNumbersAndDot(String str){
+        return str.matches("[0-9]+(\\.[0-9]+)?");
+    }
+
+    public static boolean containsOnlyNumbers(String str){
+        for(char c : str.toCharArray()){
+            if(!Character.isDigit(c)){
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static boolean validateDouble(String str){
         if(str == null || str.isEmpty()){
             return false;
@@ -35,10 +49,6 @@ public class Validator {
         }
 
         return true;
-    }
-
-    public static boolean containsOnlyNumbersAndDot(String str){
-        return str.matches("[0-9]+(\\.[0-9]+)?");
     }
 
     public static boolean validateInt(String str){
@@ -64,12 +74,5 @@ public class Validator {
         return true;
     }
 
-    public static boolean containsOnlyNumbers(String str){
-        for(char c : str.toCharArray()){
-            if(!Character.isDigit(c)){
-                return false;
-            }
-        }
-        return true;
-    }
+
 }
